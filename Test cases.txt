@@ -1,0 +1,9 @@
+Dealing with literals:
+    large ints*
+    different bases
+        different bases with decimals*
+    strings
+        string literal as char
+        char literal as string
+    sets
+    maps
