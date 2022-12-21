@@ -12,11 +12,14 @@ The subtrees created by the TokenReader holds nodes with immediately recognizabl
   ie variables, operators, tuples, function calls, control statements, and literals
 
 *variables created are separate instances and will require more analysis to map them together
+*types are not comprehended and will require more analysis to determine them
+*operator overrides are not checked for and will require more analysis to replace some operators with function calls
 
 ## AST.abstractNode.SyntaxNode
 Stores the general node of the tree from variables to control statements
-Each part should be able to execute
-Variables and Functions are stored in Locality nodes
+Each part should be able to execute its own roles
+Types are stored by each variable
+Variables and Functions are stored in "Locality" nodes
 
 ## AST.baseTypes
 These are the builtin types
