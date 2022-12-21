@@ -1,5 +1,7 @@
 package AST.baseTypes;
 
+import AST.baseTypes.Float;
+
 public abstract class Numerical extends BasicType {
     private boolean extended = false;
     private boolean unsigned = false;
@@ -28,5 +30,16 @@ public abstract class Numerical extends BasicType {
 
     public TypeSize getByteSize() {
         return new TypeSize((extended ? 2 : 1) * defaultByteSize());
+    }
+
+    public double doubleOf(){
+        if (this instanceof Float) {
+            return ((Float) this).getValue();
+        } else if (this instanceof Int) {
+            return ((Int) this).getValue();
+        } else {
+            //TODO
+            return 0.0;
+        }
     }
 }

@@ -1,6 +1,8 @@
 package AST.baseTypes;
 
 
+import AST.abstractNode.SyntaxNode;
+
 public class RangeEE extends Range {
     public RangeEE(){}
     public RangeEE(int start, int stop){

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public abstract class SyntaxNode {
+public abstract class  SyntaxNode {
     private SyntaxNode parent;
     public SyntaxNode getParent() {
         return parent;
@@ -61,4 +61,5 @@ public abstract class SyntaxNode {
     public abstract BasicType getType();
 
     public abstract Value interpret(Context context);
+
 }
