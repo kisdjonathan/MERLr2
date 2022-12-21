@@ -2,17 +2,10 @@ package parser;
 
 import java.io.*;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.Queue;
 
 //SymbolReader breaks the input into tokens as it is being read
 public class SymbolReader {
-    public static void main(String[] args) {    //DEBUG TODO remove
-        SymbolReader reader = new SymbolReader(new File("test.txt"));
-        while(!reader.eof())
-            System.out.println(reader.get());
-    }
-
     private static final boolean[] literalChars = new boolean[256];
     static{
         //all literal chars
@@ -23,6 +16,17 @@ public class SymbolReader {
         for(char i = 'a'; i <= 'z'; ++i)
             literalChars[i] = true;
         literalChars['$'] = literalChars['?'] = literalChars['.'] = literalChars['_'] = true;
+    }
+
+    private static class ReadStringLiteral {
+        public String line;
+        public int position;
+
+        public ReadStringLiteral(){}
+        public ReadStringLiteral(String line, int pos) {
+            this.line = line;
+            this.position = pos;
+        }
     }
 
     private BufferedReader source;
@@ -113,11 +117,16 @@ public class SymbolReader {
 
                 case '\'':	//'...'
                 case '"':	//"..."
+                    char c = line.charAt(cind);
                     StringBuilder val = new StringBuilder();
-                    Map.Entry<String, Integer> temp = getStringLiteral(line, val, cind);
-                    cind = temp.getValue();
-                    line = temp.getKey();
-                    lineBuffer.add("\"");
+                    ReadStringLiteral temp;
+                    if(line.length() > cind + 2 && line.charAt(cind + 1) == c && line.charAt(cind + 2) == c)
+                        temp = getStringLiteral(line, val, cind + 3, line.substring(cind, cind + 3), true);
+                    else
+                        temp = getStringLiteral(line, val, cind + 1, line.substring(cind, cind + 1), false);
+                    line = temp.line;
+                    cind = temp.position;
+                    lineBuffer.add(String.valueOf(c));
                     lineBuffer.add(val.toString());
                     continue;
 
@@ -154,13 +163,41 @@ public class SymbolReader {
         }
     }
 
-    private Map.Entry<String, Integer> getStringLiteral(String line, StringBuilder ret, int cind) {
-        char endDelim = line.charAt(cind);
+    private static boolean stringIn(String val, String container, int index) {
+        if(index + val.length() > container.length())
+            return false;
+        for(int i = 0; i < val.length(); ++i) {
+            if(val.charAt(i) != container.charAt(index + i))
+                return false;
+        }
+        return true;
+    }
 
-        ++cind;
-        while (line.charAt(cind) != endDelim)
+    private ReadStringLiteral clearSpaces(String line, int cind){
+        while(cind < line.length()) {
+            if(line.charAt(cind) == ' ' || line.charAt(cind) == '\t')
+                ++cind;
+            else if(line.charAt(cind) == '\n') {
+                line = getLine();
+                cind = 0;
+            }
+        }
+        return new ReadStringLiteral(line, cind);
+    }
+
+    private ReadStringLiteral getStringLiteral(String line, StringBuilder ret, int cind, String endDelim, boolean replaceSpaceTrailingNewline) {
+        while (!stringIn(endDelim, line, cind))
         {
-            if (line.charAt(cind) == '\\')
+            if(line.charAt(cind) == '\n') {
+                ret.append('\n');
+                line = getLine();
+                if(replaceSpaceTrailingNewline) {
+                    ReadStringLiteral r = clearSpaces(line, cind);
+                    line = r.line;
+                    cind = r.position;
+                }
+                continue;
+            } else if (line.charAt(cind) == '\\')
             {
                 char temp = line.charAt(++cind);
                 switch (temp) {
@@ -177,7 +214,12 @@ public class SymbolReader {
                     case '\n' -> {
                         line = getLine();
                         cind = 0;
-                        while (line.charAt(cind) == ' ' || line.charAt(cind) == '\t') ++cind;
+                        if(replaceSpaceTrailingNewline) {
+                            ReadStringLiteral r = clearSpaces(line, cind);
+                            line = r.line;
+                            cind = r.position;
+                        }
+                        ret.append(' ');
                         continue;
                     }
                     case 'x' -> {
@@ -199,7 +241,7 @@ public class SymbolReader {
         }
         ++cind; //end delimiter
 
-        return Map.entry(line, cind);
+        return new ReadStringLiteral(line, cind);
     }
 
     //strings are split into (",value)

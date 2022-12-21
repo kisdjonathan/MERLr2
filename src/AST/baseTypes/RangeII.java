@@ -1,0 +1,20 @@
+package AST.baseTypes;
+
+public class RangeII extends Range{
+    public RangeII(){}
+    public RangeII(int start, int stop){
+        super(start, stop);
+    }
+    public RangeII(int start, int stop, int step){
+        super(start, stop, step);
+    }
+
+    public RangeII(SyntaxNode start, SyntaxNode end) {
+        //TODO
+    }
+    //TODO remaining constructors for floats and SyntaxNodes
+
+    public SyntaxNode getIndex(int i) {
+        return new Add(getStart(), new Multiply(new Int(i), getStep()));
+    }
+}
