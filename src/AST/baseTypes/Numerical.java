@@ -1,8 +1,31 @@
 package AST.baseTypes;
 
 import AST.baseTypes.Float;
+import interpreter.Context;
+import interpreter.Value;
 
 public abstract class Numerical extends BasicType {
+    public double asDouble(){
+        if (this instanceof Float f) {
+            return f.getValue();
+        } else if (this instanceof Int i) {
+            return i.getValue();
+        } else {
+            //TODO
+            return 0.0;
+        }
+    }
+    public int asInt(){
+        if (this instanceof Float f) {
+            return (int) f.getValue();
+        } else if (this instanceof Int i) {
+            return i.getValue();
+        } else {
+            //TODO
+            return 0;
+        }
+    }
+
     private boolean extended = false;
     private boolean unsigned = false;
 
@@ -24,22 +47,5 @@ public abstract class Numerical extends BasicType {
 
     public boolean isNumeric() {
         return true;
-    }
-
-    protected abstract int defaultByteSize();
-
-    public TypeSize getByteSize() {
-        return new TypeSize((extended ? 2 : 1) * defaultByteSize());
-    }
-
-    public double doubleOf(){
-        if (this instanceof Float) {
-            return ((Float) this).getValue();
-        } else if (this instanceof Int) {
-            return ((Int) this).getValue();
-        } else {
-            //TODO
-            return 0.0;
-        }
     }
 }

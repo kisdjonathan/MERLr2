@@ -131,11 +131,6 @@ public abstract class BasicType extends SyntaxNode {
     }
 
     /**
-     * returns the size of this
-     **/
-    public abstract TypeSize getByteSize();
-
-    /**
      * returns a new instance of the type with the value
      */
     public SyntaxNode newInstance(String s) {

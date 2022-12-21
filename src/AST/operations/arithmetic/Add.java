@@ -18,15 +18,15 @@ public class Add extends ArithmeticInfix {
     }
 
 
-    public Value interpretFloats(Context context) {
-        double a = ((Numerical) getChild(0).interpret(context).getValue()).doubleOf();
-        double b = ((Numerical) getChild(1).interpret(context).getValue()).doubleOf();
+    public Value interpretFloats(Value first, Value second) {
+        double a = ((Numerical) first.getValue()).asDouble();
+        double b = ((Numerical) second.getValue()).asDouble();
         return new Value(new Float(a + b));
     }
 
-    public Value interpretInts(Context context) {
-        Int a = (Int)(getChild(0).interpret(context).getValue());
-        Int b = (Int)(getChild(1).interpret(context).getValue());
+    public Value interpretInts(Value first, Value second) {
+        Int a = (Int)(first.getValue());
+        Int b = (Int)(second.getValue());
         return new Value(new Int(a.getValue() + b.getValue()));
     }
 
