@@ -17,7 +17,6 @@ public class Add extends ArithmeticInfix {
         return "add";
     }
 
-
     public Value interpretFloats(Value first, Value second) {
         double a = ((Numerical) first.getValue()).asDouble();
         double b = ((Numerical) second.getValue()).asDouble();

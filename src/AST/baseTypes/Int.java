@@ -8,6 +8,7 @@ import interpreter.Value;
 public class Int extends Numerical{
     private int value;
 
+    public static Int ZERO = new Int(0);
     public Int(){
         value = 0;
     }

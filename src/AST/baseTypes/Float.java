@@ -2,9 +2,13 @@ package AST.baseTypes;
 
 import AST.abstractNode.SyntaxNode;
 import AST.abstractNode.SyntaxNode;
+import interpreter.Context;
+import interpreter.Value;
 
 public class Float extends Numerical{
     private double value = 0;
+
+    public static Float ZERO = new Float(0.0);
 
     public Float(){}
     public Float(double val) {
@@ -22,10 +26,10 @@ public class Float extends Numerical{
     }
 
     public boolean typeEquals(SyntaxNode other) {
-        return getByteSize().compareTo(other.getBaseType().getByteSize()) == 0;
+        return false; //TODO
     }
     public boolean typeContains(SyntaxNode other) {
-        return getByteSize().compareTo(other.getBaseType().getByteSize()) >= 0;
+        return false; //TODO
     }
 
     protected int defaultByteSize() {
@@ -34,5 +38,15 @@ public class Float extends Numerical{
 
     public String toString() {
         return super.toString() + " " + value;
+    }
+
+    @Override
+    public BasicType getType() {
+        return null;
+    }
+
+    @Override
+    public Value interpret(Context context) {
+        return null;
     }
 }
