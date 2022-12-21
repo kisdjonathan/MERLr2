@@ -5,8 +5,7 @@ import AST.abstractNode.SyntaxNode;
 public class With extends Operator {
     public With(){}
     public With(SyntaxNode val, SyntaxNode add){
-        setOrigin(val);
-        setVector(add);
+        addChild(val); addChild(add);
     }
 
     public String getName() {

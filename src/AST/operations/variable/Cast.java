@@ -9,8 +9,7 @@ import AST.operations.Operator;
 public class Cast extends Operator {
     public Cast(){}
     public Cast(SyntaxNode from, SyntaxNode to) {
-        setOrigin(from);
-        setVector(to);
+        addChild(from); addChild(to);
     }
     public Cast(SyntaxNode from, SyntaxNode to, SyntaxNode parent) {
         this(from, to);

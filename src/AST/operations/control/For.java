@@ -18,8 +18,11 @@ public class For extends Control {
         iterationVariables.setParent(this);
         for(SyntaxNode node : Tuple.asTuple(iterableVariable)){
             node.setParent(this);
-            variables.add((Variable) node.evaluated());   //TODO L potentially erroneous
+            if(!(node instanceof Variable))
+                throw new Error("for loop with non-variable variable");
+            addChild(node);
         }
+        unifyVariables();
         setBase(iterableVariable, body);
     }
 }
