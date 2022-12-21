@@ -6,12 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Operator extends SyntaxNode {
-    private List<SyntaxNode> operands = new ArrayList<>();
+    private List<String> operators = new ArrayList<>();
 
     public void addChild(String op, SyntaxNode val) {
-        operands.add(val);
+        super.addChild(op, val);
+        operators.add(op);
     }
-    public SyntaxNode getChild(int index) {
-        return operands.get(index);
+    public String getOperator(int index) {
+        return operators.get(index);
     }
 }

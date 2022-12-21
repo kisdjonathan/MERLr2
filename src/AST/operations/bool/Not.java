@@ -2,10 +2,10 @@ package AST.operations.bool;
 
 import AST.abstractNode.SyntaxNode;
 
-public class Not extends BoolInfix {
+public class Not extends BoolOperator {
     public Not(){}
     public Not(SyntaxNode value) {
-        setOrigin(value);
+        super(value);
     }
 
     public String getName() {

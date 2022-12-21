@@ -1,8 +1,6 @@
 package AST.baseTypes;
 
 import AST.abstractNode.SyntaxNode;
-import data.Usage;
-import AST.*;
 
 import java.util.Arrays;
 import java.util.Collection;

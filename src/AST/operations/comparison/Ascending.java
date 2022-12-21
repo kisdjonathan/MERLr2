@@ -2,7 +2,7 @@ package AST.operations.comparison;
 
 import AST.abstractNode.SyntaxNode;
 
-public class Ascending extends ComparisonInfix {
+public class Ascending extends ComparisonOperator {
     public Ascending() {}
     public Ascending(SyntaxNode origin, SyntaxNode vector) {
         super(origin, vector);
