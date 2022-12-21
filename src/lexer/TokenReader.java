@@ -108,8 +108,15 @@ public class TokenReader {
     private SyntaxNode readOperator(SyntaxNode predecessor, String oper) {
         //group
         if(GroupReader.isStartDelimiter(oper)) {
-            SyntaxNode args = readGroup(oper);
-            return OperatorReader.decodeCall(predecessor, args);
+            String startdelim = oper;
+            SyntaxNode args = null;
+            if(!source.eof() && !GroupReader.isEndDelimiter(source.peek())) {
+                args = get();
+                while (!source.eof() && !GroupReader.isEndDelimiter(source.peek()))
+                    args = getOperator(args);
+            }
+            String endDelim = source.eof() ? "EOF" : source.get();
+            return OperatorReader.decodeCall(predecessor, startdelim, endDelim, args);
         }
 
         SyntaxNode ret = OperatorReader.decode(oper); ret.addChild(oper, predecessor);

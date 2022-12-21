@@ -6,8 +6,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 //TODO Tuple, except with named fields
-public abstract class Structure extends Tuple {
+public class Structure extends Tuple {
     private Map<String, Integer> namePositions = new HashMap<>();
+
+    public Structure(SyntaxNode variable, SyntaxNode body) {
+        //TODO
+    }
 
     public SyntaxNode removeChild(String name) {
         return removeChild(namePositions.get(name));

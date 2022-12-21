@@ -1,7 +1,7 @@
 package lexer;
 
-import AST.abstractNode.ParentNode;
 import AST.abstractNode.SyntaxNode;
+import AST.baseTypes.Structure;
 import AST.baseTypes.Tuple;
 import AST.operations.variable.*;
 import AST.operations.*;
@@ -56,7 +56,7 @@ public class OperatorReader {
             default -> throw new Error("unable to find operator " + name);
         };
     }
-    public static Operator prefix(String oper, SyntaxNode opand) {
+    public static SyntaxNode prefix(String oper, SyntaxNode opand) {
         return switch (oper) {
             case "+"        ->new Positive  (opand);
             case "-"        ->new Negative  (opand);
@@ -66,11 +66,22 @@ public class OperatorReader {
             default -> throw new Error("unable to find prefix " + oper);
         };
     }
-    public static Operator decodeCall(SyntaxNode caller, SyntaxNode args) {
-
+    public static SyntaxNode decodeCall(SyntaxNode caller, String startDelim, String endDelim, SyntaxNode args) {
+        return switch (startDelim + endDelim) {
+            case "()"   ->new Call      (caller, args);
+            case "[]"   ->new Index     (caller, args);
+            case "{}"   ->new Structure (caller, args);
+            default     ->throw new Error("invalid calling brackets " + startDelim + endDelim);
+        };
     }
     public static Operator decodePrefix(String oper, SyntaxNode opand) {
-
+        return switch (oper) {
+            case "+"        ->new Positive  (opand);
+            case "-"        ->new Negative  (opand);
+            case "not","!"  ->new Not       (opand);
+            case "$invert"  ->new BitNot    (opand);
+            case "ref"      ->null;
+        };
     }
 
 

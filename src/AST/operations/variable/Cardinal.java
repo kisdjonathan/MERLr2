@@ -1,13 +1,13 @@
 package AST.operations.variable;
 
-import baseTypes.Int;
+import AST.baseTypes.Int;
+import AST.operations.Operator;
 import AST.abstractNode.SyntaxNode;
-import operations.BuiltinOperation;
 
-public class Cardinal extends BuiltinOperation {
+public class Cardinal extends Operator {
     public Cardinal(){}
     public Cardinal(SyntaxNode value) {
-        setOrigin(value);
+        addChild(value);
     }
 
     public String getName() {

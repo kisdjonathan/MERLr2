@@ -5,6 +5,7 @@ package AST.baseTypes;
 
 import AST.abstractNode.SyntaxNode;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -14,8 +15,7 @@ public class Tuple extends BasicType implements Iterable<SyntaxNode>{
      * returns node if node is a tuple, otherwise creates a tuple containing node and returns that
      **/
     public static Tuple asTuple(SyntaxNode node) {
-        return node instanceof Tuple ? (Tuple)node : new Tuple(){{
-            addChild(node);}};
+        return node == null ? new Tuple() : node instanceof Tuple ? (Tuple)node : new Tuple(Arrays.asList(node));
     }
 
     public Tuple(){}
