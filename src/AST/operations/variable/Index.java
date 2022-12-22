@@ -1,13 +1,13 @@
 package AST.operations.variable;
 
+import AST.baseTypes.BasicType;
 import AST.operations.Operator;
 import AST.abstractNode.SyntaxNode;
 
 //builtin indexing provided for array/list types only
 public class Index extends Operator {
     public Index(SyntaxNode ref, SyntaxNode pos) {
-        setOrigin(ref);
-        setVector(pos);
+        addChild(ref); addChild(pos);
     }
 
     public SyntaxNode getDeclaredType() {
@@ -17,5 +17,16 @@ public class Index extends Operator {
 
     public String getName() {
         return "index";
+    }
+
+    //TODO
+    @Override
+    public BasicType getType() {
+        return null;
+    }
+
+    @Override
+    public BasicType interpret() {
+        return null;
     }
 }

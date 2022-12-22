@@ -82,7 +82,7 @@ public class LiteralReader {
             if(value.contains(".") || value.contains("E"))
                 return new Float(n.doubleValue());
             else
-                return new Int(n.longValue());
+                return new Int(n.intValue());
         }
         else {
             return switch (suffix) {

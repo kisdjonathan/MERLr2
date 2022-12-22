@@ -6,20 +6,18 @@ import AST.baseTypes.Int;
 import AST.baseTypes.Numerical;
 import AST.operations.Operator;
 import AST.abstractNode.SyntaxNode;
-import interpreter.Context;
-import interpreter.Value;
 
 import java.util.Arrays;
 
-public abstract class ArithmeticInfix extends Operator {
+public abstract class ArithmeticOperator extends Operator {
     private static SyntaxNode largerType(SyntaxNode a, SyntaxNode b) {
         //BasicType t1 = a.getBaseType(), t2 = b.getBaseType();
         //return t1.getByteSize().compareTo(t2.getByteSize()) > 0 ? a : b;
         return null;
     }
 
-    public ArithmeticInfix() {}
-    public ArithmeticInfix(SyntaxNode a, SyntaxNode b) {
+    public ArithmeticOperator() {}
+    public ArithmeticOperator(SyntaxNode a, SyntaxNode b) {
         setChildren(Arrays.asList(a, b));
     }
 
@@ -33,22 +31,22 @@ public abstract class ArithmeticInfix extends Operator {
     }
 
     @Override
-    public Value interpret(Context context) {
-        Value first = getChild(0).interpret(context);
-        Value second = getChild(1).interpret(context);
-        if (first.getValue() instanceof Int && second.getValue() instanceof Int) {
-            return interpretInts(first, second);
-        } else if (first.getValue().getBaseType() instanceof Float || second.getValue().getBaseType() instanceof Float) {
-            return interpretFloats(first, second);
+    public BasicType interpret() {
+        BasicType first = getChild(0).interpret();
+        BasicType second = size() > 1 ? getChild(1).interpret() : null;
+        if (first instanceof Int a && second instanceof Int b) {
+            return interpretInts(a, b);
+        } else if (first instanceof Float || second instanceof Float) {
+            return interpretFloats((Numerical)first, (Numerical)second);
         } else {
             //TODO
             return null;
         }
     }
 
-    protected abstract Value interpretFloats(Value first, Value second);
+    protected abstract BasicType interpretFloats(Numerical first, Numerical second);
 
-    protected abstract Value interpretInts(Value first, Value second);
+    protected abstract BasicType interpretInts(Numerical first, Numerical second);
 
 
 }

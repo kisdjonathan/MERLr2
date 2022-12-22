@@ -1,6 +1,7 @@
 package AST.operations;
 
 import AST.abstractNode.SyntaxNode;
+import AST.baseTypes.BasicType;
 
 public class With extends Operator {
     public With(){}
@@ -10,5 +11,16 @@ public class With extends Operator {
 
     public String getName() {
         return "with";
+    }
+
+    //TODO
+    @Override
+    public BasicType getType() {
+        return null;
+    }
+
+    @Override
+    public BasicType interpret() {
+        return null;
     }
 }

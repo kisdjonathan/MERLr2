@@ -81,6 +81,7 @@ public class OperatorReader {
             case "not","!"  ->new Not       (opand);
             case "$invert"  ->new BitNot    (opand);
             case "ref"      ->null;
+            default         ->throw new Error("invalid prefix " + oper);
         };
     }
 

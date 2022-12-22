@@ -1,6 +1,8 @@
 package AST.baseTypes;
 
 
+import AST.abstractNode.SyntaxNode;
+
 public class RangeIE extends Range {
     public RangeIE(){}
     public RangeIE(int start, int stop){
@@ -12,10 +14,5 @@ public class RangeIE extends Range {
 
     public RangeIE(SyntaxNode start, SyntaxNode end) {
         //TODO
-    }
-    //TODO remaining constructors for floats and SyntaxNodes
-
-    public SyntaxNode getIndex(int i) {
-        return new Add(getStart(), new Multiply(new Int(i), getStep()));
     }
 }

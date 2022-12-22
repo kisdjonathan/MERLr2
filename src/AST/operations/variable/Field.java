@@ -1,5 +1,6 @@
 package AST.operations.variable;
 
+import AST.baseTypes.BasicType;
 import AST.operations.Operator;
 import AST.abstractNode.SyntaxNode;
 import AST.components.*;
@@ -30,5 +31,16 @@ public class Field extends Operator {
         if(loadedVariables.containsKey(name))
             return loadedVariables.get(name);
         return super.getVariable(name);
+    }
+
+    //TODO
+    @Override
+    public BasicType getType() {
+        return null;
+    }
+
+    @Override
+    public BasicType interpret() {
+        return null;
     }
 }

@@ -1,9 +1,5 @@
 package AST.baseTypes;
 
-import AST.baseTypes.Float;
-import interpreter.Context;
-import interpreter.Value;
-
 public abstract class Numerical extends BasicType {
     public double asDouble(){
         if (this instanceof Float f) {

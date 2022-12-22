@@ -2,8 +2,6 @@ package AST.abstractNode;
 
 import AST.baseTypes.BasicType;
 import AST.components.Variable;
-import interpreter.Context;
-import interpreter.Value;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +57,10 @@ public abstract class  SyntaxNode {
     public void unifyVariables(Map<String, Variable> variables){}
 
     public abstract BasicType getType();
+    public void setType(BasicType type) {
+        throw new Error("can not set type for " + this);
+    }
 
-    public abstract Value interpret(Context context);
+    public abstract BasicType interpret();
 
 }

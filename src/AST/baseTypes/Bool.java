@@ -19,17 +19,6 @@ public class Bool extends BasicType {
         return "bool";
     }
 
-    public boolean typeEquals(SyntaxNode other) {
-        return getByteSize().compareTo(other.getBaseType().getByteSize()) == 0;
-    }
-    public boolean typeContains(SyntaxNode other) {
-        return getByteSize().compareTo(other.getBaseType().getByteSize()) >= 0;
-    }
-
-    public TypeSize getByteSize() {
-        return new TypeSize(1);
-    }
-
     public String toString() {
         return super.toString() + " " + value;
     }

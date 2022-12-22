@@ -28,31 +28,13 @@ public class Tuple extends BasicType implements Iterable<SyntaxNode>{
     }
 
 
-    public boolean typeEquals(SyntaxNode t) {
-        for(SyntaxNode child : children)
-            if(!child.typeEquals(t))
-                return false;
-        return true;
-    }
-
-    public TypeSize getByteSize() {
-        TypeSize ret = new TypeSize(0);
-        for(SyntaxNode child : children)
-            ret = TypeSize.add(ret, child.getBaseType().getByteSize());
-        return ret;
-    }
-    public SyntaxNode newInstance(String s) {
-        throw new Error("unable to create new tuple instance as a literal (from " + s + ")");
-    }
-
-
     public Iterator<SyntaxNode> iterator() {
-        return children.listIterator();
+        return getChildren().listIterator();
     }
 
     public String toString() {
         StringBuilder ret = new StringBuilder("(");
-        for(SyntaxNode child : children) {
+        for(SyntaxNode child : getChildren()) {
             if (ret.length() > 1)
                 ret.append(",");
             ret.append(child.toString());

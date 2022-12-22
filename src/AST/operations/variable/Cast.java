@@ -1,6 +1,7 @@
 package AST.operations.variable;
 
 import AST.abstractNode.SyntaxNode;
+import AST.baseTypes.BasicType;
 import AST.operations.Operator;
 
 /**
@@ -20,10 +21,12 @@ public class Cast extends Operator {
         return "cast";
     }
 
-    public BasicType getBaseType() {
-        return getVector().getBaseType();
+    public BasicType getType() {
+        return getChild(1).getType();
     }
-    public boolean typeEquals(SyntaxNode other) {
-        return getVector().typeEquals(other);
+
+    //TODO
+    public BasicType interpret() {
+        return null;
     }
 }

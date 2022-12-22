@@ -2,7 +2,7 @@ package AST.operations.bitwise;
 
 import AST.abstractNode.SyntaxNode;
 
-public class LeftShift extends  BitwiseInfix{
+public class LeftShift extends BitwiseOperator {
     public LeftShift() {}
     public LeftShift(SyntaxNode origin, SyntaxNode vector) {
         super(origin, vector);

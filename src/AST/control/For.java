@@ -1,11 +1,9 @@
-package AST.operations.control;
+package AST.control;
 
 import AST.abstractNode.SyntaxNode;
+import AST.baseTypes.BasicType;
 import AST.baseTypes.Tuple;
 import AST.components.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class For extends Control {
 
@@ -22,7 +20,16 @@ public class For extends Control {
                 throw new Error("for loop with non-variable variable");
             addChild(node);
         }
-        unifyVariables();
         setBase(iterableVariable, body);
+    }
+
+    @Override
+    public BasicType getType() {
+        return null;    //TODO
+    }
+
+    @Override
+    public BasicType interpret() {
+        return null;
     }
 }

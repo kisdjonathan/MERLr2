@@ -1,9 +1,13 @@
-package AST.operations.variable;
+package AST.control;
 
+import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
-import AST.operations.Operator;
 
-public class In extends Operator {
+public class Repeat extends Control {
+    public Repeat(SyntaxNode count, SyntaxNode body) {
+        setBase(count, body);
+    }
+
     //TODO
     @Override
     public BasicType getType() {

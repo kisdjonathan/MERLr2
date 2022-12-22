@@ -1,9 +1,11 @@
 package AST.components;
 
 import AST.abstractNode.SyntaxNode;
+import AST.baseTypes.BasicType;
 
 public class Variable extends SyntaxNode {
     private String name;
+    private BasicType type;
 
     public Variable(String name) {
         this.name = name;
@@ -11,5 +13,16 @@ public class Variable extends SyntaxNode {
 
     public String getName() {
         return name;
+    }
+
+    public BasicType getType() {
+        return type;
+    }
+    public void setType(BasicType t) {
+        type = t;
+    }
+
+    public BasicType interpret() {
+        return type;
     }
 }

@@ -1,37 +1,29 @@
 package AST.operations.variable;
 
-import baseTypes.Signature;
-import baseTypes.Tuple;
+import AST.baseTypes.BasicType;
+import AST.components.Function;
+import AST.components.Variable;
 import AST.operations.Operator;
 import AST.abstractNode.SyntaxNode;
-import AST.Function;
-import AST.Variable;
 
 public class Assign extends Operator {
     public Assign(){}
     public Assign(SyntaxNode dest, SyntaxNode value){
-        setOrigin(dest);
-        setVector(value);
-    }
-
-    public void evaluate() {
-        super.evaluate();
-        Variable dest = getVariable(getOrigin().getName());
-        SyntaxNode source = getVector();
-        if(dest.getDeclaredType().equals("inferred"))
-            dest.setDeclaredType(source);
-        else if(!dest.getDeclaredType().equals(source)) {
-            Function conv = getFunction("convert", new Signature(Tuple.asTuple(source.getDeclaredType()), Tuple.asTuple(dest.getDeclaredType())));
-            if(conv != null)
-                setVector(new Call(conv, source));
-            else if(source.typeConvertsTo(dest))
-                setVector(new Cast(source, dest));
-            else
-                throw new Error("No conversion exists from " + source + " to " + dest);
-        }
+        addChild(dest); addChild(value);
     }
 
     public String getName() {
         return "assign";
+    }
+
+    public BasicType getType() {
+        return getChild(size() - 1).getType();
+    }
+
+    public BasicType interpret() {
+        BasicType value = getChild(size() - 1).interpret();
+        for(int i = 0; i < size()-1; ++i)
+            getChild(i).setType(value);
+        return value;
     }
 }

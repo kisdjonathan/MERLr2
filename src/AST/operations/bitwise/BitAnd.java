@@ -2,7 +2,7 @@ package AST.operations.bitwise;
 
 import AST.abstractNode.SyntaxNode;
 
-public class BitAnd extends BitwiseInfix{
+public class BitAnd extends BitwiseOperator {
     public BitAnd() {}
     public BitAnd(SyntaxNode origin, SyntaxNode vector) {
         super(origin, vector);

@@ -1,14 +1,32 @@
 package AST.operations.arithmetic;
 
 import AST.abstractNode.SyntaxNode;
+import AST.baseTypes.BasicType;
+import AST.baseTypes.Int;
+import AST.baseTypes.Numerical;
 
-public class Factorial extends ArithmeticInfix {
+public class Factorial extends ArithmeticOperator {
     public Factorial(){}
     public Factorial(SyntaxNode value) {
-        setOrigin(value);
+        addChild(value);
     }
 
     public String getName() {
         return "factorial";
+    }
+
+    public BasicType interpretFloats(Numerical first, Numerical second) {
+        return null;    //TODO
+    }
+
+    public BasicType interpretInts(Numerical first, Numerical second) {
+        int stop = first.asInt();
+        if(stop < 0)
+            throw new Error("NaN");
+
+        int ret = stop;
+        for(int i = 1; i < stop; ++i)
+            ret *= i;
+        return new Int(ret);
     }
 }

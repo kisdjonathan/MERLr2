@@ -1,7 +1,6 @@
 package lexer;
 import AST.components.Variable;
-import AST.operations.Operator;
-import AST.operations.control.Control;
+import AST.control.Control;
 import AST.operations.variable.Field;
 import parser.SymbolReader;
 import AST.abstractNode.SyntaxNode;

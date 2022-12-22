@@ -15,9 +15,4 @@ public class RangeEI extends Range {
     public RangeEI(SyntaxNode start, SyntaxNode end) {
         //TODO
     }
-    //TODO remaining constructors for floats and SyntaxNodes
-
-    public SyntaxNode getIndex(int i) {
-        return new Add(getStart(), new Multiply(new Int(i + 1), getStep()));
-    }
 }

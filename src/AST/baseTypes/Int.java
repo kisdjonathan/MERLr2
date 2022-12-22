@@ -2,8 +2,6 @@ package AST.baseTypes;
 
 
 import AST.abstractNode.SyntaxNode;
-import interpreter.Context;
-import interpreter.Value;
 
 public class Int extends Numerical{
     private int value;
@@ -40,15 +38,5 @@ public class Int extends Numerical{
 
     public String toString() {
         return super.toString() + " " + value;
-    }
-
-    @Override
-    public BasicType getType() {
-        return null;
-    }
-
-    @Override
-    public Value interpret(Context context) {
-        return null;
     }
 }

@@ -1,6 +1,5 @@
 package AST.baseTypes;
 
-import baseAST.abstractNode.SyntaxNode;
 import AST.abstractNode.SyntaxNode;
 
 public class Signature extends BasicType{
@@ -24,10 +23,6 @@ public class Signature extends BasicType{
         args = Tuple.asTuple(first);
         args.setParent(this);
     }
-    public void setArgs(SyntaxNode first) {
-        first.setParent(this);
-        setArgs(first.getEvaluatedReplacement());
-    }
 
     public Tuple getRets() {
         return rets;
@@ -36,19 +31,10 @@ public class Signature extends BasicType{
         rets = Tuple.asTuple(second);
         rets.setParent(this);
     }
-    public void setRets(SyntaxNode second) {
-        second.setParent(this);
-        setRets(second.getEvaluatedReplacement());
-    }
 
-
-    public boolean typeEquals(SyntaxNode other) {
+    public boolean equals(Object other) {
         if(!(other instanceof Signature fother))
             return false;
-        return args.typeEquals(fother.getArgs()) && rets.typeEquals(fother.getRets());
-    }
-
-    public TypeSize getByteSize() {
-        return new TypeSize();
+        return args.equals(fother.getArgs()) && rets.equals(fother.getRets());
     }
 }

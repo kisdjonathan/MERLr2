@@ -2,10 +2,10 @@ package AST.operations.bitwise;
 
 import AST.abstractNode.SyntaxNode;
 
-public class BitNot extends BitwiseInfix {
+public class BitNot extends BitwiseOperator {
     public BitNot(){}
     public BitNot(SyntaxNode value) {
-        setOrigin(value);
+        addChild(value);
     }
 
     public String getName() {

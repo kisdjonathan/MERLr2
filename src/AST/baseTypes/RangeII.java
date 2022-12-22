@@ -1,5 +1,7 @@
 package AST.baseTypes;
 
+import AST.abstractNode.SyntaxNode;
+
 public class RangeII extends Range{
     public RangeII(){}
     public RangeII(int start, int stop){
@@ -11,10 +13,5 @@ public class RangeII extends Range{
 
     public RangeII(SyntaxNode start, SyntaxNode end) {
         //TODO
-    }
-    //TODO remaining constructors for floats and SyntaxNodes
-
-    public SyntaxNode getIndex(int i) {
-        return new Add(getStart(), new Multiply(new Int(i), getStep()));
     }
 }

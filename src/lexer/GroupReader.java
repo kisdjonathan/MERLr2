@@ -11,13 +11,13 @@ public class GroupReader {
         Tuple elements = Tuple.asTuple(body);
         switch (elements.size()) {
             case 1:
-                value.setStop(elements.getIndex(0));
+                value.setStop(elements.getChild(0));
                 break;
             case 2:
-                value.setStart(elements.getIndex(0));
-                value.setStop(elements.getIndex(1));
+                value.setStart(elements.getChild(0));
+                value.setStop(elements.getChild(1));
             case 3:
-                value.setStep(elements.getIndex(2));
+                value.setStep(elements.getChild(2));
             default:
                 throw new Error("too many values in range");
         }
@@ -29,6 +29,7 @@ public class GroupReader {
             case "()" -> fillRange(new RangeEE(), body);
             case "[)" -> fillRange(new RangeIE(), body);
             case "(]" -> fillRange(new RangeEI(), body);
+            default   -> throw new Error("invalid braces for range " + startdelim + enddelim);
         };
     }
 
@@ -57,6 +58,7 @@ public class GroupReader {
             case "[)"   -> fillRange(new RangeIE(), body);
             case "[]"   -> new DynamicArray(Tuple.asTuple(body));
             case "{}"   -> new UnorderedSet(Tuple.asTuple(body));
+            case "EOF"  -> body;    //TODO this is the entire file, so more analysis should be performed
             default     -> throw new Error("invalid combination of start and end delimiters " + startdelim + enddelim);
         };
     }

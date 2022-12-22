@@ -1,9 +1,10 @@
-package AST.operations.control;
+package AST.control;
 
 import AST.abstractNode.SyntaxNode;
+import AST.baseTypes.BasicType;
 import AST.baseTypes.Bool;
+import AST.baseTypes.VoidType;
 import AST.components.Locality;
-import AST.operations.Operator;
 import AST.operations.variable.In;
 
 import java.util.HashSet;
@@ -23,6 +24,25 @@ public abstract class Control extends Locality {
         public void setParent(SyntaxNode parent) {
             super.setParent(parent);
             condition.setParent(parent);
+        }
+
+        public BasicType getType() {
+            return body.getType();
+        }
+
+        public BasicType interpret() {
+            BasicType success = condition.interpret();
+            if(success.equals(new Bool(true))) {    //TODO switch implementation
+                BasicType val = body.interpret();
+                if(executionTrue != null)
+                    return executionTrue.interpret();
+                else
+                    return val;
+            }
+             else if(executionFalse != null)
+                 return executionFalse.interpret();
+             else
+                 return new VoidType();
         }
     }
     
