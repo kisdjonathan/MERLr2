@@ -3,6 +3,7 @@ package interpreter;
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
 import AST.baseTypes.Int;
+import AST.baseTypes.Numerical;
 import lexer.TokenReader;
 
 import java.io.File;
@@ -16,6 +17,6 @@ public class Entry {
         TokenReader reader = new TokenReader(new File(path));
         SyntaxNode body = reader.readGroup("");
         BasicType value = body.interpret();
-        System.out.println(((Int)value).getValue());
+        System.out.println(value);
     }
 }

@@ -69,4 +69,8 @@ public abstract class BasicType extends SyntaxNode {
     public BasicType clone(){
         return this;    //TODO make abstract and implement elsewhere
     }
+
+    public String toString() {
+        return getName();
+    }
 }
