@@ -5,6 +5,11 @@ import AST.operations.Operator;
 
 public class In extends Operator {
     //TODO
+
+    public String getName() {
+        return "in";
+    }
+
     @Override
     public BasicType getType() {
         return null;

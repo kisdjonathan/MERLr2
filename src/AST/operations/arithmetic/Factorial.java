@@ -1,7 +1,7 @@
 package AST.operations.arithmetic;
 
 import AST.abstractNode.SyntaxNode;
-import AST.baseTypes.BasicType;
+import AST.baseTypes.Float;
 import AST.baseTypes.Int;
 import AST.baseTypes.Numerical;
 
@@ -15,11 +15,11 @@ public class Factorial extends ArithmeticOperator {
         return "factorial";
     }
 
-    public BasicType interpretFloats(Numerical first, Numerical second) {
+    public Float interpretFloats(Numerical first, Numerical second) {
         return null;    //TODO
     }
 
-    public BasicType interpretInts(Numerical first, Numerical second) {
+    public Int interpretInts(Numerical first, Numerical second) {
         int stop = first.asInt();
         if(stop < 0)
             throw new Error("NaN");

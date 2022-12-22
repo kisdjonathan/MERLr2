@@ -15,7 +15,7 @@ public class Tuple extends BasicType implements Iterable<SyntaxNode>{
      * returns node if node is a tuple, otherwise creates a tuple containing node and returns that
      **/
     public static Tuple asTuple(SyntaxNode node) {
-        return node == null ? new Tuple() : node instanceof Tuple ? (Tuple)node : new Tuple(Arrays.asList(node));
+        return node == null ? new Tuple() : node instanceof Tuple ? (Tuple)node : new Tuple() {{addChild(node);}};
     }
 
     public Tuple(){}
@@ -27,6 +27,13 @@ public class Tuple extends BasicType implements Iterable<SyntaxNode>{
         return "tuple";
     }
 
+    @Override
+    public BasicType interpret() {
+        Tuple ret = new Tuple();
+        for(SyntaxNode child : getChildren())
+            ret.addChild(child.interpret());
+        return ret;
+    }
 
     public Iterator<SyntaxNode> iterator() {
         return getChildren().listIterator();

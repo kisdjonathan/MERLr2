@@ -21,22 +21,29 @@ public abstract class ArithmeticOperator extends Operator {
         setChildren(Arrays.asList(a, b));
     }
 
-    public SyntaxNode getDeclaredType() {
-        return largerType(getChild(0), getChild(1));
-    }
-
     @Override
     public BasicType getType() {
-        return null;
+        BasicType first = getChild(0).getType();
+        BasicType second = size() > 1 ? getChild(1).getType() : null;
+        if (first instanceof Int a && second instanceof Int b) {
+            return new Int();
+        } else if (first instanceof Float || second instanceof Float) {
+            return new Float();
+        } else {
+            //TODO
+            return null;
+        }
     }
 
     @Override
     public BasicType interpret() {
         BasicType first = getChild(0).interpret();
         BasicType second = size() > 1 ? getChild(1).interpret() : null;
-        if (first instanceof Int a && second instanceof Int b) {
-            return interpretInts(a, b);
-        } else if (first instanceof Float || second instanceof Float) {
+        BasicType outType = getType();
+
+        if (outType instanceof Int) {
+            return interpretInts((Numerical)first, (Numerical)second);
+        } else if (outType instanceof Float) {
             return interpretFloats((Numerical)first, (Numerical)second);
         } else {
             //TODO
@@ -44,9 +51,9 @@ public abstract class ArithmeticOperator extends Operator {
         }
     }
 
-    protected abstract BasicType interpretFloats(Numerical first, Numerical second);
+    protected abstract Float interpretFloats(Numerical first, Numerical second);
 
-    protected abstract BasicType interpretInts(Numerical first, Numerical second);
+    protected abstract Int interpretInts(Numerical first, Numerical second);
 
 
 }

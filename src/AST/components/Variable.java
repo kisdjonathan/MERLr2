@@ -25,4 +25,8 @@ public class Variable extends SyntaxNode {
     public BasicType interpret() {
         return type;
     }
+
+    public String toString() {
+        return type + " " + name;
+    }
 }

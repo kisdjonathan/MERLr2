@@ -33,6 +33,10 @@ public class Field extends Operator {
         return super.getVariable(name);
     }
 
+    public String getName() {
+        return "field";
+    }
+
     //TODO
     @Override
     public BasicType getType() {

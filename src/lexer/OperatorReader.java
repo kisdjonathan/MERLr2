@@ -48,7 +48,7 @@ public class OperatorReader {
             case "<<"       ->new Assign    ();
             case "->"       ->new Cast      ();
             case "with"     ->new With      ();
-            case "of"       ->new Without   ();
+            case "then"     ->new Without   ();
             case "in"       ->new In        ();
 
             case ";",","    ->new Tuple     ();
@@ -101,7 +101,7 @@ public class OperatorReader {
             {";", ":"},
             {"if", "while", "repeat", "for", "else", "nelse"},
             {"in"},
-            {"with"},
+            {"with", "then"},
             {"<<", ">>"},
             {","},
             {"or"}, {"nor"}, {"xor"}, {"xnor"}, {"and"},
@@ -117,7 +117,7 @@ public class OperatorReader {
 
     private static final Set<String> infixes = new HashSet<>(Arrays.asList(
             "else", "nelse",
-            "with",
+            "with", "then",
             ",", ";",
             "or", "nor", "xor", "xnor", "and",
             "<<", ">>",

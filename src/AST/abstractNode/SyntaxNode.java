@@ -37,6 +37,10 @@ public abstract class  SyntaxNode {
     public SyntaxNode getChild(int index) {
         return children.get(index);
     }
+    public void setChild(int index, SyntaxNode child) {
+        child.setParent(this);
+        children.set(index, child);
+    }
     public SyntaxNode removeChild(int index) {
         SyntaxNode ret = children.remove(index);
         ret.setParent(null);
@@ -54,7 +58,16 @@ public abstract class  SyntaxNode {
      * implemented in syntaxNodes that store children
      * stops at children locals and calls their unifyVariables function
      */
-    public void unifyVariables(Map<String, Variable> variables){}
+    public void unifyVariables(Map<String, Variable> variables){
+        for(int i = 0; i < size(); ++i) {
+            if(getChild(i) instanceof Variable var) {
+                if (variables.containsKey(var.getName()))
+                    setChild(i, variables.get(var.getName()));
+            }
+            else
+                getChild(i).unifyVariables(variables);
+        }
+    }
 
     public abstract BasicType getType();
     public void setType(BasicType type) {
