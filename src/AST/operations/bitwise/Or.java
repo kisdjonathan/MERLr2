@@ -4,23 +4,23 @@ import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.Bool;
 import AST.baseTypes.Char;
 
-public class LeftShift extends BitwiseOperator {
-    public LeftShift() {}
-    public LeftShift(SyntaxNode origin, SyntaxNode vector) {
+public class Or extends BitwiseOperator {
+    public Or() {}
+    public Or(SyntaxNode origin, SyntaxNode vector) {
         super(origin, vector);
     }
 
     @Override
     protected Bool interpretBools(Bool first, Bool second) {
-        throw new Error("Unsupported arguments for right shift operator: \n\tfirst: boolean\n\tsecond: boolean");
+        return new Bool(first.getValue() || second.getValue());
     }
 
     @Override
     protected Char interpretBytes(Char first, Char second) {
-        return null;
+        return new Char((short) (first.getValue() | second.getValue()));
     }
 
     public String getName() {
-        return "left shift";
+        return "or";
     }
 }
