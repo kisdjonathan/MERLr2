@@ -24,28 +24,22 @@ public class OperatorReader {
             case "-"        ->new Subtract  ();
             case "*"        ->new Multiply  ();
             case "/"        ->new Divide    ();
-            case "^"        ->new Exponent  ();
+            case "**"       ->new Exponent  ();
             case "!"        ->new Factorial ();
-            //boolean
-            case "and"      ->new And       ();
-            case "or"       ->new Or        ();
-            case "nor"      ->new Nor       ();
-            case "xor"      ->new Xor       ();
-            case "xnor"     ->new Xnor      ();
+            //boolean, bitwise
+            case "and","&&" ->new And       ();
+            case "or","||"  ->new Or        ();
+            case "nor","~|" ->new Nor       ();
+            case "xor","^^" ->new Xor       ();
+            case "xnor","~^"->new Xnor      ();
             //comparison
             case "!="       ->new NotEqual  ();
-            case "="        ->new Equal     ();
+            case "=="       ->new Equal     ();
             case ">=",">"   ->new Ascending ();
             case "<=","<"   ->new Descending();
-            //bitwise
-            case "$and"     ->new BitAnd    ();
-            case "$or"      ->new BitOr     ();
-            case "$nor"     ->new BitNor    ();
-            case "$xor"     ->new BitXor    ();
-            case "$xnor"    ->new BitXnor   ();
             //other
             case ">>"       ->new Field     ();
-            case "<<"       ->new Assign    ();
+            case "<<", "="  ->new Assign    ();
             case "->"       ->new Cast      ();
             case "with"     ->new With      ();
             case "then"     ->new Without   ();
@@ -102,12 +96,12 @@ public class OperatorReader {
             {"if", "while", "repeat", "for", "else", "nelse"},
             {"in"},
             {"with", "then"},
-            {"<<", ">>"},
+            {"<<", "=", ">>"},
             {","},
             {"or"}, {"nor"}, {"xor"}, {"xnor"}, {"and"},
-            {"="}, {"!="}, {"<", ">", "<=", ">="},
+            {"=="}, {"!="}, {"<", ">", "<=", ">="},
             {"not"},
-            {"+", "-"}, {"||"}, {"%"}, {"*", "/"}, {"^"}, {"!"},
+            {"+", "-"}, {"||"}, {"%"}, {"*", "/"}, {"**"}, {"!"},
             {"$up", "$down", "$left", "$right"},
             {"$or"}, {"$nor"}, {"$xor"}, {"$xnor"}, {"$and"},
             {"$invert"},
@@ -122,7 +116,7 @@ public class OperatorReader {
             "or", "nor", "xor", "xnor", "and",
             "<<", ">>",
             "=", "!=", "<", ">", "<=", ">=",
-            "+", "-", "||", "%", "*", "/", "^",
+            "+", "-", "||", "%", "*", "/", "**",
             "$up", "$down", "$left", "$right",
             "$or", "$nor", "$xor", "$xnor", "$and",
             "->",

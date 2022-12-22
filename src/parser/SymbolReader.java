@@ -81,7 +81,10 @@ public class SymbolReader {
                 case '^':	//^
                 case '&':	//&
                 case '+':	//+
-                case '*':	//*
+                case '*':	//*, **
+                    if (line.charAt(cind + 1) == '*')
+                        ++len;
+                    break;
                 case ':':	//:
                 case ';':	//;
                 case ',':	//,
