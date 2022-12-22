@@ -2,6 +2,7 @@ package interpreter;
 
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
+import AST.baseTypes.Bool;
 import AST.baseTypes.Int;
 import AST.baseTypes.Numerical;
 import AST.components.Variable;
@@ -20,6 +21,8 @@ public class Entry {
         TokenReader reader = new TokenReader(new File(path));
         SyntaxNode body = reader.readGroup("");
         Map<String, Variable> globalVariables = new HashMap<>();
+        globalVariables.put("true", new Variable("true"){{setType(new Bool(true));}});
+        globalVariables.put("false", new Variable("false"){{setType(new Bool(false));}});
         body.unifyVariables(globalVariables);
         BasicType value = body.interpret();
         System.out.println(value);

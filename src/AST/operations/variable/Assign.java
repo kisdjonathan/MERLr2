@@ -23,15 +23,13 @@ public class Assign extends Operator {
     }
 
     public void unifyVariables(Map<String, Variable> variables) {
-        getChild(size() - 1).unifyVariables(variables);
+        super.unifyVariables(variables);
         BasicType type = getChild(size() - 1).getType();
         for(int i = 0; i < size()-1; ++i) {
             if(getChild(i) instanceof Variable var && !variables.containsKey(var.getName())) {
                 var.setType(type);
                 variables.put(var.getName(), var);
             }
-            else
-                getChild(i).unifyVariables(variables);
         }
     }
 
