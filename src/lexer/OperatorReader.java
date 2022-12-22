@@ -6,7 +6,6 @@ import AST.baseTypes.Tuple;
 import AST.operations.variable.*;
 import AST.operations.*;
 import AST.operations.arithmetic.*;
-import AST.operations.bool.*;
 import AST.operations.comparison.*;
 import AST.operations.bitwise.*;
 
@@ -55,7 +54,6 @@ public class OperatorReader {
             case "+"        ->new Positive  (opand);
             case "-"        ->new Negative  (opand);
             case "not","!"  ->new Not       (opand);
-            case "$not"     ->new BitNot    (opand);
             case "#"        ->new Cardinal  (opand);
             default -> throw new Error("unable to find prefix " + oper);
         };
@@ -73,7 +71,6 @@ public class OperatorReader {
             case "+"        ->new Positive  (opand);
             case "-"        ->new Negative  (opand);
             case "not","!"  ->new Not       (opand);
-            case "$invert"  ->new BitNot    (opand);
             case "ref"      ->null;
             default         ->throw new Error("invalid prefix " + oper);
         };

@@ -133,6 +133,11 @@ public class SymbolReader {
                     lineBuffer.add(val.toString());
                     continue;
 
+                case 't':
+                    if (line.substring(cind, cind + 4).equals("true")) {
+                        len += 4;
+                    }
+                    break;
                 default:	//id
                     while(isLiteralChar(line.charAt(cind + len)))
                         ++len;
