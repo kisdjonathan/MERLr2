@@ -2,7 +2,7 @@ package AST.operations.bitwise;
 
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.Bool;
-import AST.baseTypes.Char;
+import AST.baseTypes.Int;
 
 public class RightShift extends BitwiseOperator {
     public RightShift() {}
@@ -16,7 +16,7 @@ public class RightShift extends BitwiseOperator {
     }
 
     @Override
-    protected Char interpretBytes(Char first, Char second) {
+    protected Int interpretBytes(Int first, Int second) {
         return null;
     }
 

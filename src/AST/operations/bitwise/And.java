@@ -3,6 +3,7 @@ package AST.operations.bitwise;
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.Bool;
 import AST.baseTypes.Char;
+import AST.baseTypes.Int;
 
 public class And extends BitwiseOperator {
     public And() {}
@@ -16,8 +17,8 @@ public class And extends BitwiseOperator {
     }
 
     @Override
-    protected Char interpretBytes(Char first, Char second) {
-        return new Char((short) (first.getValue() & second.getValue()));
+    protected Int interpretBytes(Int first, Int second) {
+        return new Int(first.asInt() & second.asInt());
     }
 
     public String getName() {

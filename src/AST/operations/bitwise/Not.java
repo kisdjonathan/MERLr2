@@ -3,6 +3,7 @@ package AST.operations.bitwise;
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.Bool;
 import AST.baseTypes.Char;
+import AST.baseTypes.Int;
 
 public class Not extends BitwiseOperator {
     public Not(){}
@@ -13,8 +14,8 @@ public class Not extends BitwiseOperator {
     }
 
     @Override
-    protected Char interpretBytes(Char first, Char second) {
-        return new Char((short) ~first.getValue());
+    protected Int interpretBytes(Int first, Int second) {
+        return new Int(~first.asInt());
     }
 
     public Not(SyntaxNode value) {
