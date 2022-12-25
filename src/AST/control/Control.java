@@ -8,112 +8,103 @@ import AST.components.Locality;
 import AST.components.Variable;
 import AST.operations.variable.In;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 
 public abstract class Control extends Locality {
     protected class Node extends Locality {
-        public final SyntaxNode condition, body;
-        public Node executionFalse = null, executionTrue = null;
+        //[0]:condition, [1]: body, [2]: execFalse, [3]: execTrue
+        private boolean executionFalse = false, executionTrue = false;
 
         public Node(SyntaxNode condition, SyntaxNode body) {
-            body.setParent(this);
-            this.condition = condition;
-            this.body = body;
+            addChild(condition);
+            addChild(body);
         }
 
-        public void setParent(SyntaxNode parent) {
-            super.setParent(parent);
-            condition.setParent(parent);
-        }
+        private Node(){}
 
         public BasicType getType() {
-            return body.getType();
+            return getChild(1).getType();
         }
 
         public BasicType interpret() {
-            BasicType success = condition.interpret();
+            BasicType success = getChild(0).interpret();
             if(success.equals(new Bool(true))) {    //TODO switch implementation
-                BasicType val = body.interpret();
-                if(executionTrue != null)
-                    return executionTrue.interpret();
+                BasicType val = getChild(1).interpret();
+                if(executionTrue)
+                    return getChild(2).interpret();
                 else
                     return val;
             }
-             else if(executionFalse != null)
-                 return executionFalse.interpret();
+             else if(executionFalse && executionTrue)
+                 return getChild(3).interpret();
+             else if(executionFalse)
+                 return getChild(2).interpret();
              else
                  return new VoidType();
         }
 
         public Node clone() {
-            Node ret = new Node(condition.clone(), body.clone());
-            ret.executionFalse = executionFalse == null ? null : executionFalse.clone();
-            ret.executionTrue = executionTrue == null ? null : executionTrue.clone();
+            Node ret = new Node();
+            for(SyntaxNode child : getChildren())
+                ret.addChild(child.clone());
+            ret.executionTrue = executionTrue;
+            ret.executionFalse = executionFalse;
             return ret;
         }
     }
-    
-    private Node base;
-    private final Set<Node> nodes = new HashSet<>();
+
+    private final List<Node> nodes = new ArrayList<>();
 
     /**
      * pass null for condition for always true
      */
     public void addElse(SyntaxNode condition, SyntaxNode body) {
         if(condition == null) condition = new Bool(true);
-        for(Node n : nodes)
-            if(n.executionFalse == null) {
+        for(int i = nodes.size()-1; i >= 0; --i)
+            if(!nodes.get(i).executionFalse) {
                 Node newNode = new Node(condition, body);
-                n.executionFalse = newNode;
-                newNode.setParent(n);
-                nodes.add(newNode);
+                nodes.get(i).addChild(newNode);
+                nodes.get(i).executionFalse = true;
             }
     }
     public void addNelse(SyntaxNode condition, SyntaxNode body) {
         if(condition == null) condition = new Bool(true);
-        for(Node n : nodes)
-            if(n.executionTrue == null){
+        for(int i = nodes.size()-1; i >= 0; --i)
+            if(!nodes.get(i).executionTrue) {
                 Node newNode = new Node(condition, body);
-                n.executionTrue = newNode;
-                newNode.setParent(n);
-                nodes.add(newNode);
+                nodes.get(i).addChild(2, newNode);
+                nodes.get(i).executionTrue = true;
             }
     }
     public void addChild(String chainName, SyntaxNode condition, SyntaxNode body) {
         switch (chainName) {
-            case "else":
-                addElse(condition,body);
-            case "nelse":
-                addNelse(condition, body);
-            default:
-                throw new Error("no chain by the name of " + chainName);
+            case "else" -> addElse(condition, body);
+            case "nelse" -> addNelse(condition, body);
+            default -> throw new Error("no chain by the name of " + chainName);
         }
     }
 
     public Node getBase() {
-        return base;
+        return (Node)getChild(0);
     }
     public void setBase(SyntaxNode condition, SyntaxNode body) {
-        this.base = new Node(condition, body);
+        Node base = new Node(condition, body);
+        addChild(base);
         nodes.add(base);
     }
     protected void setBase(Node node) {
-        this.base = node;
-        if(node == null)
+        if(node == null) {
+            removeChild(0);
             return;
+        }
+        setChild(0, node);
         Stack<Node> nodes = new Stack<>();
         nodes.add(node);
         while(!nodes.empty()) {
             node = nodes.pop();
-            if(this.nodes.add(node)) {
-                nodes.add(node);
-                if(node.executionTrue != null)
-                    nodes.add(node.executionTrue);
-                if(node.executionFalse != null)
-                    nodes.add(node.executionFalse);
-            }
+            this.nodes.add(node);
+            for(int i = 2; i < node.size(); ++i)
+                nodes.add((Node)node.getChild(i));
         }
     }
 
@@ -127,7 +118,7 @@ public abstract class Control extends Locality {
                 return new While(condition, body);
             case "for":
                 if(condition instanceof In icondition)
-                return new For(icondition.getChild(0), icondition.getChild(1), body);
+                    return new For(icondition.getChild(0), icondition.getChild(1), body);
             default:
                 throw new Error("no control by the name " + controlName);
         }

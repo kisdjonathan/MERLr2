@@ -65,11 +65,22 @@ public class TokenReader {
         return readIdentifier(source.get());
     }
 
+    public SyntaxNode getSection(String stop) {
+        SyntaxNode ret = null;
+        if(!source.eof() && !stop.equals(source.peek())) {
+            ret = get();
+            while (!source.eof() && !stop.equals(source.peek()))
+                ret = getOperator(ret);
+        }
+        source.get();   //clear endDelim
+        return ret;
+    }
+
     public Control readControl(String id) {
         Control ret;
 
         {
-            SyntaxNode control = readGroup("", ":");
+            SyntaxNode control = getSection(":");
             SyntaxNode body = get();
             while (OperatorReader.isOperator(source.peek()) &&
                     OperatorReader.isBefore(source.peek(), id))
@@ -80,7 +91,8 @@ public class TokenReader {
 
         while(ControlReader.isCase(source.peek())) {
             String name = source.get();     //else/nelse
-            SyntaxNode control = readGroup("", ":");
+            SyntaxNode control = getSection(":");
+
             SyntaxNode body = get();
             while (OperatorReader.isOperator(source.peek()) &&
                     OperatorReader.isBefore(source.peek(), id))
@@ -153,19 +165,6 @@ public class TokenReader {
                 body = getOperator(body);
         }
         String endDelim = source.eof() ? "EOF" : source.get();
-        if(LiteralReader.isSuffix(source.peek()))
-            return GroupReader.decodeWithSuffix(body, startDelim, endDelim, source.get());
-        else
-            return GroupReader.decode(body, startDelim, endDelim);
-    }
-    public SyntaxNode readGroup(String startDelim, String endDelim) {
-        SyntaxNode body = null;
-        if(!source.eof() && !endDelim.equals(source.peek())) {
-            body = get();
-            while (!source.eof() && !endDelim.equals(source.peek()))
-                body = getOperator(body);
-        }
-        source.get();   //clear endDelim
         if(LiteralReader.isSuffix(source.peek()))
             return GroupReader.decodeWithSuffix(body, startDelim, endDelim, source.get());
         else

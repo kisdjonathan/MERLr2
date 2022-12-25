@@ -3,4 +3,4 @@ b << a/2;
 c << 1 + b*a;
 d << true xor true;
 f(x) << x + c;
-f(20);
+e << if true: 2 + b else: f(20) nelse: 5;
