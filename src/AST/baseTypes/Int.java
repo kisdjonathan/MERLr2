@@ -2,11 +2,11 @@ package AST.baseTypes;
 
 
 import AST.abstractNode.SyntaxNode;
+import AST.operations.variable.In;
 
 public class Int extends Numerical{
     private int value;
 
-    public static Int ZERO = new Int(0);
     public Int(){
         value = 0;
     }
@@ -25,15 +25,8 @@ public class Int extends Numerical{
         return value;
     }
 
-    public boolean typeEquals(SyntaxNode other) {
-        return false;   //TODO
-    }
-    public boolean typeContains(SyntaxNode other) {
-        return false;   //TODO
-    }
-
-    protected int defaultByteSize() {
-        return 4;
+    public Int clone() {
+        return new Int(value);
     }
 
     public String toString() {

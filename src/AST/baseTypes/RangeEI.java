@@ -15,4 +15,12 @@ public class RangeEI extends Range {
     public RangeEI(SyntaxNode start, SyntaxNode end) {
         //TODO
     }
+
+    public RangeEI clone() {
+        RangeEI ret = new RangeEI();
+        ret.setStart(getStart().clone());
+        ret.setStop(getStop().clone());
+        ret.setStep(getStep().clone());
+        return ret;
+    }
 }

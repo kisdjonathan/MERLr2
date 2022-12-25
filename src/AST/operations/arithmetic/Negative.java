@@ -15,6 +15,10 @@ public class Negative extends ArithmeticOperator {
         return "negative";
     }
 
+    public Negative clone() {
+        return new Negative(getChild(0).clone());
+    }
+
     public Float interpretFloats(Numerical first, Numerical second) {
         return new Float(-first.asDouble());
     }

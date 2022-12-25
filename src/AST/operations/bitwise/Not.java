@@ -4,9 +4,18 @@ import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.Bool;
 import AST.baseTypes.Char;
 import AST.baseTypes.Int;
+import AST.operations.arithmetic.Add;
 
 public class Not extends BitwiseOperator {
     public Not(){}
+
+    public Not(SyntaxNode value) {
+        super(value, null);
+    }
+
+    public Not clone() {
+        return new Not(getChild(0).clone());
+    }
 
     @Override
     protected Bool interpretBools(Bool first, Bool second) {
@@ -16,10 +25,6 @@ public class Not extends BitwiseOperator {
     @Override
     protected Int interpretBytes(Int first, Int second) {
         return new Int(~first.asInt());
-    }
-
-    public Not(SyntaxNode value) {
-        super(value, null);
     }
 
     public String getName() {

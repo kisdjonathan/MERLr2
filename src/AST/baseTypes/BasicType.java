@@ -1,7 +1,7 @@
 package AST.baseTypes;
 
 import AST.abstractNode.SyntaxNode;
-import AST.components.Function;
+import AST.components.Signature;
 
 import java.util.Collection;
 
@@ -63,11 +63,8 @@ public abstract class BasicType extends SyntaxNode {
         return null;    //TODO
     }
 
-    /**
-     * returns a copy of the type with the same values
-     */
-    public BasicType clone(){
-        return this;    //TODO make abstract and implement elsewhere
+    public boolean typeEquals(BasicType obj) {
+        return equals(obj);
     }
 
     public String toString() {

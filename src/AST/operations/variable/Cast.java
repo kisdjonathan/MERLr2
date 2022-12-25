@@ -12,13 +12,13 @@ public class Cast extends Operator {
     public Cast(SyntaxNode from, SyntaxNode to) {
         addChild(from); addChild(to);
     }
-    public Cast(SyntaxNode from, SyntaxNode to, SyntaxNode parent) {
-        this(from, to);
-        setParent(parent);
-    }
 
     public String getName() {
         return "cast";
+    }
+
+    public Cast clone() {
+        return new Cast(getChild(0).clone(), getChild(1).clone());
     }
 
     public BasicType getType() {

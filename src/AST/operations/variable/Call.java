@@ -3,9 +3,14 @@ package AST.operations.variable;
 import AST.baseTypes.BasicType;
 import AST.baseTypes.InferredType;
 import AST.baseTypes.Tuple;
-import AST.components.Function;
+import AST.baseTypes.Function;
+import AST.components.Signature;
+import AST.components.Variable;
 import AST.operations.Operator;
 import AST.abstractNode.SyntaxNode;
+import AST.operations.bitwise.Not;
+
+import java.util.Map;
 
 //Call stores information of a function call
 //TODO L for now, Call is expected to return the values of ret, but in the future, allow Call to write directly to ret
@@ -28,8 +33,8 @@ public class Call extends Operator {
     }
 
     public Call(Function func, SyntaxNode args) {
-        this((SyntaxNode)func, args);
-        setType(func.getType().getRets());
+        this((SyntaxNode)func, Tuple.asTuple(args));
+        setType(func.getRets().getType());
     }
 
     public void setType(BasicType type) {
@@ -47,7 +52,38 @@ public class Call extends Operator {
         return "call";
     }
 
+    public Call clone() {
+        return new Call(getChild(0).clone(), getChild(1).clone());
+    }
+
+    public Function createFunction(SyntaxNode body) {
+        Function ret = new Function();
+        BasicType texplicit = getChild(0).getType();
+        ret.setRets(texplicit == null ? body.getType() : texplicit);
+        ret.setArgs(getChild(1));
+        ret.addChild(body.clone());
+        return ret;
+    }
+
+    @Override
+    public Signature asVariable() {
+        Variable var = getChild(0).asVariable();
+        return new Signature(var.getName());
+    }
+
+    public void unifyVariables(Map<String, Variable> variables) {
+        super.unifyVariables(variables);
+        if(getChild(0) instanceof Variable var) {
+            if (!(var instanceof Signature))
+                variables.put(var.getName(), new Signature(var.getName()));
+            Signature signature = (Signature) variables.get(var.getName());
+            if(!signature.hasOverload(Tuple.asTuple(getChild(1)), Tuple.asTuple(getType())))
+                signature.addOverload(new Function(Tuple.asTuple(getChild(1)), Tuple.asTuple(getType())));
+        }
+    }
+
     public BasicType interpret() {
-        return null;    //TODO
+        Function f = ((Signature)getChild(0)).getOverload((Tuple)getChild(1), Tuple.asTuple(getType()));
+        return f.interpretExecute((Tuple)getChild(1));
     }
 }

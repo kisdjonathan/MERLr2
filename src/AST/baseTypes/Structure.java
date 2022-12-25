@@ -1,6 +1,7 @@
 package AST.baseTypes;
 
 import AST.abstractNode.SyntaxNode;
+import AST.components.Variable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +11,8 @@ public class Structure extends BasicType {
     private Map<String, BasicType> fields = new HashMap<>();
 
     public Structure(SyntaxNode variable, SyntaxNode body) {
-        //TODO
+        addChild(variable);
+        addChild(body);
     }
 
     @Override
@@ -18,12 +20,11 @@ public class Structure extends BasicType {
         return null;
     }
 
-//    public Collection<Pair> pairFieldsIn(SyntaxNode ref, SyntaxNode t) {
-//        if(size() > t.size())
-//            return null;
-//        List<Pair> ret = new ArrayList<>();
-//        for(String s : namePositions.keySet())
-//            ret.add(new Pair(new Field(ref, s), new Field(t, s)));
-//        return  ret;
-//    }
+    public Variable asVariable() {
+        return null;    //TODO
+    }
+
+    public Structure clone() {
+        return new Structure(getChild(0), getChild(1));
+    }
 }

@@ -32,13 +32,12 @@ public class OperatorReader {
             case "xor","^^" ->new Xor       ();
             case "xnor","~^"->new Xnor      ();
             //comparison
-            case "!="       ->new NotEqual  ();
-            case "=="       ->new Equal     ();
+            case "!=","=="  ->new Equal     ();
             case ">=",">"   ->new Ascending ();
             case "<=","<"   ->new Descending();
             //other
             case ">>"       ->new Field     ();
-            case "<<", "="  ->new Assign    ();
+            case "<<", "="  ->new Declare();
             case "->"       ->new Cast      ();
             case "with"     ->new With      ();
             case "then"     ->new Without   ();
@@ -103,7 +102,8 @@ public class OperatorReader {
             {"$or"}, {"$nor"}, {"$xor"}, {"$xnor"}, {"$and"},
             {"$invert"},
             {"->"},
-            {"ref"}
+            {"ref"},
+            {"(", "[", "{"}
     };
 
     private static final Set<String> infixes = new HashSet<>(Arrays.asList(
@@ -131,6 +131,7 @@ public class OperatorReader {
     private static final List<Set<String>> chainGroups = Arrays.asList(
             new HashSet<>(Arrays.asList("<", "<=", "=")),
             new HashSet<>(Arrays.asList(">", ">=", "=")),
+            new HashSet<>(Arrays.asList("=", "!=")),
             new HashSet<>(Arrays.asList("else", "nelse")),
             new HashSet<>(List.of("<<")),
             new HashSet<>(List.of(">>")),
@@ -228,5 +229,21 @@ public class OperatorReader {
                 return true;
         }
         return false;
+    }
+
+    public static SyntaxNode verify(SyntaxNode val) {
+        if(val instanceof Operator op && op instanceof Equal) {
+            Operator ret = op;
+            if(op.getOperators().contains(">")) {
+                ret = new Descending();
+            }
+            else if(op.getOperators().contains("<")) {
+                ret = new Ascending();
+            }
+            ret.setOperators(op.getOperators());
+            ret.setChildren(op.getChildren());
+            return ret;
+        }
+        return val;
     }
 }

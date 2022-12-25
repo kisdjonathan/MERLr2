@@ -10,6 +10,14 @@ public class Descending extends ComparisonOperator {
         super(origin, vector);
     }
 
+    public Descending clone() {
+        Descending ret = new Descending();
+        for(SyntaxNode child : getChildren())
+            ret.addChild(child.clone());
+        ret.setOperators(getOperators());
+        return ret;
+    }
+
     //TODO
     @Override
     protected Bool interpretNumerical(Numerical first, Numerical second) {

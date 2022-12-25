@@ -15,6 +15,12 @@ public abstract class Operator extends SyntaxNode {
     public String getOperator(int index) {
         return operators.get(index);
     }
+    public List<String> getOperators() {
+        return operators;
+    }
+    public void setOperators(List<String> operators) {
+        this.operators = operators;
+    }
 
     public abstract String getName();
 

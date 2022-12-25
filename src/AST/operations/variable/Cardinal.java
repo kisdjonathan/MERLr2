@@ -15,6 +15,10 @@ public class Cardinal extends Operator {
         return "cardinal";
     }
 
+    public Cardinal clone() {
+        return new Cardinal(getChild(0).clone());
+    }
+
     public BasicType getType() {
         return new Int();
     }

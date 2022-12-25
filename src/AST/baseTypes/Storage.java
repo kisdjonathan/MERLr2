@@ -5,7 +5,7 @@ import AST.abstractNode.SyntaxNode;
 import java.util.List;
 
 //TODO define storage (ie does it only store values of the same type...)
-public class Storage extends BasicType {
+public abstract class Storage extends BasicType {
     public String getName() {
         return "storage";
     }

@@ -138,7 +138,7 @@ public class TokenReader {
             }
             ret.addChild(null, next);
         }
-        return ret;
+        return OperatorReader.verify(ret);  //check for chained =,> or =,< operators
     }
     public SyntaxNode getOperator(SyntaxNode predecessor) {
         return readOperator(predecessor, source.get());

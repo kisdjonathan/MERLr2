@@ -13,6 +13,10 @@ public class Without extends Operator {
         return "then";
     }
 
+    public Without clone() {
+        return new Without( getChild(0).clone(), getChild(1).clone());
+    }
+
     @Override
     public BasicType getType() {
         return getChild(1).getType();

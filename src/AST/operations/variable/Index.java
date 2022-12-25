@@ -10,13 +10,12 @@ public class Index extends Operator {
         addChild(ref); addChild(pos);
     }
 
-    public SyntaxNode getDeclaredType() {
-        //return getOrigin().getType().getIndexedType();
-        return null;    //TODO
-    }
-
     public String getName() {
         return "index";
+    }
+
+    public Index clone() {
+        return new Index(getChild(0).clone(), getChild(1).clone());
     }
 
     //TODO

@@ -4,6 +4,7 @@ import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.Bool;
 import AST.baseTypes.Char;
 import AST.baseTypes.Int;
+import AST.operations.arithmetic.Add;
 
 public class Or extends BitwiseOperator {
     public Or() {}
@@ -11,6 +12,9 @@ public class Or extends BitwiseOperator {
         super(origin, vector);
     }
 
+    public Or clone() {
+        return new Or(getChild(0).clone(), getChild(1).clone());
+    }
     @Override
     protected Bool interpretBools(Bool first, Bool second) {
         return new Bool(first.getValue() || second.getValue());

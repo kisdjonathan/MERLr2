@@ -4,11 +4,16 @@ import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.Bool;
 import AST.baseTypes.Char;
 import AST.baseTypes.Int;
+import AST.operations.arithmetic.Add;
 
 public class Xor extends BitwiseOperator {
     public Xor() {}
     public Xor(SyntaxNode origin, SyntaxNode vector) {
         super(origin, vector);
+    }
+
+    public Xor clone() {
+        return new Xor(getChild(0).clone(), getChild(1).clone());
     }
 
     @Override

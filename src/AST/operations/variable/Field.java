@@ -1,11 +1,11 @@
 package AST.operations.variable;
 
 import AST.baseTypes.BasicType;
+import AST.baseTypes.Function;
 import AST.operations.Operator;
 import AST.abstractNode.SyntaxNode;
 import AST.components.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,10 +23,6 @@ public class Field extends Operator {
         addChild(null, body);
     }
 
-    public void LoadVariables() {
-
-    }
-
     public Variable getVariable(String name) {
         if(loadedVariables.containsKey(name))
             return loadedVariables.get(name);
@@ -35,6 +31,10 @@ public class Field extends Operator {
 
     public String getName() {
         return "field";
+    }
+
+    public Field clone() {
+        return new Field(getChild(0).clone(), getChild(1).clone());
     }
 
     //TODO

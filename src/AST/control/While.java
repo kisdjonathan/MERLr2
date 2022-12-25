@@ -12,6 +12,13 @@ public class While extends Control {
         setParent(parent);
         setBase(condition, body);
     }
+    private While(){}
+
+    public While clone() {
+        While ret = new While();
+        ret.setBase(getBase().clone());
+        return ret;
+    }
 
     //TODO
     @Override

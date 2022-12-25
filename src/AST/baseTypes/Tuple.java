@@ -27,6 +27,13 @@ public class Tuple extends BasicType implements Iterable<SyntaxNode>{
         return "tuple";
     }
 
+    public Tuple clone() {
+        Tuple ret = new Tuple();
+        for(SyntaxNode child : getChildren())
+            ret.addChild(child.clone());
+        return ret;
+    }
+
     @Override
     public BasicType interpret() {
         Tuple ret = new Tuple();
@@ -48,5 +55,25 @@ public class Tuple extends BasicType implements Iterable<SyntaxNode>{
         }
         ret.append(")");
         return ret.toString();
+    }
+
+    public boolean typeEquals(BasicType other) {
+        if(other instanceof Tuple tother) {
+            for(int i = 0; i < size(); ++i)
+                if(!getChild(i).getType().equals(tother.getChild(i).getType()))
+                    return false;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean equals(Object other) {
+        if(other instanceof Tuple tother) {
+            for(int i = 0; i < size(); ++i)
+                if(!getChild(i).equals(tother.getChild(i)))
+                    return false;
+            return true;
+        }
+        return false;
     }
 }

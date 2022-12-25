@@ -22,18 +22,17 @@ public class Float extends Numerical{
         return value;
     }
 
-    public boolean typeEquals(SyntaxNode other) {
-        return false; //TODO
-    }
-    public boolean typeContains(SyntaxNode other) {
-        return false; //TODO
-    }
-
-    protected int defaultByteSize() {
-        return 4;
+    public Float clone() {
+        return new Float(value);
     }
 
     public String toString() {
         return super.toString() + " " + value;
+    }
+
+    public boolean equals(Object other) {
+        if(other instanceof  Float f)
+            return f.value == value;
+        return false;
     }
 }

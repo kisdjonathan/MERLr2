@@ -4,8 +4,6 @@ import AST.abstractNode.SyntaxNode;
 import AST.abstractNode.SyntaxNode;
 
 public class Bool extends BasicType {
-    public static final Bool TRUE = new Bool(true);
-    public static final Bool FALSE = new Bool(false);
     private boolean value = false;
 
     public Bool(){}
@@ -19,6 +17,10 @@ public class Bool extends BasicType {
 
     public String getName() {
         return "bool";
+    }
+
+    public Bool clone() {
+        return new Bool(value);
     }
 
     public String toString() {

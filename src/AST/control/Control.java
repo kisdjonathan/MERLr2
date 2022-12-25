@@ -5,10 +5,12 @@ import AST.baseTypes.BasicType;
 import AST.baseTypes.Bool;
 import AST.baseTypes.VoidType;
 import AST.components.Locality;
+import AST.components.Variable;
 import AST.operations.variable.In;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Stack;
 
 public abstract class Control extends Locality {
     protected class Node extends Locality {
@@ -43,6 +45,13 @@ public abstract class Control extends Locality {
                  return executionFalse.interpret();
              else
                  return new VoidType();
+        }
+
+        public Node clone() {
+            Node ret = new Node(condition.clone(), body.clone());
+            ret.executionFalse = executionFalse == null ? null : executionFalse.clone();
+            ret.executionTrue = executionTrue == null ? null : executionTrue.clone();
+            return ret;
         }
     }
     
@@ -89,6 +98,23 @@ public abstract class Control extends Locality {
     public void setBase(SyntaxNode condition, SyntaxNode body) {
         this.base = new Node(condition, body);
         nodes.add(base);
+    }
+    protected void setBase(Node node) {
+        this.base = node;
+        if(node == null)
+            return;
+        Stack<Node> nodes = new Stack<>();
+        nodes.add(node);
+        while(!nodes.empty()) {
+            node = nodes.pop();
+            if(this.nodes.add(node)) {
+                nodes.add(node);
+                if(node.executionTrue != null)
+                    nodes.add(node.executionTrue);
+                if(node.executionFalse != null)
+                    nodes.add(node.executionFalse);
+            }
+        }
     }
 
     public static Control decode(String controlName, SyntaxNode condition, SyntaxNode body) {

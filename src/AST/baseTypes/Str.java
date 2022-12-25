@@ -32,8 +32,9 @@ public class Str extends Storage{
         //TODO length
         return null;
     }
-    public SyntaxNode newInstance(String s) {
-        return new Str(s);
+
+    public Str clone() {
+        return new Str(value);
     }
 
     public String toString() {

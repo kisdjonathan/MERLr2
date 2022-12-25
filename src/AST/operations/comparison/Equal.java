@@ -10,6 +10,14 @@ public class Equal extends ComparisonOperator {
         super(origin, vector);
     }
 
+    public Equal clone() {
+        Equal ret = new Equal();
+        for(SyntaxNode child : getChildren())
+            ret.addChild(child.clone());
+        ret.setOperators(getOperators());
+        return ret;
+    }
+
     //TODO
     @Override
     protected Bool interpretNumerical(Numerical first, Numerical second) {

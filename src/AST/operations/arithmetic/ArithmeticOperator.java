@@ -31,7 +31,7 @@ public abstract class ArithmeticOperator extends Operator {
             return new Float();
         } else {
             //TODO
-            return null;
+            throw new Error("Type mismatch for operator " + getName() + "\nfirst:" + first + "\nsecond:"+second);
         }
     }
 

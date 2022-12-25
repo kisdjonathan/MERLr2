@@ -23,4 +23,7 @@ public class Add extends ArithmeticOperator {
         return new Int(first.asInt() + second.asInt());
     }
 
+    public Add clone() {
+        return new Add(getChild(0).clone(), getChild(1).clone());
+    }
 }

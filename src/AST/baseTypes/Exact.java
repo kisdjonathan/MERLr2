@@ -11,4 +11,8 @@ public class Exact extends BasicType{
     public String getName() {
         return null;
     }
+
+    public Exact clone() {
+        return null;
+    }
 }

@@ -15,6 +15,10 @@ public class Multiply extends ArithmeticOperator {
         return "mul";
     }
 
+    public Multiply clone() {
+        return new Multiply(getChild(0).clone(), getChild(1).clone());
+    }
+
     public Float interpretFloats(Numerical first, Numerical second) {
         return new Float(first.asDouble() * second.asDouble());
     }

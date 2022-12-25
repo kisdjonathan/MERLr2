@@ -14,4 +14,12 @@ public class RangeII extends Range{
     public RangeII(SyntaxNode start, SyntaxNode end) {
         //TODO
     }
+
+    public RangeII clone() {
+        RangeII ret = new RangeII();
+        ret.setStart(getStart().clone());
+        ret.setStop(getStop().clone());
+        ret.setStep(getStep().clone());
+        return ret;
+    }
 }

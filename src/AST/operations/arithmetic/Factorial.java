@@ -15,6 +15,10 @@ public class Factorial extends ArithmeticOperator {
         return "factorial";
     }
 
+    public Factorial clone() {
+        return new Factorial(getChild(0).clone());
+    }
+
     public Float interpretFloats(Numerical first, Numerical second) {
         return null;    //TODO
     }

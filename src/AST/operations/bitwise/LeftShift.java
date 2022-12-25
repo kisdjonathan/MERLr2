@@ -3,11 +3,16 @@ package AST.operations.bitwise;
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.Bool;
 import AST.baseTypes.Int;
+import AST.operations.arithmetic.Add;
 
 public class LeftShift extends BitwiseOperator {
     public LeftShift() {}
     public LeftShift(SyntaxNode origin, SyntaxNode vector) {
         super(origin, vector);
+    }
+
+    public LeftShift clone() {
+        return new LeftShift(getChild(0).clone(), getChild(1).clone());
     }
 
     @Override

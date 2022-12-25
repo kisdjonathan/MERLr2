@@ -15,6 +15,10 @@ public class Divide extends ArithmeticOperator {
         return "div";
     }
 
+    public Divide clone() {
+        return new Divide(getChild(0).clone(), getChild(1).clone());
+    }
+
     public Float interpretFloats(Numerical first, Numerical second) {
         return new Float(first.asDouble() / second.asDouble());
     }

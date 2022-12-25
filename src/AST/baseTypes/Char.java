@@ -22,6 +22,10 @@ public class Char extends Numerical{
         return value;
     }
 
+    public Char clone() {
+        return new Char(value);
+    }
+
     public String toString() {
         return super.toString() + " " + value;
     }

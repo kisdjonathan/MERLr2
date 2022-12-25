@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public abstract class  SyntaxNode {
+public abstract class SyntaxNode {
     private SyntaxNode parent;
     public SyntaxNode getParent() {
         return parent;
@@ -69,11 +69,16 @@ public abstract class  SyntaxNode {
         }
     }
 
+    public Variable asVariable() {
+        throw new Error(this + " is not a variable");
+    }
+
     public abstract BasicType getType();
     public void setType(BasicType type) {
         throw new Error("can not set type for " + this);
     }
 
-    public abstract BasicType interpret();
+    public abstract SyntaxNode clone();
 
+    public abstract BasicType interpret();
 }

@@ -5,4 +5,8 @@ public class UnorderedSet extends Storage {
     public UnorderedSet(Tuple values) {
         //TODO
     }
+
+    public UnorderedSet clone() {
+        return null;
+    }
 }

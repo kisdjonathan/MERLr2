@@ -13,6 +13,10 @@ public class With extends Operator {
         return "with";
     }
 
+    public With clone() {
+        return new With( getChild(0).clone(), getChild(1).clone());
+    }
+
     //TODO
     @Override
     public BasicType getType() {

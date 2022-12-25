@@ -2,7 +2,6 @@ package AST.baseTypes;
 
 
 import AST.abstractNode.SyntaxNode;
-import AST.components.Function;
 
 import java.util.List;
 

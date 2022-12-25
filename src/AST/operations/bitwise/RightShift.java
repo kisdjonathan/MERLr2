@@ -3,11 +3,16 @@ package AST.operations.bitwise;
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.Bool;
 import AST.baseTypes.Int;
+import AST.operations.arithmetic.Add;
 
 public class RightShift extends BitwiseOperator {
     public RightShift() {}
     public RightShift(SyntaxNode origin, SyntaxNode vector) {
         super(origin, vector);
+    }
+
+    public RightShift clone() {
+        return new RightShift(getChild(0).clone(), getChild(1).clone());
     }
 
     @Override

@@ -1,0 +1,93 @@
+package AST.baseTypes;
+
+import AST.abstractNode.SyntaxNode;
+import AST.components.Variable;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class Function extends BasicType {
+    private Tuple args = null, rets = null;
+    private Map<String, Variable> variables = new HashMap<>();
+
+    public Function() {}
+    public Function(Tuple args, Tuple rets) {
+        this.args = args;
+        this.rets = rets;
+    }
+
+    public String getName() {
+        return "function";
+    }
+
+
+    public Tuple getArgs() {
+        return args;
+    }
+    public void setArgs(SyntaxNode first) {
+        args = Tuple.asTuple(first);
+        args.setParent(this);
+    }
+
+    public Tuple getRets() {
+        return rets;
+    }
+    public void setRets(SyntaxNode second) {
+        rets = Tuple.asTuple(second);
+        rets.setParent(this);
+    }
+
+    public Function clone() {
+        Function ret = new Function(args.clone(), rets.clone());
+        for(SyntaxNode child : getChildren())
+            ret.addChild(child.clone());
+        return ret;
+    }
+
+    public void unifyVariables(Map<String, Variable> variables) {
+        this.variables.putAll(variables);
+        for(SyntaxNode arg : args) {
+            Variable var = arg.asVariable();
+            this.variables.put(var.getName(), var);
+        }
+        for(SyntaxNode ret : rets) {
+            if(ret instanceof BasicType)
+                break;
+            Variable var = ret.asVariable();
+            this.variables.put(var.getName(), var);
+        }
+        super.unifyVariables(this.variables);
+    }
+
+    public BasicType interpretExecute(Tuple args) {
+        this.args.interpret();
+        for(int i = 0; i < args.size(); ++i)
+            this.args.getChild(i).asVariable().setType(args.getChild(i).getType());
+        if(rets.size() == 0) {
+            getChild(0).interpret();
+            return new VoidType();
+        }
+        else if(rets.size() == 1 && rets.getChild(0) instanceof InferredType) {
+            return getChild(0).interpret();
+        }
+        else{
+            this.rets.interpret();
+            getChild(0).interpret();
+            if(rets.size() == 1)
+                return rets.getChild(0).getType();
+            else
+                return rets.getType();
+        }
+    }
+
+    public boolean equals(Object other) {
+        if(!(other instanceof Function fother))
+            return false;
+        return args.typeEquals(fother.getArgs()) && rets.typeEquals(fother.getRets());
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + args + rets;
+    }
+}

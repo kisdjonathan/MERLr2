@@ -23,6 +23,14 @@ public class For extends Control {
         setBase(iterableVariable, body);
     }
 
+    private For(){}
+
+    public For clone() {
+        For ret = new For();
+        ret.setBase(getBase().clone());
+        return ret;
+    }
+
     @Override
     public BasicType getType() {
         return null;    //TODO

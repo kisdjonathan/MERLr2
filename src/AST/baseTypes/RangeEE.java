@@ -15,4 +15,12 @@ public class RangeEE extends Range {
     public RangeEE(SyntaxNode start, SyntaxNode end) {
         //TODO
     }
+
+    public RangeEE clone() {
+        RangeEE ret = new RangeEE();
+        ret.setStart(getStart().clone());
+        ret.setStop(getStop().clone());
+        ret.setStep(getStep().clone());
+        return ret;
+    }
 }
