@@ -77,6 +77,7 @@ public class Call extends Operator {
             if (!(var instanceof Signature))
                 variables.put(var.getName(), new Signature(var.getName()));
             Signature signature = (Signature) variables.get(var.getName());
+            setChild(0, signature);
             if(!signature.hasOverload(Tuple.asTuple(getChild(1)), Tuple.asTuple(getType())))
                 signature.addOverload(new Function(Tuple.asTuple(getChild(1)), Tuple.asTuple(getType())));
         }

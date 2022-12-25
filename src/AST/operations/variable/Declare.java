@@ -40,9 +40,11 @@ public class Declare extends Operator {
                 Signature sig = call.asVariable();
                 if(!variables.containsKey(sig.getName()) || !(variables.get(sig.getName()) instanceof Signature))
                     variables.put(sig.getName(), sig);
+                else
+                    sig = (Signature) variables.get(sig.getName());
 
                 f.unifyVariables(variables);
-                ((Signature)variables.get(sig.getName())).addOverload(f);
+                sig.addOverload(f);
                 functionDeclaration = f;
             }
             else {
