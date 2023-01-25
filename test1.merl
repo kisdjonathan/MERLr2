@@ -2,5 +2,5 @@ a << 1+1+2*9-3**3 + 0.1/0.01;
 b << a/2;
 c << 1 + b*a;
 d << true xor true;
-f(x) << x + c;
-e << if true: 2 + b else: f(20) nelse: 5;
+f(x,y) << x + y;
+e << if false: 2 + b else: f(20,5) nelse: 5;
