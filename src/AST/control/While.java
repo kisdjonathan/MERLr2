@@ -16,7 +16,8 @@ public class While extends Control {
 
     public While clone() {
         While ret = new While();
-        ret.setBase(getBase().clone());
+        for(SyntaxNode child : getChildren())
+            ret.addChild(child.clone());
         return ret;
     }
 

@@ -27,7 +27,8 @@ public class For extends Control {
 
     public For clone() {
         For ret = new For();
-        ret.setBase(getBase().clone());
+        for(SyntaxNode child : getChildren())
+            ret.addChild(child.clone());
         return ret;
     }
 

@@ -17,7 +17,8 @@ public class Repeat extends Control {
 
     public Repeat clone() {
         Repeat ret = new Repeat();
-        ret.setBase(getBase().clone());
+        for(SyntaxNode child : getChildren())
+            ret.addChild(child.clone());
         return ret;
     }
     @Override

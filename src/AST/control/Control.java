@@ -13,7 +13,7 @@ import java.util.*;
 public abstract class Control extends Locality {
     protected class Node extends Locality {
         //[0]:condition, [1]: body, [2]: execFalse, [3]: execTrue
-        private boolean executionFalse = false, executionTrue = false;
+        private int executionFalse = -1, executionTrue = -1;
 
         public Node(SyntaxNode condition, SyntaxNode body) {
             addChild(condition);
@@ -28,17 +28,15 @@ public abstract class Control extends Locality {
 
         public BasicType interpret() {
             BasicType success = getChild(0).interpret();
-            if(success.equals(new Bool(true))) {    //TODO switch implementation
+            if(success.equals(new Bool(true))) {    //TODO implementation as switch statement
                 BasicType val = getChild(1).interpret();
-                if(executionTrue)
-                    return getChild(2).interpret();
+                if(executionTrue >= 0)
+                    return getParent().getChild(executionTrue).interpret();
                 else
                     return val;
             }
-             else if(executionFalse && executionTrue)
-                 return getChild(3).interpret();
-             else if(executionFalse)
-                 return getChild(2).interpret();
+             else if(executionFalse >= 0)
+                 return getParent().getChild(executionFalse).interpret();
              else
                  return new VoidType();
         }
@@ -53,28 +51,28 @@ public abstract class Control extends Locality {
         }
     }
 
-    private final List<Node> nodes = new ArrayList<>();
+    //private final List<Node> nodes = new ArrayList<>();
 
     /**
      * pass null for condition for always true
      */
     public void addElse(SyntaxNode condition, SyntaxNode body) {
         if(condition == null) condition = new Bool(true);
-        for(int i = nodes.size()-1; i >= 0; --i)
-            if(!nodes.get(i).executionFalse) {
-                Node newNode = new Node(condition, body);
-                nodes.get(i).addChild(newNode);
-                nodes.get(i).executionFalse = true;
+        for(int i = size()-1; i >= 0; --i)
+            if(getChild(i).executionFalse < 0) {
+                getChild(i).executionFalse = size();
             }
+        Node newNode = new Node(condition, body);
+        addChild(newNode);
     }
     public void addNelse(SyntaxNode condition, SyntaxNode body) {
         if(condition == null) condition = new Bool(true);
-        for(int i = nodes.size()-1; i >= 0; --i)
-            if(!nodes.get(i).executionTrue) {
-                Node newNode = new Node(condition, body);
-                nodes.get(i).addChild(2, newNode);
-                nodes.get(i).executionTrue = true;
+        for(int i = size()-1; i >= 0; --i)
+            if(getChild(i).executionTrue < 0) {
+                getChild(i).executionTrue = size();
             }
+        Node newNode = new Node(condition, body);
+        addChild(newNode);
     }
     public void addChild(String chainName, SyntaxNode condition, SyntaxNode body) {
         switch (chainName) {
@@ -83,29 +81,29 @@ public abstract class Control extends Locality {
             default -> throw new Error("no chain by the name of " + chainName);
         }
     }
+    public Node getChild(int i) {
+        return (Node) super.getChild(i);
+    }
 
     public Node getBase() {
-        return (Node)getChild(0);
+        return getChild(0);
     }
     public void setBase(SyntaxNode condition, SyntaxNode body) {
         Node base = new Node(condition, body);
         addChild(base);
-        nodes.add(base);
     }
     protected void setBase(Node node) {
+        if(size() > 1) {
+            throw new Error("can not modify base after conditions have been aded");
+        }
         if(node == null) {
             removeChild(0);
             return;
         }
-        setChild(0, node);
-        Stack<Node> nodes = new Stack<>();
-        nodes.add(node);
-        while(!nodes.empty()) {
-            node = nodes.pop();
-            this.nodes.add(node);
-            for(int i = 2; i < node.size(); ++i)
-                nodes.add((Node)node.getChild(i));
-        }
+        if (size() == 0)
+            addChild(node);
+        else
+            setChild(0, node);
     }
 
     public static Control decode(String controlName, SyntaxNode condition, SyntaxNode body) {

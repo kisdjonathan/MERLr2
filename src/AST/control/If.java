@@ -15,7 +15,8 @@ public class If extends Control {
 
     public If clone() {
         If ret = new If();
-        ret.setBase(getBase().clone());
+        for(SyntaxNode child : getChildren())
+            ret.addChild(child.clone());
         return ret;
     }
 

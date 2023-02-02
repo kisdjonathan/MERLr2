@@ -3,4 +3,5 @@ b << a/2;
 c << 1 + b*a;
 d << true xor true;
 f(x,y) << x + y;
-e << if false: 2 + b else: f(20,5) nelse: 5;
+g(x,y) << if false: x+y else: x-y;
+e << g(20,5);
