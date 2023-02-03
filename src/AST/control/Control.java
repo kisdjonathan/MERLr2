@@ -13,7 +13,7 @@ import java.util.*;
 public abstract class Control extends Locality {
     protected class Node extends Locality {
         //[0]:condition, [1]: body, [2]: execFalse, [3]: execTrue
-        private int executionFalse = -1, executionTrue = -1;
+        protected int executionFalse = -1, executionTrue = -1;
 
         public Node(SyntaxNode condition, SyntaxNode body) {
             addChild(condition);
@@ -90,7 +90,7 @@ public abstract class Control extends Locality {
     }
     public void setBase(SyntaxNode condition, SyntaxNode body) {
         Node base = new Node(condition, body);
-        addChild(base);
+        setBase(base);
     }
     protected void setBase(Node node) {
         if(size() > 1) {

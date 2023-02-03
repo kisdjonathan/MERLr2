@@ -23,6 +23,9 @@ public class InferredType extends BasicType{
         return new ArrayList<>(fields.values());
     }
 
+    public boolean typeEquals(BasicType other) {
+        return true;
+    }
     public boolean equals(Object other) {
         return other instanceof BasicType;
     }

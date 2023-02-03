@@ -56,6 +56,7 @@ public class SymbolReader {
                 case '!':	//!=, !
                 case '?':   //?=
                 case '=':	//=, ==
+                case ':':	//:, :=
                     if (line.charAt(cind + 1) == '=')
                         ++len;
                     break;
@@ -85,7 +86,6 @@ public class SymbolReader {
                     if (line.charAt(cind + 1) == '*')
                         ++len;
                     break;
-                case ':':	//:
                 case ';':	//;
                 case ',':	//,
                 case '\\':  //\
@@ -113,6 +113,7 @@ public class SymbolReader {
                                 cind = 0;
                             }
                         }
+                        cind+=2;
                         continue;
                     }
                     break;

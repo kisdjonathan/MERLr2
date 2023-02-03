@@ -33,6 +33,9 @@ public class Str extends Storage{
         return null;
     }
 
+    public boolean typeEquals(BasicType other) {
+        return other instanceof Str;
+    }
     public Str clone() {
         return new Str(value);
     }

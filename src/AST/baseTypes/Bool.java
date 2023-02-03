@@ -31,6 +31,10 @@ public class Bool extends BasicType {
         return value;
     }
 
+    public boolean typeEquals(BasicType other) {
+        return other instanceof Bool;
+    }
+
     public boolean equals(Object other) {
         return other instanceof Bool b && b.value == value;
     }

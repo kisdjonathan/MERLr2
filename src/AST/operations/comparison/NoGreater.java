@@ -4,28 +4,27 @@ import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.Bool;
 import AST.baseTypes.Numerical;
 
-public class Equal extends ComparisonOperator{
-    public Equal(){}
-    public Equal(SyntaxNode a, SyntaxNode b) {
+public class NoGreater extends ComparisonOperator{
+    public NoGreater(){}
+    public NoGreater(SyntaxNode a, SyntaxNode b) {
         addChild(a);
         addChild(b);
     }
 
     public SyntaxNode clone() {
-        return new Equal(getChild(0), getChild(1));
+        return new NoGreater(getChild(0),getChild(1));
     }
 
     public String getName() {
-        return "equal";
+        return "not greater";
     }
 
     protected Bool interpretInts(Numerical first, Numerical second) {
-        return new Bool(first.asInt() == second.asInt());
+        return new Bool(first.asInt() <= second.asInt());
     }
     protected Bool interpretFloats(Numerical first, Numerical second) {
-        return new Bool(first.asDouble() == second.asDouble());
+        return new Bool(first.asDouble() <= second.asDouble());
     }
-
     protected Bool interpretOthers() {
         return null;
     }

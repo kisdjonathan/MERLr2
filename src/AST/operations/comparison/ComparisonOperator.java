@@ -3,6 +3,8 @@ package AST.operations.comparison;
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
 import AST.baseTypes.Bool;
+import AST.baseTypes.Float;
+import AST.baseTypes.Int;
 import AST.baseTypes.Numerical;
 import AST.operations.Operator;
 
@@ -28,15 +30,20 @@ public abstract class ComparisonOperator extends Operator {
     @Override
     public BasicType interpret() {
         BasicType first = getChild(0).interpret();
-        BasicType second = size() > 1 ?  getChild(1).interpret() : null;
-        if (first instanceof Numerical f && second instanceof Numerical s) {
-            return interpretNumerical(f, s);
+        BasicType second = size() > 1 ? getChild(1).interpret() : null;
+
+        if (first instanceof Int && second instanceof Int) {
+            return interpretInts((Numerical)first, (Numerical)second);
+        } else if (first instanceof Numerical && second instanceof Numerical) {
+            return interpretFloats((Numerical)first, (Numerical)second);
         } else {
-            return interpretOthers();
+            //TODO
+            return null;
         }
     }
 
-    protected abstract Bool interpretNumerical(Numerical first, Numerical second);
+    protected abstract Bool interpretInts(Numerical first, Numerical second);
+    protected abstract Bool interpretFloats(Numerical first, Numerical second);
 
     //TODO
     protected abstract Bool interpretOthers();

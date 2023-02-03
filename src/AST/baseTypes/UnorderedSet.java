@@ -6,6 +6,9 @@ public class UnorderedSet extends Storage {
         //TODO
     }
 
+    public boolean typeEquals(BasicType other) {
+        return false;
+    }
     public UnorderedSet clone() {
         return null;
     }

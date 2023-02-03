@@ -63,9 +63,7 @@ public abstract class BasicType extends SyntaxNode {
         return null;    //TODO
     }
 
-    public boolean typeEquals(BasicType obj) {
-        return equals(obj);
-    }
+    public abstract boolean typeEquals(BasicType obj);
 
     public String toString() {
         return getName();

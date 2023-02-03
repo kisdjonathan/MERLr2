@@ -30,6 +30,10 @@ public class Float extends Numerical{
         return super.toString() + " " + value;
     }
 
+    public boolean typeEquals(BasicType other) {
+        return other instanceof Float;
+    }
+
     public boolean equals(Object other) {
         if(other instanceof  Float f)
             return f.value == value;

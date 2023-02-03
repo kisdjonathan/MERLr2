@@ -1,6 +1,8 @@
 package lexer;
 
 import AST.abstractNode.SyntaxNode;
+import AST.baseTypes.BasicType;
+import AST.baseTypes.Bool;
 import AST.baseTypes.Structure;
 import AST.baseTypes.Tuple;
 import AST.operations.variable.*;
@@ -31,19 +33,20 @@ public class OperatorReader {
             case "nor","~|" ->new Nor       ();
             case "xor","^^" ->new Xor       ();
             case "xnor","~^"->new Xnor      ();
-            //comparison
-            case "!=","=="  ->new Equal     ();
-            case ">=",">"   ->new Ascending ();
-            case "<=","<"   ->new Descending();
             //other
+            case "<<"       ->null;
             case ">>"       ->new Field     ();
-            case "<<", "="  ->new Declare();
+            case "="        ->new Declare   ();
+            case ":="       ->new Modify    ();
             case "->"       ->new Cast      ();
             case "with"     ->new With      ();
             case "then"     ->new Without   ();
             case "in"       ->new In        ();
 
             case ";",","    ->new Tuple     ();
+
+            //comparison
+            case "!=","==",">=",">","<=","<" -> new ComparisonChain();
 
             default -> throw new Error("unable to find operator " + name);
         };
@@ -92,7 +95,7 @@ public class OperatorReader {
             {"if", "while", "repeat", "for", "else", "nelse"},
             {"in"},
             {"with", "then"},
-            {"<<", "=", ">>"},
+            {"<<", ":=", "=", ">>"},
             {","},
             {"or"}, {"nor"}, {"xor"}, {"xnor"}, {"and"},
             {"=="}, {"!="}, {"<", ">", "<=", ">="},
@@ -111,8 +114,9 @@ public class OperatorReader {
             "with", "then",
             ",", ";",
             "or", "nor", "xor", "xnor", "and",
+            "=", ":=",
             "<<", ">>",
-            "=", "!=", "<", ">", "<=", ">=",
+            "==", "!=", "<", ">", "<=", ">=",
             "+", "-", "||", "%", "*", "/", "**",
             "$up", "$down", "$left", "$right",
             "$or", "$nor", "$xor", "$xnor", "$and",
@@ -129,10 +133,11 @@ public class OperatorReader {
             ";", "%", "!"
     ));
     private static final List<Set<String>> chainGroups = Arrays.asList(
-            new HashSet<>(Arrays.asList("<", "<=", "=")),
-            new HashSet<>(Arrays.asList(">", ">=", "=")),
-            new HashSet<>(Arrays.asList("=", "!=")),
+            new HashSet<>(Arrays.asList("<", "<=", "==")),
+            new HashSet<>(Arrays.asList(">", ">=", "==")),
+            new HashSet<>(Arrays.asList("==", "!=")),
             new HashSet<>(Arrays.asList("else", "nelse")),
+            new HashSet<>(List.of("=", ":=")),
             new HashSet<>(List.of("<<")),
             new HashSet<>(List.of(">>")),
             new HashSet<>(List.of(",")),
@@ -179,7 +184,7 @@ public class OperatorReader {
     }
 
     private static boolean isRightToLeft(String op) {
-        return "<<".equals(op) || ">>".equals(op);
+        return "=".equals(op) || ":=".equals(op) || "<<".equals(op) || ">>".equals(op);
     }
     private static boolean isLeftToRight(String op) {
         return !isRightToLeft(op);
@@ -231,17 +236,57 @@ public class OperatorReader {
         return false;
     }
 
+
+    /**
+     * auxiliary class for parsing
+     */
+    private static class ComparisonChain extends Operator {
+        public ComparisonChain(){}
+        public ComparisonChain(SyntaxNode a, SyntaxNode b) {
+            addChild(a); addChild(b);
+        }
+
+        public BasicType getType() {
+            return new Bool();
+        }
+        public SyntaxNode clone() {
+            return null;
+        }
+        public BasicType interpret() {
+            return null;
+        }
+        public String getName() {
+            return "comparison";
+        }
+    }
+
     public static SyntaxNode verify(SyntaxNode val) {
-        if(val instanceof Operator op && op instanceof Equal) {
-            Operator ret = op;
-            if(op.getOperators().contains(">")) {
-                ret = new Descending();
+        if(val instanceof ComparisonChain compop) {
+            List<SyntaxNode> conditions = new ArrayList<>();
+            SyntaxNode prevVal = compop.getChild(0);
+            for(int i = 1; i < compop.size(); ++i) {
+                switch (compop.getOperator(i-1)) {
+                    case "<"->
+                            conditions.add(new Lesser(prevVal, compop.getChild(i)));
+                    case ">"->
+                            conditions.add(new Greater(prevVal, compop.getChild(i)));
+                    case "<="->
+                            conditions.add(new NoGreater(prevVal, compop.getChild(i)));
+                    case ">="->
+                            conditions.add(new NoLesser(prevVal, compop.getChild(i)));
+                    case "=="->
+                            conditions.add(new Equal(prevVal, compop.getChild(i)));
+                    case "!="->
+                            conditions.add(new NoEqual(prevVal, compop.getChild(i)));
+                }
+                prevVal = compop.getChild(i);
             }
-            else if(op.getOperators().contains("<")) {
-                ret = new Ascending();
-            }
-            ret.setOperators(op.getOperators());
-            ret.setChildren(op.getChildren());
+            if(conditions.size() == 1)
+                return conditions.get(0);
+
+            And ret = new And(conditions.get(0), conditions.get(1));
+            for(int i = 2; i < conditions.size(); ++i)
+                ret = new And(ret, conditions.get(i));
             return ret;
         }
         return val;

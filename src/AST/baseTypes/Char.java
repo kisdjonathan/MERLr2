@@ -26,6 +26,9 @@ public class Char extends Numerical{
         return new Char(value);
     }
 
+    public boolean typeEquals(BasicType other) {
+        return other instanceof Char;
+    }
     public String toString() {
         return super.toString() + " " + value;
     }

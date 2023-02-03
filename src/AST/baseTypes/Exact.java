@@ -12,6 +12,9 @@ public class Exact extends BasicType{
         return null;
     }
 
+    public boolean typeEquals(BasicType other) {
+        return false;
+    }
     public Exact clone() {
         return null;
     }

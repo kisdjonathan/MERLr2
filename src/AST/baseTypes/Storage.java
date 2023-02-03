@@ -10,6 +10,10 @@ public abstract class Storage extends BasicType {
         return "storage";
     }
 
+    public void setStoredType(BasicType type) {
+        //TODO
+    }
+
     public List<SyntaxNode> getFields() {
         return null;    //TODO
     }

@@ -16,6 +16,9 @@ public class RangeEE extends Range {
         //TODO
     }
 
+    public boolean typeEquals(BasicType other) {
+        return other instanceof RangeEE;
+    }
     public RangeEE clone() {
         RangeEE ret = new RangeEE();
         ret.setStart(getStart().clone());

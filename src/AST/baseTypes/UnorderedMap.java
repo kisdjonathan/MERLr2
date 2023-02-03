@@ -5,6 +5,9 @@ public class UnorderedMap extends Storage {
         //TODO
     }
 
+    public boolean typeEquals(BasicType other) {
+        return false;
+    }
     public UnorderedMap clone() {
         return null;    //TODO
     }

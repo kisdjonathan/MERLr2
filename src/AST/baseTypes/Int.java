@@ -29,6 +29,12 @@ public class Int extends Numerical{
         return new Int(value);
     }
 
+    public boolean typeEquals(BasicType other) {
+        return other instanceof Int;
+    }
+    public boolean equals(Object other) {
+        return other instanceof Int iother && iother.value == value;
+    }
     public String toString() {
         return super.toString() + " " + value;
     }

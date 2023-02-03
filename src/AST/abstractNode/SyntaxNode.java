@@ -63,6 +63,8 @@ public abstract class SyntaxNode {
             if(getChild(i) instanceof Variable var) {
                 if (variables.containsKey(var.getName()))
                     setChild(i, variables.get(var.getName()));
+                else
+                    throw new Error("Variable used without assignment:" + var.getName());
             }
             else
                 getChild(i).unifyVariables(variables);

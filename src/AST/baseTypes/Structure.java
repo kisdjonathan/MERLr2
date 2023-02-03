@@ -24,6 +24,9 @@ public class Structure extends BasicType {
         return null;    //TODO
     }
 
+    public boolean typeEquals(BasicType other) {
+        return other instanceof Structure;
+    }
     public Structure clone() {
         return new Structure(getChild(0), getChild(1));
     }

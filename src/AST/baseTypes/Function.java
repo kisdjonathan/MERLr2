@@ -80,10 +80,16 @@ public class Function extends BasicType {
         }
     }
 
-    public boolean equals(Object other) {
+    public boolean typeEquals(BasicType other) {
         if(!(other instanceof Function fother))
             return false;
         return args.typeEquals(fother.getArgs()) && rets.typeEquals(fother.getRets());
+    }
+
+    public boolean equals(Object other) {
+        return other instanceof BasicType bother &&
+                typeEquals(bother) &&
+                bother.getName().equals(getName());
     }
 
     @Override
