@@ -36,8 +36,8 @@ public class OperatorReader {
             //other
             case "<<"       ->null;
             case ">>"       ->new Field     ();
-            case "="        ->new Declare   ();
-            case ":="       ->new Modify    ();
+            case ":"        ->new Declare   ();
+            case "="        ->new Modify    ();
             case "->"       ->new Cast      ();
             case "with"     ->new With      ();
             case "then"     ->new Without   ();
@@ -91,11 +91,12 @@ public class OperatorReader {
     }
     private static final String[][] builtinOperators = new String[][]{  //sorted by low to high precedence
             {"|", ")", "}", "]"},
-            {";", ":"},
+            {";"},
+            {":", "="},
             {"if", "while", "repeat", "for", "else", "nelse"},
             {"in"},
             {"with", "then"},
-            {"<<", ":=", "=", ">>"},
+            {"<<", ">>"},
             {","},
             {"or"}, {"nor"}, {"xor"}, {"xnor"}, {"and"},
             {"=="}, {"!="}, {"<", ">", "<=", ">="},
@@ -104,7 +105,8 @@ public class OperatorReader {
             {"$up", "$down", "$left", "$right"},
             {"$or"}, {"$nor"}, {"$xor"}, {"$xnor"}, {"$and"},
             {"$invert"},
-            {"->"},
+            {"@"},
+            {"as"},
             {"ref"},
             {"(", "[", "{"}
     };
@@ -114,14 +116,13 @@ public class OperatorReader {
             "with", "then",
             ",", ";",
             "or", "nor", "xor", "xnor", "and",
-            "=", ":=",
+            "=", ":",
             "<<", ">>",
             "==", "!=", "<", ">", "<=", ">=",
             "+", "-", "||", "%", "*", "/", "**",
             "$up", "$down", "$left", "$right",
             "$or", "$nor", "$xor", "$xnor", "$and",
-            "->",
-            ":"
+            "as"
     ));
     private static final Set<String> prefixes = new HashSet<>(Arrays.asList(
             "if", "for", "while", "repeat",
@@ -137,7 +138,7 @@ public class OperatorReader {
             new HashSet<>(Arrays.asList(">", ">=", "==")),
             new HashSet<>(Arrays.asList("==", "!=")),
             new HashSet<>(Arrays.asList("else", "nelse")),
-            new HashSet<>(List.of("=", ":=")),
+            new HashSet<>(List.of("=", ":")),
             new HashSet<>(List.of("<<")),
             new HashSet<>(List.of(">>")),
             new HashSet<>(List.of(",")),
@@ -184,7 +185,7 @@ public class OperatorReader {
     }
 
     private static boolean isRightToLeft(String op) {
-        return "=".equals(op) || ":=".equals(op) || "<<".equals(op) || ">>".equals(op);
+        return "=".equals(op) || ":".equals(op) || "<<".equals(op) || ">>".equals(op);
     }
     private static boolean isLeftToRight(String op) {
         return !isRightToLeft(op);
