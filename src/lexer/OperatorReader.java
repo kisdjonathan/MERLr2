@@ -92,10 +92,10 @@ public class OperatorReader {
     private static final String[][] builtinOperators = new String[][]{  //sorted by low to high precedence
             {"|", ")", "}", "]"},
             {";"},
-            {":", "="},
             {"if", "while", "repeat", "for", "else", "nelse"},
             {"in"},
             {"with", "then"},
+            {":", "="},
             {"<<", ">>"},
             {","},
             {"or"}, {"nor"}, {"xor"}, {"xnor"}, {"and"},

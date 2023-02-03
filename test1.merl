@@ -10,9 +10,9 @@ f(x,y) = x + y;
 g(x,y) = if false: x+y else: x-y;
 e = g(20,5);*/
 
-/*w := 1;
-m := 20;
+w = 1;
+m = 20;
 while w < m: (
-    w := w+2;
-    m := m+1
-)*/
+    w = w+2;
+    m = m+1
+)
