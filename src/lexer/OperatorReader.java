@@ -42,6 +42,7 @@ public class OperatorReader {
             case "with"     ->new With      ();
             case "then"     ->new Without   ();
             case "in"       ->new In        ();
+            case "@"        ->new Print     ();
 
             case ";",","    ->new Tuple     ();
 
@@ -57,6 +58,7 @@ public class OperatorReader {
             case "-"        ->new Negative  (opand);
             case "not","!"  ->new Not       (opand);
             case "#"        ->new Cardinal  (opand);
+            case "@"        ->new Print     (opand);
             default -> throw new Error("unable to find prefix " + oper);
         };
     }
@@ -73,6 +75,7 @@ public class OperatorReader {
             case "+"        ->new Positive  (opand);
             case "-"        ->new Negative  (opand);
             case "not","!"  ->new Not       (opand);
+            case "@"        ->new Print     (opand);
             case "ref"      ->null;
             default         ->throw new Error("invalid prefix " + oper);
         };
@@ -128,6 +131,7 @@ public class OperatorReader {
             "if", "for", "while", "repeat",
             "+", "-",
             "not", "$invert",
+            "@",
             "ref"
     ));
     private static final Set<String> postfixes = new HashSet<>(Arrays.asList(
