@@ -42,6 +42,7 @@ public class OperatorReader {
             case "with"     ->new With      ();
             case "then"     ->new Without   ();
             case "in"       ->new In        ();
+            case "@"        ->new Print     ();
 
             case ";",","    ->new Tuple     ();
 
@@ -49,15 +50,6 @@ public class OperatorReader {
             case "!=","==",">=",">","<=","<" -> new ComparisonChain();
 
             default -> throw new Error("unable to find operator " + name);
-        };
-    }
-    public static SyntaxNode prefix(String oper, SyntaxNode opand) {
-        return switch (oper) {
-            case "+"        ->new Positive  (opand);
-            case "-"        ->new Negative  (opand);
-            case "not","!"  ->new Not       (opand);
-            case "#"        ->new Cardinal  (opand);
-            default -> throw new Error("unable to find prefix " + oper);
         };
     }
     public static SyntaxNode decodeCall(SyntaxNode caller, String startDelim, String endDelim, SyntaxNode args) {
@@ -73,6 +65,7 @@ public class OperatorReader {
             case "+"        ->new Positive  (opand);
             case "-"        ->new Negative  (opand);
             case "not","!"  ->new Not       (opand);
+            case "@"        ->new Print     (opand);
             case "ref"      ->null;
             default         ->throw new Error("invalid prefix " + oper);
         };
@@ -128,6 +121,7 @@ public class OperatorReader {
             "if", "for", "while", "repeat",
             "+", "-",
             "not", "$invert",
+            "@",
             "ref"
     ));
     private static final Set<String> postfixes = new HashSet<>(Arrays.asList(
