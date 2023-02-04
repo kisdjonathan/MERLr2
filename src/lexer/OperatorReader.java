@@ -236,6 +236,16 @@ public class OperatorReader {
      * auxiliary class for parsing
      */
     private static class ComparisonChain extends Operator {
+        private List<String> operators = new ArrayList<>();
+
+        public void addChild(String descrip, SyntaxNode child) {
+            super.addChild(descrip, child);
+            operators.add(descrip);
+        }
+        public String getOperator(int index) {
+            return operators.get(index);
+        }
+
         public ComparisonChain(){}
         public ComparisonChain(SyntaxNode a, SyntaxNode b) {
             addChild(a); addChild(b);
