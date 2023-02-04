@@ -20,8 +20,8 @@ public class Modify extends Operator {
         return "modify";
     }
 
-    public Declare clone() {
-        Declare ret = new Declare();
+    public Modify clone() {
+        Modify ret = new Modify();
         for(SyntaxNode child : getChildren())
             ret.addChild(child.clone());
         return ret;
@@ -39,10 +39,10 @@ public class Modify extends Operator {
             if(getChild(i) instanceof Variable var) {
                 if (variables.containsKey(var.getName())) {
                     Variable existing = variables.get(var.getName());
-                    if(!existing.getType().typeEquals(resultType))
-                        throw new Error("Assigning to variable " + existing + " with incompatible type " + resultType);
+                    if(!existing.getType().typeEquals(resultType) && !resultType.typeEquals(existing.getType()))
+                        throw new Error("Modifying variable " + existing + " with incompatible type " + resultType);
                     else if(existing.isConstant())
-                        throw new Error("Assigning to constant " + existing + " to " + val);
+                        throw new Error("Modifying constant " + existing + " to " + val);
                     setChild(i, existing);
                 }
                 else {

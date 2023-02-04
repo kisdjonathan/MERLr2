@@ -1,9 +1,7 @@
 package AST.operations.arithmetic;
 
-import AST.baseTypes.BasicType;
+import AST.baseTypes.*;
 import AST.baseTypes.Float;
-import AST.baseTypes.Int;
-import AST.baseTypes.Numerical;
 import AST.operations.Operator;
 import AST.abstractNode.SyntaxNode;
 
@@ -29,6 +27,8 @@ public abstract class ArithmeticOperator extends Operator {
             return new Int();
         } else if (first instanceof Float || second instanceof Float) {
             return new Float();
+        } else if (first instanceof InferredType || second instanceof InferredType) {
+            return new InferredType();
         } else {
             //TODO
             throw new Error("Type mismatch for operator " + getName() + "\nfirst:" + first + "\nsecond:"+second);
