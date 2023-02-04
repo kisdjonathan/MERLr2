@@ -19,6 +19,8 @@ public abstract class BitwiseOperator extends Operator {
             return new Bool();
         } else if (first instanceof Int && second instanceof Int) {
             return new Int();
+        } else if (first instanceof InferredType || second instanceof InferredType) {
+            return new InferredType();
         } else {
             throw new Error("Unsupported arguments for " + getName() + " operator: \n\tfirst: " + first + "\n\tsecond:" + second);
         }
