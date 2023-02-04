@@ -11,6 +11,9 @@ import lexer.TokenReader;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
 
 //entry point of the program
 //TODO complete

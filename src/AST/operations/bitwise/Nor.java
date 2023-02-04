@@ -12,6 +12,11 @@ public class Nor extends BitwiseOperator {
         super(origin, vector);
     }
 
+    @Override
+    protected void setEvaluations() {
+
+    }
+
     public Nor clone() {
         return new Nor(getChild(0).clone(), getChild(1).clone());
     }

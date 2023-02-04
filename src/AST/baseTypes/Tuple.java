@@ -23,6 +23,10 @@ public class Tuple extends BasicType implements Iterable<SyntaxNode>{
         setChildren(children);
     }
 
+    public Tuple(SyntaxNode... nodes){
+        setChildren(Arrays.asList(nodes));
+    }
+
     public String getName() {
         return "tuple";
     }

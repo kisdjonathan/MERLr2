@@ -11,6 +11,11 @@ public class RightShift extends BitwiseOperator {
         super(origin, vector);
     }
 
+    @Override
+    protected void setEvaluations() {
+
+    }
+
     public RightShift clone() {
         return new RightShift(getChild(0).clone(), getChild(1).clone());
     }

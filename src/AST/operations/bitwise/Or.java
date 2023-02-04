@@ -12,6 +12,11 @@ public class Or extends BitwiseOperator {
         super(origin, vector);
     }
 
+    @Override
+    protected void setEvaluations() {
+
+    }
+
     public Or clone() {
         return new Or(getChild(0).clone(), getChild(1).clone());
     }

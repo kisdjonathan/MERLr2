@@ -12,6 +12,11 @@ public class Xor extends BitwiseOperator {
         super(origin, vector);
     }
 
+    @Override
+    protected void setEvaluations() {
+
+    }
+
     public Xor clone() {
         return new Xor(getChild(0).clone(), getChild(1).clone());
     }

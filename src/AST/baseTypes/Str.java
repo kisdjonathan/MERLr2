@@ -43,4 +43,7 @@ public class Str extends Storage{
     public String toString() {
         return super.toString() + " \"" + value + "\"";
     }
+
+    public String getValue() {return value;}
+
 }

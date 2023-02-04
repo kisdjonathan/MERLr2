@@ -12,6 +12,11 @@ public class Xnor extends BitwiseOperator {
         super(origin, vector);
     }
 
+    @Override
+    protected void setEvaluations() {
+
+    }
+
     public Xnor clone() {
         return new Xnor(getChild(0).clone(), getChild(1).clone());
     }

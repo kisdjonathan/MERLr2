@@ -9,6 +9,11 @@ import AST.operations.arithmetic.Add;
 public class Not extends BitwiseOperator {
     public Not(){}
 
+    @Override
+    protected void setEvaluations() {
+
+    }
+
     public Not(SyntaxNode value) {
         super(value, null);
     }
