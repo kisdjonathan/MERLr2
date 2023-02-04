@@ -20,11 +20,12 @@ public class With extends Operator {
     //TODO
     @Override
     public BasicType getType() {
-        return null;
+        return getChild(0).getType();
     }
 
-    @Override
     public BasicType interpret() {
-        return null;
+        BasicType ret = getChild(0).interpret();
+        getChild(1).interpret();
+        return ret;
     }
 }

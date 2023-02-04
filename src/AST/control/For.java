@@ -41,4 +41,8 @@ public class For extends Control {
     public BasicType interpret() {
         return null;
     }
+
+    public String toString() {
+        return "for " + getChildren();
+    }
 }

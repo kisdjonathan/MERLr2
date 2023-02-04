@@ -49,6 +49,10 @@ public abstract class Control extends Locality {
             ret.executionFalse = executionFalse;
             return ret;
         }
+
+        public String toString() {
+            return getChild(0) + ":" + getChild(1);
+        }
     }
 
     //private final List<Node> nodes = new ArrayList<>();

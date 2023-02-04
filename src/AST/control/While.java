@@ -29,15 +29,17 @@ public class While extends Control {
         return ret;
     }
 
-    @Override
     public BasicType getType() {
         DynamicArray ret = new DynamicArray();
         ret.setStoredType(getChild(0).getType());
         return ret;
     }
 
-    @Override
     public BasicType interpret() {
-        return getBase().interpret();
+        return getBase().interpret();   //TODO make into array
+    }
+
+    public String toString() {
+        return "while " + getChildren();
     }
 }
