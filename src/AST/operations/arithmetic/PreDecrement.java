@@ -14,11 +14,12 @@ public class PreDecrement extends UnaryOperator {
     }
 
     static {
-        setEvaluation(new Int(), new Int(), x -> {
+        addEvaluationOperation("predec");
+        setEvaluation("predec",new Int(), new Int(), x -> {
             x.setValue(x.asInt() - 1);
             return x;
         });
-        setEvaluation(new Float(), new Float(), x -> {
+        setEvaluation("predec",new Float(), new Float(), x -> {
             x.setValue(x.asDouble() - 1);
             return x;
         });

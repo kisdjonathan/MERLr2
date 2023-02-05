@@ -14,12 +14,13 @@ public class PostIncrement extends UnaryOperator {
     }
 
     static {
-        setEvaluation(new Int(), new Int(), x -> {
+        addEvaluationOperation("postinc");
+        setEvaluation("postinc",new Int(), new Int(), x -> {
             Int result = x.clone();
             x.setValue(x.asInt() + 1);
             return result;
         });
-        setEvaluation(new Float(), new Float(), x -> {
+        setEvaluation("postinc",new Float(), new Float(), x -> {
             Float result = x.clone();
             x.setValue(x.asDouble() + 1);
             return result;

@@ -13,9 +13,10 @@ public class Or extends BinaryOperator {
         super(origin, vector);
     }
 
-    static {
-        setEvaluation(new Bool(), new Bool(), new Bool(), (x, y) -> new Bool(x.getValue() || y.getValue()));
-        setEvaluation(new Int(), new Int(), new Int(), (x, y) -> new Int(x.getValue() | y.getValue()));
+    static  {
+        addEvaluationOperation("or");
+        setEvaluation("or", new Bool(), new Bool(), new Bool(), (x, y) -> new Bool(x.getValue() || y.getValue()));
+        setEvaluation("or", new Int(), new Int(), new Int(), (x, y) -> new Int(x.getValue() | y.getValue()));
     }
 
     public Or clone() {

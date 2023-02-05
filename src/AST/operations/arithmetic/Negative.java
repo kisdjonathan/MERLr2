@@ -13,8 +13,9 @@ public class Negative extends UnaryOperator {
     }
 
     static {
-        setEvaluation(new Int(), new Int(), x -> new Int(-x.asInt()));
-        setEvaluation(new Float(), new Float(), x -> new Float(x.asDouble()));
+        addEvaluationOperation("negative");
+        setEvaluation("negative", new Int(), new Int(), x -> new Int(-x.asInt()));
+        setEvaluation("negative", new Float(), new Float(), x -> new Float(x.asDouble()));
     }
 
     public String getName() {

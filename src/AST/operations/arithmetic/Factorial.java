@@ -13,7 +13,8 @@ public class Factorial extends UnaryOperator {
     }
 
     static {
-        setEvaluation(new Int(), new Int(), x -> {
+        addEvaluationOperation("factorial");
+        setEvaluation("factorial", new Int(), new Int(), x -> {
             if (x.getValue() < 0){
                 throw new Error("Invalid integer argument: integer cannot be negative");
             }

@@ -1,12 +1,15 @@
 package AST.operations.arithmetic;
 
 import AST.abstractNode.SyntaxNode;
+import AST.baseTypes.*;
 import AST.baseTypes.Float;
-import AST.baseTypes.Int;
-import AST.baseTypes.Numerical;
-import AST.baseTypes.Str;
 import AST.operations.BinaryOperator;
 import util.Pair;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.function.BiFunction;
 
 public class Divide extends BinaryOperator {
     public Divide(){}
@@ -14,11 +17,12 @@ public class Divide extends BinaryOperator {
         super(origin, vector);
     }
 
-    static {
-        setEvaluation(new Int(), new Int(), new Int(), (x, y) -> new Int(x.asInt() / y.asInt()));
-        setEvaluation(new Float(), new Int(), new Float(), (x, y) -> new Float(x.asDouble() / y.asDouble()));
-        setEvaluation(new Int(), new Float(), new Float(), (x, y) -> new Float(x.asDouble() / y.asDouble()));
-        setEvaluation(new Float(), new Float(), new Float(), (x, y) -> new Float(x.asDouble() / y.asDouble()));
+    static  {
+        addEvaluationOperation("div");
+        setEvaluation("div", new Int(), new Int(), new Int(), (x, y) -> new Int(x.asInt() / y.asInt()));
+        setEvaluation("div", new Float(), new Int(), new Float(), (x, y) -> new Float(x.asDouble() / y.asDouble()));
+        setEvaluation("div", new Int(), new Float(), new Float(), (x, y) -> new Float(x.asDouble() / y.asDouble()));
+        setEvaluation("div", new Float(), new Float(), new Float(), (x, y) -> new Float(x.asDouble() / y.asDouble()));
     }
 
     public String getName() {

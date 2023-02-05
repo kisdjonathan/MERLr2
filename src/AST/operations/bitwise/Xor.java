@@ -11,9 +11,10 @@ public class Xor extends BinaryOperator {
         super(origin, vector);
     }
 
-    static {
-        setEvaluation(new Bool(), new Bool(), new Bool(), (x, y) -> new Bool(x.getValue() != y.getValue()));
-        setEvaluation(new Int(), new Int(), new Int(), (x, y) -> new Int(x.getValue() ^ y.getValue()));
+    static  {
+        addEvaluationOperation("xor");
+        setEvaluation("xor", new Bool(), new Bool(), new Bool(), (x, y) -> new Bool(x.getValue() != y.getValue()));
+        setEvaluation("xor", new Int(), new Int(), new Int(), (x, y) -> new Int(x.getValue() ^ y.getValue()));
     }
 
     public Xor clone() {

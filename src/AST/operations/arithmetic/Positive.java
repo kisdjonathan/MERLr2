@@ -12,8 +12,9 @@ public class Positive extends UnaryOperator {
     }
 
     static {
-        setEvaluation(new Int(), new Int(), x -> x);
-        setEvaluation(new Float(), new Float(), x -> x);
+        addEvaluationOperation("positive");
+        setEvaluation("positive", new Int(), new Int(), x -> x);
+        setEvaluation("positive", new Float(), new Float(), x -> x);
     }
 
     public String getName() {

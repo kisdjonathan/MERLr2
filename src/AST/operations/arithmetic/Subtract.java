@@ -1,10 +1,15 @@
 package AST.operations.arithmetic;
 
 import AST.abstractNode.SyntaxNode;
-import AST.baseTypes.Int;
-import AST.baseTypes.Numerical;
+import AST.baseTypes.*;
 import AST.baseTypes.Float;
 import AST.operations.BinaryOperator;
+import util.Pair;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.function.BiFunction;
 
 public class Subtract extends BinaryOperator {
     public Subtract(){}
@@ -12,11 +17,12 @@ public class Subtract extends BinaryOperator {
         super(origin, vector);
     }
 
-    static {
-        setEvaluation(new Int(), new Int(), new Int(), (x, y) -> new Int(x.asInt() - y.asInt()));
-        setEvaluation(new Float(), new Int(), new Float(), (x, y) -> new Float(x.asDouble() - y.asDouble()));
-        setEvaluation(new Int(), new Float(), new Float(), (x, y) -> new Float(x.asDouble() - y.asDouble()));
-        setEvaluation(new Float(), new Float(), new Float(), (x, y) -> new Float(x.asDouble() - y.asDouble()));
+    static  {
+        addEvaluationOperation("sub");
+        setEvaluation("sub", new Int(), new Int(), new Int(), (x, y) -> new Int(x.asInt() - y.asInt()));
+        setEvaluation("sub", new Float(), new Int(), new Float(), (x, y) -> new Float(x.asDouble() - y.asDouble()));
+        setEvaluation("sub", new Int(), new Float(), new Float(), (x, y) -> new Float(x.asDouble() - y.asDouble()));
+        setEvaluation("sub", new Float(), new Float(), new Float(), (x, y) -> new Float(x.asDouble() - y.asDouble()));
     }
 
     public String getName() {

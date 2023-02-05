@@ -1,10 +1,15 @@
 package AST.operations.arithmetic;
 
 import AST.abstractNode.SyntaxNode;
-import AST.baseTypes.Int;
+import AST.baseTypes.*;
 import AST.baseTypes.Float;
-import AST.baseTypes.Str;
 import AST.operations.BinaryOperator;
+import util.Pair;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.function.BiFunction;
 
 public class Add extends BinaryOperator {
     public Add(){}
@@ -12,16 +17,17 @@ public class Add extends BinaryOperator {
         super(origin, vector);
     }
 
-    static {
-        setEvaluation(new Int(), new Int(), new Int(), (x, y) -> new Int(x.asInt() + y.asInt()));
-        setEvaluation(new Float(), new Int(), new Float(), (x, y) -> new Float(x.asDouble() + y.asDouble()));
-        setEvaluation(new Int(), new Float(), new Float(), (x, y) -> new Float(x.asDouble() + y.asDouble()));
-        setEvaluation(new Float(), new Float(), new Float(), (x, y) -> new Float(x.asDouble() + y.asDouble()));
-        setEvaluation(new Str(), new Str(), new Str(), (x, y) -> new Str(x.getValue() + y.getValue()));
-        setEvaluation(new Str(), new Int(), new Str(), (x, y) -> new Str(x.getValue() + y.getValue()));
-        setEvaluation(new Int(), new Str(), new Str(), (x, y) -> new Str(x.getValue() + y.getValue()));
-        setEvaluation(new Str(), new Float(), new Str(), (x, y) -> new Str(x.getValue() + y.getValue()));
-        setEvaluation(new Float(), new Str(), new Str(), (x, y) -> new Str(x.getValue() + y.getValue()));
+    static  {
+        addEvaluationOperation("add");
+        setEvaluation("add", new Int(), new Int(), new Int(), (x, y) -> new Int(x.asInt() + y.asInt()));
+        setEvaluation("add", new Float(), new Int(), new Float(), (x, y) -> new Float(x.asDouble() + y.asDouble()));
+        setEvaluation("add", new Int(), new Float(), new Float(), (x, y) -> new Float(x.asDouble() + y.asDouble()));
+        setEvaluation("add", new Float(), new Float(), new Float(), (x, y) -> new Float(x.asDouble() + y.asDouble()));
+        setEvaluation("add", new Str(), new Str(), new Str(), (x, y) -> new Str(x.getValue() + y.getValue()));
+        setEvaluation("add", new Str(), new Int(), new Str(), (x, y) -> new Str(x.getValue() + y.getValue()));
+        setEvaluation("add", new Int(), new Str(), new Str(), (x, y) -> new Str(x.getValue() + y.getValue()));
+        setEvaluation("add", new Str(), new Float(), new Str(), (x, y) -> new Str(x.getValue() + y.getValue()));
+        setEvaluation("add", new Float(), new Str(), new Str(), (x, y) -> new Str(x.getValue() + y.getValue()));
     }
 
     public String getName() {

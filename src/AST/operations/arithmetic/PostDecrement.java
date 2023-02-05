@@ -14,12 +14,13 @@ public class PostDecrement extends UnaryOperator {
     }
 
     static {
-        setEvaluation(new Int(), new Int(), x -> {
+        addEvaluationOperation("postdec");
+        setEvaluation("postdec",new Int(), new Int(), x -> {
             Int result = x.clone();
             x.setValue(x.asInt() - 1);
             return result;
         });
-        setEvaluation(new Float(), new Float(), x -> {
+        setEvaluation("postdec",new Float(), new Float(), x -> {
             Float result = x.clone();
             x.setValue(x.asDouble() - 1);
             return result;

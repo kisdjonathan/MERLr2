@@ -6,6 +6,7 @@ import AST.components.Variable;
 import AST.operations.With;
 import AST.operations.Without;
 import AST.operations.arithmetic.Add;
+import AST.operations.arithmetic.PreIncrement;
 import AST.operations.comparison.Lesser;
 import AST.operations.variable.Modify;
 
@@ -19,18 +20,16 @@ public class Repeat extends Control {
     }};
 
     public Repeat(SyntaxNode count, SyntaxNode body) {
+        putVariable(counter.getName(), counter);
         setBase(count, body);
     }
-    private Repeat(){}
-
-    protected void setBase(Node node) {
-        node.setChild(1, new With(node.getChild(1), new Modify(counter, new Add(counter, new Int(1)))));    //TODO replace with increment operator
-        super.setBase(node);
+    private Repeat(){
+        putVariable(counter.getName(), counter);
     }
 
-    public void unifyVariables(Map<String, Variable> variables) {
-        variables.put(counter.getName(), counter);
-        super.unifyVariables(variables);
+    protected void setBase(Node node) {
+        node.setChild(1, new With(node.getChild(1), new PreIncrement(counter)));
+        super.setBase(node);
     }
 
     public BasicType getType() {
