@@ -3,12 +3,17 @@ package AST.baseTypes;
 
 import AST.abstractNode.SyntaxNode;
 
+import java.util.List;
+
 public class DynamicArray extends Storage{
     public DynamicArray(){
         //TODO
     }
     public DynamicArray(Tuple values) {
         setChildren(values.getChildren());
+    }
+    public DynamicArray(List<SyntaxNode> values) {
+        setChildren(values);
     }
 
     public boolean typeEquals(BasicType other) {

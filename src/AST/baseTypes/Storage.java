@@ -25,4 +25,8 @@ public abstract class Storage extends BasicType {
     public SyntaxNode getField(String name) {
         return null;    //TODO
     }
+
+    public String toString() {
+        return getName() + " " + getChildren();
+    }
 }

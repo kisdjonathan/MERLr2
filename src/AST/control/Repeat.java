@@ -3,6 +3,7 @@ package AST.control;
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
 import AST.baseTypes.DynamicArray;
+import AST.baseTypes.FixedArray;
 import AST.baseTypes.Int;
 import AST.components.Variable;
 import AST.operations.With;
@@ -11,6 +12,8 @@ import AST.operations.arithmetic.Add;
 import AST.operations.comparison.Lesser;
 import AST.operations.variable.Modify;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class Repeat extends Control {
@@ -24,8 +27,6 @@ public class Repeat extends Control {
     private Repeat(){}
 
     protected void setBase(Node node) {
-        node.executionTrue = 0;
-        node.setChild(0, new Lesser(counter, node.getChild(0)));
         node.setChild(1, new With(node.getChild(1), new Modify(counter, new Add(counter, new Int(1)))));    //TODO replace with increment operator
         super.setBase(node);
     }
@@ -49,7 +50,21 @@ public class Repeat extends Control {
     }
 
     public BasicType interpret() {
-        return getBase().interpret(); //TODO make into array
+        List<SyntaxNode> values = new ArrayList<>();    //TODO optimize storing values such that it is not used when both success and break conditions are fulfilled
+        Node base = getBase();
+        SyntaxNode condition = base.getChild(0), body = base.getChild(1);
+
+        while(!counter.getType().equals(condition.interpret())){
+            values.add(body.interpret());
+        }
+        if(!counter.getType().equals(condition.interpret())) {
+            if (base.executionTrue > 0)  //strictly greater than 0, otherwise this would not make sense
+                return getChild(base.executionTrue).interpret();
+        }
+        else if(base.executionFalse > 0)
+            return getChild(base.executionFalse).interpret();
+
+        return new FixedArray(values);
     }
 
     public String toString() {
