@@ -10,8 +10,12 @@ public abstract class Storage extends BasicType {
         return "storage";
     }
 
+    private BasicType storedType = null;
     public void setStoredType(BasicType type) {
-        //TODO
+        storedType = type;
+    }
+    public BasicType getStoredType() {
+        return storedType;
     }
 
     public List<SyntaxNode> getFields() {
@@ -20,5 +24,9 @@ public abstract class Storage extends BasicType {
 
     public SyntaxNode getField(String name) {
         return null;    //TODO
+    }
+
+    public String toString() {
+        return getName() + " " + getChildren();
     }
 }

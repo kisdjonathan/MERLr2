@@ -17,12 +17,10 @@ public class Without extends Operator {
         return new Without( getChild(0).clone(), getChild(1).clone());
     }
 
-    @Override
     public BasicType getType() {
         return getChild(1).getType();
     }
 
-    @Override
     public BasicType interpret() {
         getChild(0).interpret();
         return getChild(1).interpret();

@@ -36,7 +36,7 @@ public class GroupReader {
     public static SyntaxNode decodeWithSuffix(SyntaxNode body, String startdelim, String enddelim, String suffix) {
         return switch (suffix) {
             case "l"        ->  new DynamicArray(Tuple.asTuple(body));
-            case "v"        ->  Tuple.asTuple(body);
+            case "v"        -> new FixedArray(Tuple.asTuple(body));
             case "s", "us"  ->
                     (startdelim + enddelim).equals("[]") ?
                             null:   // multiset

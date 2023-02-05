@@ -11,8 +11,10 @@ import AST.operations.variable.In;
 import java.util.*;
 
 public abstract class Control extends Locality {
+    protected SyntaxNode conditionControl = new Bool(true);
     protected class Node extends Locality {
-        //[0]:condition, [1]: body, [2]: execFalse, [3]: execTrue
+        //TODO condition does not have to be bool, but any value, and the loop will execute while the two are equal
+        //-1: unassigned, -2: always stop
         protected int executionFalse = -1, executionTrue = -1;
 
         public Node(SyntaxNode condition, SyntaxNode body) {
@@ -28,7 +30,7 @@ public abstract class Control extends Locality {
 
         public BasicType interpret() {
             BasicType success = getChild(0).interpret();
-            if(success.equals(new Bool(true))) {    //TODO implementation as switch statement
+            if(success.equals(conditionControl)) {
                 BasicType val = getChild(1).interpret();
                 if(executionTrue >= 0)
                     return getParent().getChild(executionTrue).interpret();
@@ -49,6 +51,10 @@ public abstract class Control extends Locality {
             ret.executionFalse = executionFalse;
             return ret;
         }
+
+        public String toString() {
+            return getChild(0) + ":" + getChild(1);
+        }
     }
 
     //private final List<Node> nodes = new ArrayList<>();
@@ -59,7 +65,7 @@ public abstract class Control extends Locality {
     public void addElse(SyntaxNode condition, SyntaxNode body) {
         if(condition == null) condition = new Bool(true);
         for(int i = size()-1; i >= 0; --i)
-            if(getChild(i).executionFalse < 0) {
+            if(getChild(i).executionFalse == -1) {
                 getChild(i).executionFalse = size();
             }
         Node newNode = new Node(condition, body);
@@ -68,7 +74,7 @@ public abstract class Control extends Locality {
     public void addNelse(SyntaxNode condition, SyntaxNode body) {
         if(condition == null) condition = new Bool(true);
         for(int i = size()-1; i >= 0; --i)
-            if(getChild(i).executionTrue < 0) {
+            if(getChild(i).executionTrue == -1) {
                 getChild(i).executionTrue = size();
             }
         Node newNode = new Node(condition, body);
