@@ -64,7 +64,7 @@ public class Tuple extends BasicType implements Iterable<SyntaxNode>{
     public boolean typeEquals(BasicType other) {
         if(other instanceof Tuple tother) {
             for(int i = 0; i < size(); ++i)
-                if(!getChild(i).getType().equals(tother.getChild(i).getType()))
+                if(!getChild(i).getType().typeEquals(tother.getChild(i).getType()))
                     return false;
             return true;
         }
@@ -81,3 +81,4 @@ public class Tuple extends BasicType implements Iterable<SyntaxNode>{
         return false;
     }
 }
+

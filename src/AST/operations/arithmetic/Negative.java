@@ -4,11 +4,17 @@ import AST.baseTypes.Float;
 import AST.baseTypes.Int;
 import AST.baseTypes.Numerical;
 import AST.abstractNode.SyntaxNode;
+import AST.operations.UnaryOperator;
 
-public class Negative extends ArithmeticOperator {
+public class Negative extends UnaryOperator {
     public Negative(){}
     public Negative(SyntaxNode value) {
         addChild(value);
+    }
+
+    static {
+        setEvaluation(new Int(), new Int(), x -> new Int(-x.asInt()));
+        setEvaluation(new Float(), new Float(), x -> new Float(x.asDouble()));
     }
 
     public String getName() {
@@ -19,11 +25,4 @@ public class Negative extends ArithmeticOperator {
         return new Negative(getChild(0).clone());
     }
 
-    public Float interpretFloats(Numerical first, Numerical second) {
-        return new Float(-first.asDouble());
-    }
-
-    public Int interpretInts(Numerical first, Numerical second) {
-        return new Int(-first.asInt());
-    }
 }

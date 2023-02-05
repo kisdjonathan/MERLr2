@@ -1,14 +1,24 @@
 package AST.operations.arithmetic;
 
 import AST.abstractNode.SyntaxNode;
-import AST.baseTypes.Float;
 import AST.baseTypes.Int;
-import AST.baseTypes.Numerical;
+import AST.operations.UnaryOperator;
 
-public class Factorial extends ArithmeticOperator {
+import java.util.stream.IntStream;
+
+public class Factorial extends UnaryOperator {
     public Factorial(){}
     public Factorial(SyntaxNode value) {
         addChild(value);
+    }
+
+    static {
+        setEvaluation(new Int(), new Int(), x -> {
+            if (x.getValue() < 0){
+                throw new Error("Invalid integer argument: integer cannot be negative");
+            }
+            return new Int(IntStream.rangeClosed(1, Math.max(1, x.getValue())).reduce((a, b) -> a * b).getAsInt());
+        });
     }
 
     public String getName() {
@@ -19,18 +29,4 @@ public class Factorial extends ArithmeticOperator {
         return new Factorial(getChild(0).clone());
     }
 
-    public Float interpretFloats(Numerical first, Numerical second) {
-        return null;    //TODO
-    }
-
-    public Int interpretInts(Numerical first, Numerical second) {
-        int stop = first.asInt();
-        if(stop < 0)
-            throw new Error("NaN");
-
-        int ret = stop;
-        for(int i = 1; i < stop; ++i)
-            ret *= i;
-        return new Int(ret);
-    }
 }

@@ -3,12 +3,17 @@ package AST.operations.arithmetic;
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.Float;
 import AST.baseTypes.Int;
-import AST.baseTypes.Numerical;
+import AST.operations.UnaryOperator;
 
-public class Positive extends ArithmeticOperator {
+public class Positive extends UnaryOperator {
     public Positive(){}
     public Positive(SyntaxNode value) {
         addChild(value);
+    }
+
+    static {
+        setEvaluation(new Int(), new Int(), x -> x);
+        setEvaluation(new Float(), new Float(), x -> x);
     }
 
     public String getName() {
@@ -19,11 +24,4 @@ public class Positive extends ArithmeticOperator {
         return new Positive(getChild(0).clone());
     }
 
-    public Float interpretFloats(Numerical first, Numerical second) {
-        return new Float(first.asDouble());
-    }
-
-    public Int interpretInts(Numerical first, Numerical second) {
-        return new Int(first.asInt());
-    }
 }

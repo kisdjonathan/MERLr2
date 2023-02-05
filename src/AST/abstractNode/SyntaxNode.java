@@ -76,6 +76,7 @@ public abstract class SyntaxNode {
     }
 
     public abstract BasicType getType();
+
     public void setType(BasicType type) {
         throw new Error("can not set type for " + this);
     }
@@ -83,4 +84,6 @@ public abstract class SyntaxNode {
     public abstract SyntaxNode clone();
 
     public abstract BasicType interpret();
+
+
 }
