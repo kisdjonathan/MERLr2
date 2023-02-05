@@ -2,18 +2,13 @@ package interpreter;
 
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
-import AST.baseTypes.Bool;
-import AST.baseTypes.Int;
-import AST.baseTypes.Numerical;
+import AST.baseTypes.numerical.Bool;
 import AST.components.Variable;
 import lexer.TokenReader;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
 
 //entry point of the program
 //TODO complete

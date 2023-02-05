@@ -1,7 +1,8 @@
-package AST.baseTypes;
+package AST.baseTypes.advanced;
 
 
 import AST.abstractNode.SyntaxNode;
+import AST.baseTypes.BasicType;
 
 public class RangeEI extends Range {
     public RangeEI(){}

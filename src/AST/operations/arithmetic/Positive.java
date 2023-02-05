@@ -1,8 +1,8 @@
 package AST.operations.arithmetic;
 
 import AST.abstractNode.SyntaxNode;
-import AST.baseTypes.Float;
-import AST.baseTypes.Int;
+import AST.baseTypes.numerical.Float;
+import AST.baseTypes.numerical.Int;
 import AST.operations.UnaryOperator;
 
 public class Positive extends UnaryOperator {

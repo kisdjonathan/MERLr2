@@ -1,7 +1,6 @@
-package AST.baseTypes;
+package AST.baseTypes.numerical;
 
-import AST.abstractNode.SyntaxNode;
-import AST.abstractNode.SyntaxNode;
+import AST.baseTypes.BasicType;
 
 public class Bool extends BasicType {
     private boolean value = false;
@@ -23,16 +22,20 @@ public class Bool extends BasicType {
         return new Bool(value);
     }
 
-    public String toString() {
-        return super.toString() + " " + value;
-    }
-
     public boolean getValue(){
         return value;
     }
 
     public boolean typeEquals(BasicType other) {
         return other instanceof Bool;
+    }
+
+    public String valueString() {
+        return String.valueOf(value);
+    }
+
+    public String toString() {
+        return super.toString() + " " + value;
     }
 
     public boolean equals(Object other) {

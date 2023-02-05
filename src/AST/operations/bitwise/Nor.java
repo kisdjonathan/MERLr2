@@ -1,17 +1,9 @@
 package AST.operations.bitwise;
 
 import AST.abstractNode.SyntaxNode;
-import AST.baseTypes.BasicType;
-import AST.baseTypes.Bool;
-import AST.baseTypes.Int;
-import AST.baseTypes.Tuple;
+import AST.baseTypes.numerical.Bool;
+import AST.baseTypes.numerical.Int;
 import AST.operations.BinaryOperator;
-import util.Pair;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.function.BiFunction;
 
 public class Nor extends BinaryOperator {
     public Nor() {}

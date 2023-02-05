@@ -1,16 +1,9 @@
 package AST.operations.bitwise;
 
 import AST.abstractNode.SyntaxNode;
-import AST.baseTypes.*;
-import AST.baseTypes.Float;
-import AST.baseTypes.Str;
+import AST.baseTypes.numerical.Bool;
+import AST.baseTypes.numerical.Int;
 import AST.operations.BinaryOperator;
-import util.Pair;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.function.BiFunction;
 
 public class And extends BinaryOperator {
     public And() {}

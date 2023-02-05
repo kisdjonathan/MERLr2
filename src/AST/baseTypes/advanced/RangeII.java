@@ -1,6 +1,7 @@
-package AST.baseTypes;
+package AST.baseTypes.advanced;
 
 import AST.abstractNode.SyntaxNode;
+import AST.baseTypes.BasicType;
 
 public class RangeII extends Range{
     public RangeII(){}

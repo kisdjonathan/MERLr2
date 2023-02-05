@@ -2,13 +2,10 @@ package AST.control;
 
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
-import AST.baseTypes.Bool;
+import AST.baseTypes.numerical.Bool;
 import AST.baseTypes.VoidType;
 import AST.components.Locality;
-import AST.components.Variable;
 import AST.operations.variable.In;
-
-import java.util.*;
 
 public abstract class Control extends Locality {
     protected SyntaxNode conditionControl = new Bool(true);

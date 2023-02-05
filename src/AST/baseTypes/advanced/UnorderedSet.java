@@ -1,4 +1,7 @@
-package AST.baseTypes;
+package AST.baseTypes.advanced;
+
+import AST.baseTypes.BasicType;
+import AST.baseTypes.Tuple;
 
 //TODO fill in fields, methods, and bytes
 public class UnorderedSet extends Storage {

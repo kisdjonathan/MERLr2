@@ -3,6 +3,8 @@ package AST.control;
 
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.*;
+import AST.baseTypes.advanced.Sequence;
+import AST.baseTypes.numerical.Bool;
 import AST.components.Variable;
 
 import java.util.ArrayList;

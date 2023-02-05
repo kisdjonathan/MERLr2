@@ -1,8 +1,8 @@
 package AST.operations.comparison;
 
 import AST.abstractNode.SyntaxNode;
-import AST.baseTypes.Bool;
-import AST.baseTypes.Numerical;
+import AST.baseTypes.numerical.Bool;
+import AST.baseTypes.numerical.Numerical;
 
 public class Lesser extends ComparisonOperator{
     public Lesser(){}

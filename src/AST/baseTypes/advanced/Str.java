@@ -1,6 +1,7 @@
-package AST.baseTypes;
+package AST.baseTypes.advanced;
 
 import AST.abstractNode.SyntaxNode;
+import AST.baseTypes.BasicType;
 
 import java.util.List;
 
@@ -40,6 +41,9 @@ public class Str extends Storage{
         return new Str(value);
     }
 
+    public String valueString() {
+        return value;
+    }
     public String toString() {
         return super.toString() + " \"" + value + "\"";
     }

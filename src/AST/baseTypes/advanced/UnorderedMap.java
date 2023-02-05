@@ -1,4 +1,7 @@
-package AST.baseTypes;
+package AST.baseTypes.advanced;
+
+import AST.baseTypes.BasicType;
+import AST.baseTypes.Tuple;
 
 public class UnorderedMap extends Storage {
     public UnorderedMap(Tuple values) {

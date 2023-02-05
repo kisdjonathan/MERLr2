@@ -2,10 +2,10 @@ package AST.operations.bitwise;
 
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.*;
+import AST.baseTypes.numerical.Bool;
+import AST.baseTypes.numerical.Int;
 import AST.operations.Operator;
 
-import java.lang.reflect.Type;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;

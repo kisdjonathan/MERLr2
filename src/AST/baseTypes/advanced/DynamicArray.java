@@ -1,7 +1,9 @@
-package AST.baseTypes;
+package AST.baseTypes.advanced;
 
 
 import AST.abstractNode.SyntaxNode;
+import AST.baseTypes.BasicType;
+import AST.baseTypes.Tuple;
 
 import java.util.List;
 

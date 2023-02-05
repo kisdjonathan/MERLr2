@@ -1,8 +1,7 @@
 package AST.operations.arithmetic;
 
-import AST.baseTypes.Float;
-import AST.baseTypes.Int;
-import AST.baseTypes.Numerical;
+import AST.baseTypes.numerical.Float;
+import AST.baseTypes.numerical.Int;
 import AST.abstractNode.SyntaxNode;
 import AST.operations.UnaryOperator;
 

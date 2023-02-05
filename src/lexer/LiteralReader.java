@@ -1,10 +1,10 @@
 package lexer;
 
 import AST.abstractNode.SyntaxNode;
-import AST.baseTypes.Char;
-import AST.baseTypes.Float;
-import AST.baseTypes.Int;
-import AST.baseTypes.Str;
+import AST.baseTypes.numerical.Char;
+import AST.baseTypes.numerical.Float;
+import AST.baseTypes.numerical.Int;
+import AST.baseTypes.advanced.Str;
 
 import java.text.NumberFormat;
 import java.text.ParsePosition;

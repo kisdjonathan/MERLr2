@@ -1,10 +1,9 @@
-package AST.baseTypes;
+package AST.baseTypes.numerical;
 
 
-import AST.abstractNode.SyntaxNode;
-import AST.operations.variable.In;
+import AST.baseTypes.BasicType;
 
-public class Int extends Numerical{
+public class Int extends Numerical {
     private int value;
 
     public Int(){
@@ -38,6 +37,9 @@ public class Int extends Numerical{
     }
     public boolean equals(Object other) {
         return other instanceof Int iother && iother.value == value;
+    }
+    public String valueString() {
+        return String.valueOf(value);
     }
     public String toString() {
         return super.toString() + " " + value;

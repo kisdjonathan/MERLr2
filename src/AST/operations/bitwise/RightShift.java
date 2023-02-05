@@ -1,10 +1,7 @@
 package AST.operations.bitwise;
 
 import AST.abstractNode.SyntaxNode;
-import AST.baseTypes.Bool;
-import AST.baseTypes.Int;
 import AST.operations.BinaryOperator;
-import AST.operations.arithmetic.Add;
 
 public class RightShift extends BinaryOperator {
     public RightShift() {}

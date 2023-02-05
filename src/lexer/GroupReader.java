@@ -2,6 +2,7 @@ package lexer;
 
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.*;
+import AST.baseTypes.advanced.*;
 
 public class GroupReader {
     /**

@@ -25,7 +25,7 @@ public class Print extends Operator {
     @Override
     public BasicType interpret() {
         BasicType b = getChild(0).interpret();
-        System.out.println(b);
+        System.out.println(b.valueString());
         return b;
     }
 

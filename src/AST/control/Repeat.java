@@ -2,17 +2,14 @@ package AST.control;
 
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.*;
+import AST.baseTypes.advanced.Sequence;
+import AST.baseTypes.numerical.Int;
 import AST.components.Variable;
 import AST.operations.With;
-import AST.operations.Without;
-import AST.operations.arithmetic.Add;
 import AST.operations.arithmetic.PreIncrement;
-import AST.operations.comparison.Lesser;
-import AST.operations.variable.Modify;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class Repeat extends Control {
     private Variable counter = new Variable("repetitions"){{

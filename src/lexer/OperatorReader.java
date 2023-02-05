@@ -2,7 +2,7 @@ package lexer;
 
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
-import AST.baseTypes.Bool;
+import AST.baseTypes.numerical.Bool;
 import AST.baseTypes.Structure;
 import AST.baseTypes.Tuple;
 import AST.operations.variable.*;

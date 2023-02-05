@@ -1,7 +1,9 @@
-package AST.baseTypes;
+package AST.baseTypes.advanced;
 
 import AST.abstractNode.SyntaxNode;
+import AST.baseTypes.BasicType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 //TODO define storage (ie does it only store values of the same type...)
@@ -26,6 +28,12 @@ public abstract class Storage extends BasicType {
         return null;    //TODO
     }
 
+    public String valueString() {
+        List<String> values = new ArrayList<>();
+        for(SyntaxNode child : getChildren())
+            values.add(child.getType().valueString());
+        return values.toString();
+    }
     public String toString() {
         return getName() + " " + getChildren();
     }

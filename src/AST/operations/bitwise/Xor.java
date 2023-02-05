@@ -1,8 +1,8 @@
 package AST.operations.bitwise;
 
 import AST.abstractNode.SyntaxNode;
-import AST.baseTypes.Bool;
-import AST.baseTypes.Int;
+import AST.baseTypes.numerical.Bool;
+import AST.baseTypes.numerical.Int;
 import AST.operations.BinaryOperator;
 
 public class Xor extends BinaryOperator {

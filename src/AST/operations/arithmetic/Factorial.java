@@ -1,7 +1,7 @@
 package AST.operations.arithmetic;
 
 import AST.abstractNode.SyntaxNode;
-import AST.baseTypes.Int;
+import AST.baseTypes.numerical.Int;
 import AST.operations.UnaryOperator;
 
 import java.util.stream.IntStream;

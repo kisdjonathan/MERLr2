@@ -1,8 +1,9 @@
-package AST.baseTypes;
+package AST.baseTypes.flagTypes;
 
 import AST.abstractNode.SyntaxNode;
+import AST.baseTypes.BasicType;
 
-public class InternalMessage extends BasicType{
+public class InternalMessage extends BasicType {
 
 
     public SyntaxNode clone() {
@@ -19,5 +20,8 @@ public class InternalMessage extends BasicType{
 
     public boolean typeEquals(BasicType obj) {
         return false;//TODO
+    }
+    public String valueString() {
+        return getName();
     }
 }

@@ -50,6 +50,16 @@ public class Tuple extends BasicType implements Iterable<SyntaxNode>{
         return getChildren().listIterator();
     }
 
+    public String valueString() {
+        StringBuilder ret = new StringBuilder("(");
+        for(SyntaxNode child : getChildren()) {
+            if (ret.length() > 1)
+                ret.append(",");
+            ret.append(child.getType().toString());
+        }
+        ret.append(")");
+        return ret.toString();
+    }
     public String toString() {
         StringBuilder ret = new StringBuilder("(");
         for(SyntaxNode child : getChildren()) {

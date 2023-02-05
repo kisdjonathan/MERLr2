@@ -1,15 +1,10 @@
 package AST.operations.arithmetic;
 
 import AST.abstractNode.SyntaxNode;
-import AST.baseTypes.*;
-import AST.baseTypes.Float;
+import AST.baseTypes.advanced.Str;
+import AST.baseTypes.numerical.Float;
+import AST.baseTypes.numerical.Int;
 import AST.operations.BinaryOperator;
-import util.Pair;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.function.BiFunction;
 
 public class Add extends BinaryOperator {
     public Add(){}
