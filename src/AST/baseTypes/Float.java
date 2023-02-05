@@ -22,6 +22,10 @@ public class Float extends Numerical{
         return value;
     }
 
+    public void setValue(double v){
+        value = v;
+    }
+
     public Float clone() {
         return new Float(value);
     }

@@ -25,6 +25,10 @@ public class Int extends Numerical{
         return value;
     }
 
+    public void setValue(int v) {
+        value = v;
+    }
+
     public Int clone() {
         return new Int(value);
     }
