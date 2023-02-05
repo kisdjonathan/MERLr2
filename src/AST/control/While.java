@@ -35,7 +35,7 @@ public class While extends Control {
         if(base.executionFalse > 0 && base.executionTrue > 0)
             return getChild(base.executionFalse).getType();
 
-        FixedArray ret = new FixedArray();
+        Sequence ret = new Sequence();
         ret.setStoredType(getChild(0).getType());
         return ret;
     }
@@ -58,7 +58,7 @@ public class While extends Control {
         else if(base.executionFalse > 0)
             return getChild(base.executionFalse).interpret();
 
-        return new FixedArray(values);
+        return new Sequence(values);
     }
 
     public String toString() {

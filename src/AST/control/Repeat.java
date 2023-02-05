@@ -1,10 +1,7 @@
 package AST.control;
 
 import AST.abstractNode.SyntaxNode;
-import AST.baseTypes.BasicType;
-import AST.baseTypes.DynamicArray;
-import AST.baseTypes.FixedArray;
-import AST.baseTypes.Int;
+import AST.baseTypes.*;
 import AST.components.Variable;
 import AST.operations.With;
 import AST.operations.Without;
@@ -37,7 +34,7 @@ public class Repeat extends Control {
     }
 
     public BasicType getType() {
-        DynamicArray ret = new DynamicArray();
+        Sequence ret = new Sequence();
         ret.setStoredType(getChild(0).getType());
         return ret;
     }
@@ -64,7 +61,7 @@ public class Repeat extends Control {
         else if(base.executionFalse > 0)
             return getChild(base.executionFalse).interpret();
 
-        return new FixedArray(values);
+        return new Sequence(values);
     }
 
     public String toString() {
