@@ -2,15 +2,27 @@ package AST.operations.comparison;
 
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.numerical.Bool;
+import AST.baseTypes.numerical.Float;
+import AST.baseTypes.numerical.Int;
 import AST.baseTypes.numerical.Numerical;
+import AST.operations.BinaryOperator;
 
-public class NoEqual extends ComparisonOperator{
+public class NoEqual extends BinaryOperator {
     public NoEqual(){}
     public NoEqual(SyntaxNode a, SyntaxNode b) {
         addChild(a);
         addChild(b);
     }
 
+    static {
+        addEvaluationOperation("not equal");
+        setEvaluation("not equal", new Int(), new Int(), new Bool(), (x, y) -> new Bool(x.asInt() != y.asInt()));
+        setEvaluation("not equal", new Float(), new Float(), new Bool(), (x, y) -> new Bool(x.asDouble() != y.asDouble()));
+        setEvaluation("not equal", new Float(), new Int(), new Bool(), (x, y) -> new Bool(x.asDouble() != y.asDouble()));
+        setEvaluation("not equal", new Int(), new Float(), new Bool(), (x, y) -> new Bool(x.asDouble() != y.asDouble()));
+        setEvaluation("not equal", new Bool(), new Bool(), new Bool(), (x, y) -> new Bool(x.getValue() != y.getValue()));
+    }
+    
     public SyntaxNode clone() {
         return new NoEqual(getChild(0),getChild(1));
     }
@@ -19,13 +31,4 @@ public class NoEqual extends ComparisonOperator{
         return "not equal";
     }
 
-    protected Bool interpretInts(Numerical first, Numerical second) {
-        return new Bool(first.asInt() != second.asInt());
-    }
-    protected Bool interpretFloats(Numerical first, Numerical second) {
-        return new Bool(first.asDouble() != second.asDouble());
-    }
-    protected Bool interpretOthers() {
-        return null;
-    }
 }

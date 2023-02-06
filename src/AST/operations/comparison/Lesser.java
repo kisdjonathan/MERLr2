@@ -2,13 +2,24 @@ package AST.operations.comparison;
 
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.numerical.Bool;
+import AST.baseTypes.numerical.Float;
+import AST.baseTypes.numerical.Int;
 import AST.baseTypes.numerical.Numerical;
+import AST.operations.BinaryOperator;
 
-public class Lesser extends ComparisonOperator{
+public class Lesser extends BinaryOperator {
     public Lesser(){}
     public Lesser(SyntaxNode a, SyntaxNode b) {
         addChild(a);
         addChild(b);
+    }
+    
+    static {
+        addEvaluationOperation("lesser");
+        setEvaluation("lesser", new Int(), new Int(), new Bool(), (x, y) -> new Bool(x.asInt() < y.asInt()));
+        setEvaluation("lesser", new Float(), new Float(), new Bool(), (x, y) -> new Bool(x.asDouble() < y.asDouble()));
+        setEvaluation("lesser", new Float(), new Int(), new Bool(), (x, y) -> new Bool(x.asDouble() < y.asDouble()));
+        setEvaluation("lesser", new Int(), new Float(), new Bool(), (x, y) -> new Bool(x.asDouble() < y.asDouble()));
     }
 
     public SyntaxNode clone() {
@@ -19,13 +30,4 @@ public class Lesser extends ComparisonOperator{
         return "lesser";
     }
 
-    protected Bool interpretInts(Numerical first, Numerical second) {
-        return new Bool(first.asInt() < second.asInt());
-    }
-    protected Bool interpretFloats(Numerical first, Numerical second) {
-        return new Bool(first.asDouble() < second.asDouble());
-    }
-    protected Bool interpretOthers() {
-        return null;
-    }
 }
