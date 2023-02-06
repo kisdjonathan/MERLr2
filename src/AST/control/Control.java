@@ -2,6 +2,7 @@ package AST.control;
 
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
+import AST.baseTypes.flagTypes.ControlCode;
 import AST.baseTypes.numerical.Bool;
 import AST.baseTypes.VoidType;
 import AST.components.Locality;
@@ -29,6 +30,8 @@ public abstract class Control extends Locality {
             BasicType success = getChild(0).interpret();
             if(success.equals(conditionControl)) {
                 BasicType val = getChild(1).interpret();
+                if(val instanceof ControlCode)
+                    return val;
                 if(executionTrue >= 0)
                     return getParent().getChild(executionTrue).interpret();
                 else
@@ -107,21 +110,5 @@ public abstract class Control extends Locality {
             addChild(node);
         else
             setChild(0, node);
-    }
-
-    public static Control decode(String controlName, SyntaxNode condition, SyntaxNode body) {
-        switch (controlName) {
-            case "if":
-                return new If(condition, body);
-            case "repeat":
-                return new Repeat(condition, body);
-            case "while":
-                return new While(condition, body);
-            case "for":
-                if(condition instanceof In icondition)
-                    return new For(icondition.getChild(0), icondition.getChild(1), body);
-            default:
-                throw new Error("no control by the name " + controlName);
-        }
     }
 }

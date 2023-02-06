@@ -86,6 +86,7 @@ public class OperatorReader {
             {"|", ")", "}", "]"},
             {";"},
             {"if", "while", "repeat", "for", "else", "nelse"},
+            {"break", "continue", "return"},
             {"in"},
             {"with", "then"},
             {":", "="},

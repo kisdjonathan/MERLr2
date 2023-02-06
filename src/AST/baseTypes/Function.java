@@ -1,6 +1,7 @@
 package AST.baseTypes;
 
 import AST.abstractNode.SyntaxNode;
+import AST.baseTypes.flagTypes.ReturnCode;
 import AST.components.Variable;
 
 import java.util.HashMap;
@@ -68,7 +69,11 @@ public class Function extends BasicType {
             return new VoidType();
         }
         else if(rets.size() == 1 && rets.getChild(0) instanceof InferredType) {
-            return getChild(0).interpret();
+            BasicType value = getChild(0).interpret();
+            if(value instanceof ReturnCode retVal)
+                return retVal.getValue();
+            else
+                return value;
         }
         else{
             this.rets.interpret();

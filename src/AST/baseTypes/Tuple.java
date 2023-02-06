@@ -4,6 +4,8 @@ package AST.baseTypes;
 //TODO special type here
 
 import AST.abstractNode.SyntaxNode;
+import AST.baseTypes.flagTypes.ControlCode;
+import AST.baseTypes.flagTypes.InternalMessage;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -41,8 +43,12 @@ public class Tuple extends BasicType implements Iterable<SyntaxNode>{
     @Override
     public BasicType interpret() {
         Tuple ret = new Tuple();
-        for(SyntaxNode child : getChildren())
-            ret.addChild(child.interpret());
+        for(SyntaxNode child : getChildren()) {
+            BasicType value = child.interpret();
+            if(value instanceof ControlCode)
+                return value;
+            ret.addChild(value);
+        }
         return ret;
     }
 

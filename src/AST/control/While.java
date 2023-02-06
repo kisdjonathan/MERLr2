@@ -4,6 +4,7 @@ package AST.control;
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.*;
 import AST.baseTypes.advanced.Sequence;
+import AST.baseTypes.flagTypes.ControlCode;
 import AST.baseTypes.numerical.Bool;
 import AST.components.Variable;
 
@@ -48,9 +49,22 @@ public class While extends Control {
 
         conditionVariable.setType(condition.interpret());
         while(conditionVariable.getType().equals(conditionControl.interpret())){
-            values.add(body.interpret());
+            BasicType value = body.interpret();
+            if(value instanceof ControlCode c) {
+                if(c.getChoice() == ControlCode.BREAK && c.getLayers() > 0) {
+                    if(c.getLayers() > 1)
+                        return c.reduced();
+                }
+                else if(c.getChoice() == ControlCode.RETURN)
+                    return c;
+                else if(c.getChoice() == ControlCode.CONTINUE) {
+                    for(int i = 0; i < c.getLayers(); ++i)
+                        conditionVariable.setType(condition.interpret());
+                    continue;
+                }
+            }
+            values.add(value);
             conditionVariable.setType(condition.interpret());
-            //TODO handle breaks and continues
         }
         if(conditionVariable.getType().equals(conditionControl.interpret())) {
             if (base.executionTrue > 0)  //strictly greater than 0, otherwise this would not make sense

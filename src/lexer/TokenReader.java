@@ -27,6 +27,8 @@ public class TokenReader {
             ret = readGroup(next);
         else if(ControlReader.isControl(next))
             ret = readControl(next);
+        else if(ControlReader.isStatement(next))
+            ret = readStatement(next);
         else if(OperatorReader.isPrefix(next))
             ret = OperatorReader.decodePrefix(next, get());
         else if(LiteralReader.isLiteral(next))
@@ -38,6 +40,22 @@ public class TokenReader {
             ret = new Field(ret, get());
 
         return ret;
+    }
+
+    //takes in the statement
+    public SyntaxNode readStatement(String value) {
+        if(!OperatorReader.isOperator(source.peek()) || OperatorReader.isPrefix(source.peek())) {
+            SyntaxNode body = get();
+            while (OperatorReader.isOperator(source.peek()) &&
+                    OperatorReader.isBefore(source.peek(), value))
+                body = getOperator(body);
+
+            return ControlReader.decodeStatement(value, body);
+        }
+        return ControlReader.decodeStatement(value);
+    }
+    public SyntaxNode getStatement() {
+        return readStatement(source.get());
     }
 
     //takes in first part of a literal
@@ -86,7 +104,7 @@ public class TokenReader {
                     OperatorReader.isBefore(source.peek(), id))
                 body = getOperator(body);
 
-            ret = Control.decode(id, control, body);
+            ret = ControlReader.decode(id, control, body);
         }
 
         while(ControlReader.isCase(source.peek())) {

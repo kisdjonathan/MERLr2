@@ -2,17 +2,26 @@ package AST.control;
 
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
+import AST.baseTypes.flagTypes.ControlCode;
+import AST.baseTypes.numerical.Int;
 
 public class Continue extends SyntaxNode {
+    public Continue() {
+        addChild(new Int(1));
+    }
+    public Continue(SyntaxNode layers) {
+        addChild(layers);
+    }
+
     public BasicType getType() {
-        return null;//TODO
+        return new ControlCode(ControlCode.BREAK);
     }
 
     public SyntaxNode clone() {
-        return null;//TODO
+        return new Continue(getChild(0));
     }
 
     public BasicType interpret() {
-        return null;//TODO
+        return new ControlCode(ControlCode.CONTINUE,((Int)getChild(0).interpret()).asInt());
     }
 }
