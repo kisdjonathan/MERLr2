@@ -25,6 +25,7 @@ public class OperatorReader {
             case "-"        ->new Subtract  ();
             case "*"        ->new Multiply  ();
             case "/"        ->new Divide    ();
+            case "%"        ->new Modulo    ();
             case "**"       ->new Exponent  ();
             case "!"        ->new Factorial ();
             //boolean, bitwise

@@ -1,4 +1,5 @@
 package lexer;
+import AST.baseTypes.BasicType;
 import AST.components.Variable;
 import AST.control.Control;
 import AST.operations.variable.Field;
@@ -29,8 +30,13 @@ public class TokenReader {
             ret = readControl(next);
         else if(ControlReader.isStatement(next))
             ret = readStatement(next);
-        else if(OperatorReader.isPrefix(next))
-            ret = OperatorReader.decodePrefix(next, get());
+        else if(OperatorReader.isPrefix(next)) {
+            SyntaxNode body = get();
+            while (OperatorReader.isOperator(source.peek()) &&
+                    OperatorReader.isBefore(source.peek(), next))
+                body = getOperator(body);
+            ret = OperatorReader.decodePrefix(next, body);
+        }
         else if(LiteralReader.isLiteral(next))
             ret = readLiteral(next);
         else
