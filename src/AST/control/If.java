@@ -24,4 +24,8 @@ public class If extends Control {
     public BasicType interpret() {
         return getBase().interpret();
     }
+
+    public String toString() {
+        return "if " + getChildren();
+    }
 }

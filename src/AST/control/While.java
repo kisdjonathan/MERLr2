@@ -2,23 +2,26 @@ package AST.control;
 
 
 import AST.abstractNode.SyntaxNode;
-import AST.baseTypes.BasicType;
-import AST.baseTypes.DynamicArray;
-import AST.baseTypes.FixedArray;
+import AST.baseTypes.*;
+import AST.baseTypes.advanced.Sequence;
+import AST.baseTypes.flagTypes.ControlCode;
+import AST.baseTypes.numerical.Bool;
+import AST.components.Variable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class While extends Control {
-    public While(SyntaxNode condition, SyntaxNode body) {
-        setBase(condition, body);
-    }
-    public While(SyntaxNode condition, SyntaxNode body, SyntaxNode parent) {
-        setParent(parent);
-        setBase(condition, body);
-    }
-    private While(){}
+    private Variable conditionVariable = new Variable("condition"){{
+        setType(new Bool(false));
+    }};
 
-    protected void setBase(Node node) {
-        node.executionTrue = 0;
-        super.setBase(node);
+    public While(SyntaxNode condition, SyntaxNode body) {
+        putVariable(conditionVariable.getName(), conditionVariable);
+        setBase(condition, body);
+    }
+    private While(){
+        putVariable(conditionVariable.getName(), conditionVariable);
     }
 
     public While clone() {
@@ -29,15 +32,51 @@ public class While extends Control {
         return ret;
     }
 
-    @Override
     public BasicType getType() {
-        DynamicArray ret = new DynamicArray();
+        Node base = getBase();
+        if(base.executionFalse > 0 && base.executionTrue > 0)
+            return getChild(base.executionFalse).getType();
+
+        Sequence ret = new Sequence();
         ret.setStoredType(getChild(0).getType());
         return ret;
     }
 
-    @Override
     public BasicType interpret() {
-        return getBase().interpret();
+        List<SyntaxNode> values = new ArrayList<>();    //TODO optimize storing values such that it is not used when both success and break conditions are fulfilled
+        Node base = getBase();
+        SyntaxNode condition = base.getChild(0), body = base.getChild(1);
+
+        conditionVariable.setType(condition.interpret());
+        while(conditionVariable.getType().equals(conditionControl.interpret())){
+            BasicType value = body.interpret();
+            if(value instanceof ControlCode c) {
+                if(c.getChoice() == ControlCode.BREAK && c.getLayers() > 0) {
+                    if(c.getLayers() > 1)
+                        return c.reduced();
+                }
+                else if(c.getChoice() == ControlCode.RETURN)
+                    return c;
+                else if(c.getChoice() == ControlCode.CONTINUE) {
+                    for(int i = 0; i < c.getLayers(); ++i)
+                        conditionVariable.setType(condition.interpret());
+                    continue;
+                }
+            }
+            values.add(value);
+            conditionVariable.setType(condition.interpret());
+        }
+        if(conditionVariable.getType().equals(conditionControl.interpret())) {
+            if (base.executionTrue > 0)  //strictly greater than 0, otherwise this would not make sense
+                return getChild(base.executionTrue).interpret();
+        }
+        else if(base.executionFalse > 0)
+            return getChild(base.executionFalse).interpret();
+
+        return new Sequence(values);
+    }
+
+    public String toString() {
+        return "while " + getChildren();
     }
 }

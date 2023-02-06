@@ -2,7 +2,7 @@ package lexer;
 
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
-import AST.baseTypes.Bool;
+import AST.baseTypes.numerical.Bool;
 import AST.baseTypes.Structure;
 import AST.baseTypes.Tuple;
 import AST.operations.variable.*;
@@ -52,16 +52,6 @@ public class OperatorReader {
             default -> throw new Error("unable to find operator " + name);
         };
     }
-    public static SyntaxNode prefix(String oper, SyntaxNode opand) {
-        return switch (oper) {
-            case "+"        ->new Positive  (opand);
-            case "-"        ->new Negative  (opand);
-            case "not","!"  ->new Not       (opand);
-            case "#"        ->new Cardinal  (opand);
-            case "@"        ->new Print     (opand);
-            default -> throw new Error("unable to find prefix " + oper);
-        };
-    }
     public static SyntaxNode decodeCall(SyntaxNode caller, String startDelim, String endDelim, SyntaxNode args) {
         return switch (startDelim + endDelim) {
             case "()"   ->new Call      (caller, args);
@@ -95,10 +85,11 @@ public class OperatorReader {
     private static final String[][] builtinOperators = new String[][]{  //sorted by low to high precedence
             {"|", ")", "}", "]"},
             {";"},
-            {":", "="},
             {"if", "while", "repeat", "for", "else", "nelse"},
+            {"break", "continue", "return"},
             {"in"},
             {"with", "then"},
+            {":", "="},
             {"<<", ">>"},
             {","},
             {"or"}, {"nor"}, {"xor"}, {"xnor"}, {"and"},
@@ -246,6 +237,16 @@ public class OperatorReader {
      * auxiliary class for parsing
      */
     private static class ComparisonChain extends Operator {
+        private List<String> operators = new ArrayList<>();
+
+        public void addChild(String descrip, SyntaxNode child) {
+            super.addChild(descrip, child);
+            operators.add(descrip);
+        }
+        public String getOperator(int index) {
+            return operators.get(index);
+        }
+
         public ComparisonChain(){}
         public ComparisonChain(SyntaxNode a, SyntaxNode b) {
             addChild(a); addChild(b);

@@ -11,6 +11,9 @@ public abstract class Locality extends SyntaxNode {
     public Variable getVariable(String name) {
         return variables.get(name);
     }
+    public void putVariable(String name, Variable var) {
+        variables.put(name, var);
+    }
 
     /**
      * this is where variables and functions are added from the locality's children to its variable map

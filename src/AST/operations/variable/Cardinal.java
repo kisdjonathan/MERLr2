@@ -1,7 +1,7 @@
 package AST.operations.variable;
 
 import AST.baseTypes.BasicType;
-import AST.baseTypes.Int;
+import AST.baseTypes.numerical.Int;
 import AST.operations.Operator;
 import AST.abstractNode.SyntaxNode;
 

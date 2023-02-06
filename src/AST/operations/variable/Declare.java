@@ -49,9 +49,12 @@ public class Declare extends Operator {
             }
             else {
                 Variable var = getChild(i).asVariable();
+                if(variables.containsKey(var.getName()))
+                    throw new Error("attempting to perform constant assignment on defined " + variables.get(var.getName()));
                 SyntaxNode val = getChild(size() - 1);
                 val.unifyVariables(variables);
                 var.setType(val.getType());
+                var.setConstant(true);
                 variables.put(var.getName(), var);
             }
         }
@@ -65,8 +68,14 @@ public class Declare extends Operator {
         if(functionDeclaration != null)
             return functionDeclaration;
         BasicType value = getChild(size() - 1).interpret();
-        for(int i = 0; i < size()-1; ++i)
-            getChild(i).setType(value);
+        for(int i = 0; i < size()-1; ++i) {
+            if (!getChild(i).asVariable().isConstant())
+                throw new Error("attempting to assign variable " + getChild(i) + " to a constant value");
+            else if(!getChild(i).getType().equals(value))
+                throw new Error("attempting to assign constant " + getChild(i) + " to a new value " + value);
+            else
+                getChild(i).setType(value);
+        }
         return value;
     }
 }

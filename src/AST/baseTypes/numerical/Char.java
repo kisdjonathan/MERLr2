@@ -1,9 +1,8 @@
-package AST.baseTypes;
+package AST.baseTypes.numerical;
 
-import AST.abstractNode.SyntaxNode;
-import AST.abstractNode.SyntaxNode;
+import AST.baseTypes.BasicType;
 
-public class Char extends Numerical{
+public class Char extends Numerical {
     private short value = '\0';
 
     public Char(){}
@@ -28,6 +27,9 @@ public class Char extends Numerical{
 
     public boolean typeEquals(BasicType other) {
         return other instanceof Char;
+    }
+    public String valueString() {
+        return String.valueOf(value);
     }
     public String toString() {
         return super.toString() + " " + value;

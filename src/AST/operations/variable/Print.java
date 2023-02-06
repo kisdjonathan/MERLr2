@@ -6,11 +6,12 @@ import AST.operations.Operator;
 
 public class Print extends Operator {
 
-    public Print(SyntaxNode child) {
-        addChild(child);
+    public Print(){}
+
+    public Print(SyntaxNode message) {
+        addChild(message);
     }
 
-    public Print(){}
     @Override
     public BasicType getType() {
         return getChild(0).getType();
@@ -23,8 +24,9 @@ public class Print extends Operator {
 
     @Override
     public BasicType interpret() {
-        System.out.println(getChild(0));
-        return getChild(0).interpret();
+        BasicType b = getChild(0).interpret();
+        System.out.println(b.valueString());
+        return b;
     }
 
     @Override

@@ -2,9 +2,7 @@ package interpreter;
 
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
-import AST.baseTypes.Bool;
-import AST.baseTypes.Int;
-import AST.baseTypes.Numerical;
+import AST.baseTypes.numerical.Bool;
 import AST.components.Variable;
 import lexer.TokenReader;
 

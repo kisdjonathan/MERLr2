@@ -7,3 +7,7 @@ Dealing with literals:
         char literal as string
     sets
     maps
+
+Issues with other things:
+    All operators that deal with types don't handle InferredType
+    Potential problem when calling a function several times, since the interpreter may modify function variables and not change it back

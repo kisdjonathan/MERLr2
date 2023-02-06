@@ -4,6 +4,8 @@ package AST.baseTypes;
 //TODO special type here
 
 import AST.abstractNode.SyntaxNode;
+import AST.baseTypes.flagTypes.ControlCode;
+import AST.baseTypes.flagTypes.InternalMessage;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -23,6 +25,10 @@ public class Tuple extends BasicType implements Iterable<SyntaxNode>{
         setChildren(children);
     }
 
+    public Tuple(SyntaxNode... nodes){
+        setChildren(Arrays.asList(nodes));
+    }
+
     public String getName() {
         return "tuple";
     }
@@ -37,8 +43,12 @@ public class Tuple extends BasicType implements Iterable<SyntaxNode>{
     @Override
     public BasicType interpret() {
         Tuple ret = new Tuple();
-        for(SyntaxNode child : getChildren())
-            ret.addChild(child.interpret());
+        for(SyntaxNode child : getChildren()) {
+            BasicType value = child.interpret();
+            if(value instanceof ControlCode)
+                return value;
+            ret.addChild(value);
+        }
         return ret;
     }
 
@@ -46,6 +56,16 @@ public class Tuple extends BasicType implements Iterable<SyntaxNode>{
         return getChildren().listIterator();
     }
 
+    public String valueString() {
+        StringBuilder ret = new StringBuilder("(");
+        for(SyntaxNode child : getChildren()) {
+            if (ret.length() > 1)
+                ret.append(",");
+            ret.append(child.getType().toString());
+        }
+        ret.append(")");
+        return ret.toString();
+    }
     public String toString() {
         StringBuilder ret = new StringBuilder("(");
         for(SyntaxNode child : getChildren()) {
@@ -60,7 +80,7 @@ public class Tuple extends BasicType implements Iterable<SyntaxNode>{
     public boolean typeEquals(BasicType other) {
         if(other instanceof Tuple tother) {
             for(int i = 0; i < size(); ++i)
-                if(!getChild(i).getType().equals(tother.getChild(i).getType()))
+                if(!getChild(i).getType().typeEquals(tother.getChild(i).getType()))
                     return false;
             return true;
         }
@@ -77,3 +97,4 @@ public class Tuple extends BasicType implements Iterable<SyntaxNode>{
         return false;
     }
 }
+

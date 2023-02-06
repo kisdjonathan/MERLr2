@@ -1,4 +1,6 @@
-package AST.baseTypes;
+package AST.baseTypes.numerical;
+
+import AST.baseTypes.BasicType;
 
 public abstract class Numerical extends BasicType {
     public double asDouble(){

@@ -1,8 +1,8 @@
-package AST.baseTypes;
+package AST.baseTypes.numerical;
 
-import AST.abstractNode.SyntaxNode;
+import AST.baseTypes.BasicType;
 
-public class Float extends Numerical{
+public class Float extends Numerical {
     private double value = 0;
 
     public static Float ZERO = new Float(0.0);
@@ -22,10 +22,17 @@ public class Float extends Numerical{
         return value;
     }
 
+    public void setValue(double v){
+        value = v;
+    }
+
     public Float clone() {
         return new Float(value);
     }
 
+    public String valueString() {
+        return String.valueOf(value);
+    }
     public String toString() {
         return super.toString() + " " + value;
     }

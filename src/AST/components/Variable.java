@@ -23,6 +23,16 @@ public class Variable extends SyntaxNode {
         type = t;
     }
 
+
+    private boolean constant = false;
+    public boolean isConstant() {
+        return constant;
+    }
+    public void setConstant(boolean constant) {
+        this.constant = constant;
+    }
+
+
     public Variable clone() {
         return new Variable(name);
     }

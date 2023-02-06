@@ -1,14 +1,22 @@
 package AST.operations.arithmetic;
 
 import AST.abstractNode.SyntaxNode;
-import AST.baseTypes.Float;
-import AST.baseTypes.Int;
-import AST.baseTypes.Numerical;
+import AST.baseTypes.numerical.Float;
+import AST.baseTypes.numerical.Int;
+import AST.operations.BinaryOperator;
 
-public class Divide extends ArithmeticOperator {
+public class Divide extends BinaryOperator {
     public Divide(){}
     public Divide(SyntaxNode origin, SyntaxNode vector) {
         super(origin, vector);
+    }
+
+    static  {
+        addEvaluationOperation("div");
+        setEvaluation("div", new Int(), new Int(), new Int(), (x, y) -> new Int(x.asInt() / y.asInt()));
+        setEvaluation("div", new Float(), new Int(), new Float(), (x, y) -> new Float(x.asDouble() / y.asDouble()));
+        setEvaluation("div", new Int(), new Float(), new Float(), (x, y) -> new Float(x.asDouble() / y.asDouble()));
+        setEvaluation("div", new Float(), new Float(), new Float(), (x, y) -> new Float(x.asDouble() / y.asDouble()));
     }
 
     public String getName() {
@@ -19,11 +27,4 @@ public class Divide extends ArithmeticOperator {
         return new Divide(getChild(0).clone(), getChild(1).clone());
     }
 
-    public Float interpretFloats(Numerical first, Numerical second) {
-        return new Float(first.asDouble() / second.asDouble());
-    }
-
-    public Int interpretInts(Numerical first, Numerical second) {
-        return new Int(first.asInt() / second.asInt());
-    }
 }

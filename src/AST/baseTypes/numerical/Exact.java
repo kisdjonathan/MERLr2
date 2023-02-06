@@ -1,7 +1,9 @@
-package AST.baseTypes;
+package AST.baseTypes.numerical;
+
+import AST.baseTypes.BasicType;
 
 //TODO
-public class Exact extends BasicType{
+public class Exact extends BasicType {
     @Override
     public BasicType getType() {
         return null;

@@ -2,10 +2,9 @@ package AST.operations.comparison;
 
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
-import AST.baseTypes.Bool;
-import AST.baseTypes.Float;
-import AST.baseTypes.Int;
-import AST.baseTypes.Numerical;
+import AST.baseTypes.numerical.Bool;
+import AST.baseTypes.numerical.Int;
+import AST.baseTypes.numerical.Numerical;
 import AST.operations.Operator;
 
 /**
