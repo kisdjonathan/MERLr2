@@ -84,7 +84,11 @@ public class Call extends Operator {
     }
 
     public BasicType interpret() {
-        Function f = ((Signature)getChild(0)).getOverload((Tuple)getChild(1), Tuple.asTuple(getType()));
+        Function f;
+        if(getChild(0) instanceof Signature sig)
+            f = sig.getOverload((Tuple)getChild(1), Tuple.asTuple(getType()));
+        else
+            f = (Function)getChild(0).interpret();
         return f.interpretExecute((Tuple)getChild(1));
     }
 }
