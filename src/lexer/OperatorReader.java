@@ -122,7 +122,7 @@ public class OperatorReader {
     private static final Set<String> prefixes = new HashSet<>(Arrays.asList(
             "if", "for", "while", "repeat",
             "+", "-",
-            "not", "$invert",
+            "!", "not", "$invert",
             "@",
             "ref"
     ));

@@ -133,9 +133,10 @@ public class TokenReader {
 
     private boolean isPostfix(String oper) {
         return OperatorReader.isPostfix(oper) && (
-                eof() ||
-                OperatorReader.isInfix(source.peek()) &&
-                        (!OperatorReader.isPrefix(source.peek()) || OperatorReader.isAfter(source.peek(), oper)) || GroupReader.isEndDelimiter(source.peek())
+                eof() || GroupReader.isEndDelimiter(source.peek()) || !OperatorReader.isInfix(oper) || (
+                        OperatorReader.isInfix(source.peek()) &&
+                        (!OperatorReader.isPrefix(source.peek()) || OperatorReader.isAfter(source.peek(), oper))
+                )
         );
     }
 
