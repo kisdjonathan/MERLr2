@@ -1,2 +1,80 @@
 trim_neg(x): if x < 0: 0 else: x;
-round(x,decimals=0): () //TODO
+round(x,decimals=0): (); //TODO
+
+
+
+log(x, base=10): ();    //TODO
+ln(x): ();  //TODO
+
+
+
+ceil(x): ();    //TODO
+floor(x): ();   //TODO
+
+
+
+radians? = true;
+degrees? :=: !radians?;
+
+
+sin(x) = if radians?: sin_rad(x) else: sin_deg(x);
+sin_rad(x) = ();    //TODO
+sin_deg(x) = ();    //TODO
+
+asin(x) = if radians?: asin_rad(x) else: asin_deg(x);
+asin_rad(x) = ();    //TODO
+asin_deg(x) = ();    //TODO
+
+sinh(x) = if radians?: sinh_rad(x) else: sinh_deg(x);
+sinh_rad(x) = ();    //TODO
+sinh_deg(x) = ();    //TODO
+
+asinh(x) = if radians?: asinh_rad(x) else: asinh_deg(x);
+asinh_rad(x) = ();    //TODO
+asinh_deg(x) = ();    //TODO
+
+
+cos(x) = if radians?: cos_rad(x) else: cos_deg(x);
+cos_rad(x) = ();    //TODO
+cos_deg(x) = ();    //TODO
+
+acos(x) = if radians?: acos_rad(x) else: acos_deg(x);
+acos_rad(x) = ();    //TODO
+acos_deg(x) = ();    //TODO
+
+cosh(x) = if radians?: cosh_rad(x) else: cosh_deg(x);
+cosh_rad(x) = ();    //TODO
+cosh_deg(x) = ();    //TODO
+
+acosh(x) = if radians?: acosh_rad(x) else: acosh_deg(x);
+acosh_rad(x) = ();    //TODO
+acosh_deg(x) = ();    //TODO
+
+
+tan(x) = if radians?: tan_rad(x) else: tan_deg(x);
+tan_rad(x) = ();    //TODO
+tan_deg(x) = ();    //TODO
+
+atan(x) = if radians?: atan_rad(x) else: atan_deg(x);
+atan_rad(x) = ();    //TODO
+atan_deg(x) = ();    //TODO
+
+tanh(x) = if radians?: tanh_rad(x) else: tanh_deg(x);
+tanh_rad(x) = ();    //TODO
+tanh_deg(x) = ();    //TODO
+
+atanh(x) = if radians?: atanh_rad(x) else: atanh_deg(x);
+atanh_rad(x) = ();    //TODO
+atanh_deg(x) = ();    //TODO
+
+
+
+rectangular : ();   //TODO
+polar : ();     //TODO
+
+
+convert{polar y}(rectangular x): (
+    //TODO
+);
+
+
