@@ -4,12 +4,12 @@ import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.advanced.Str;
 import AST.baseTypes.numerical.Float;
 import AST.baseTypes.numerical.Int;
-import AST.operations.BinaryOperator;
+import AST.operations.Operator;
 
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class Multiply extends BinaryOperator {
+public class Multiply extends Operator {
     public Multiply(){}
     public Multiply(SyntaxNode origin, SyntaxNode vector) {
         super(origin, vector);
@@ -17,11 +17,11 @@ public class Multiply extends BinaryOperator {
 
     static  {
         addEvaluationOperation("mul");
-        setEvaluation("mul", new Int(), new Int(), new Int(), (x, y) -> new Int(x.asInt() * y.asInt()));
-        setEvaluation("mul", new Float(), new Int(), new Float(), (x, y) -> new Float(x.asDouble() * y.asDouble()));
-        setEvaluation("mul", new Int(), new Float(), new Float(), (x, y) -> new Float(x.asDouble() * y.asDouble()));
-        setEvaluation("mul", new Float(), new Float(), new Float(), (x, y) -> new Float(x.asDouble() * y.asDouble()));
-        setEvaluation("mul", new Str(), new Int(), new Str(), (x, y) -> {
+        setBinaryEvaluation("mul", new Int(), new Int(), new Int(), (x, y) -> new Int(x.asInt() * y.asInt()));
+        setBinaryEvaluation("mul", new Float(), new Int(), new Float(), (x, y) -> new Float(x.asDouble() * y.asDouble()));
+        setBinaryEvaluation("mul", new Int(), new Float(), new Float(), (x, y) -> new Float(x.asDouble() * y.asDouble()));
+        setBinaryEvaluation("mul", new Float(), new Float(), new Float(), (x, y) -> new Float(x.asDouble() * y.asDouble()));
+        setBinaryEvaluation("mul", new Str(), new Int(), new Str(), (x, y) -> {
             String s = x.getValue();
             if (y.getValue() < 0) {
                 s = new StringBuilder(s).reverse().toString();
@@ -29,7 +29,7 @@ public class Multiply extends BinaryOperator {
             String finalS = s;
             return new Str(IntStream.range(0, Math.abs(y.getValue())).mapToObj(i -> finalS).collect(Collectors.joining()));
         });
-        setEvaluation("mul", new Int(), new Str(), new Str(), (x, y) -> {
+        setBinaryEvaluation("mul", new Int(), new Str(), new Str(), (x, y) -> {
             String s = y.getValue();
             if (x.getValue() < 0) {
                 s = new StringBuilder(s).reverse().toString();

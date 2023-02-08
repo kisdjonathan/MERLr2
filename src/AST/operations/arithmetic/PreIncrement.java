@@ -2,13 +2,14 @@ package AST.operations.arithmetic;
 
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
+import AST.baseTypes.Tuple;
 import AST.baseTypes.numerical.Float;
 import AST.baseTypes.numerical.Int;
-import AST.operations.UnaryOperator;
+import AST.operations.Operator;
 
-public class PreIncrement extends UnaryOperator {
+public class PreIncrement extends Operator {
     public static BasicType increment(BasicType node) {
-        return interpretEvaluate("preinc", node.interpret());
+        return interpretEvaluate("preinc", new Tuple(node.interpret()));
     }
 
     public PreIncrement(){}
@@ -19,11 +20,11 @@ public class PreIncrement extends UnaryOperator {
 
     static {
         addEvaluationOperation("preinc");
-        setEvaluation("preinc",new Int(), new Int(), x -> {
+        setUnaryEvaluation("preinc",new Int(), new Int(), x -> {
             x.setValue(x.asInt() + 1);
             return x;
         });
-        setEvaluation("preinc",new Float(), new Float(), x -> {
+        setUnaryEvaluation("preinc",new Float(), new Float(), x -> {
             x.setValue(x.asDouble() + 1);
             return x;
         });

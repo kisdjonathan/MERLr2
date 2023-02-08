@@ -3,9 +3,9 @@ package AST.operations.arithmetic;
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.numerical.Float;
 import AST.baseTypes.numerical.Int;
-import AST.operations.BinaryOperator;
+import AST.operations.Operator;
 
-public class Modulo extends BinaryOperator {
+public class Modulo extends Operator {
     public Modulo(){}
     public Modulo(SyntaxNode origin, SyntaxNode vector) {
         super(origin, vector);
@@ -13,10 +13,10 @@ public class Modulo extends BinaryOperator {
 
     static  {
         addEvaluationOperation("mod");
-        setEvaluation("mod", new Int(), new Int(), new Int(), (x, y) -> new Int(x.asInt() % y.asInt()));
-        setEvaluation("mod", new Float(), new Int(), new Float(), (x, y) -> new Float(x.asDouble() % y.asDouble()));
-        setEvaluation("mod", new Int(), new Float(), new Float(), (x, y) -> new Float(x.asDouble() % y.asDouble()));
-        setEvaluation("mod", new Float(), new Float(), new Float(), (x, y) -> new Float(x.asDouble() % y.asDouble()));
+        setBinaryEvaluation("mod", new Int(), new Int(), new Int(), (x, y) -> new Int(x.asInt() % y.asInt()));
+        setBinaryEvaluation("mod", new Float(), new Int(), new Float(), (x, y) -> new Float(x.asDouble() % y.asDouble()));
+        setBinaryEvaluation("mod", new Int(), new Float(), new Float(), (x, y) -> new Float(x.asDouble() % y.asDouble()));
+        setBinaryEvaluation("mod", new Float(), new Float(), new Float(), (x, y) -> new Float(x.asDouble() % y.asDouble()));
     }
 
     public String getName() {

@@ -2,11 +2,11 @@ package AST.operations.arithmetic;
 
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.numerical.Int;
-import AST.operations.UnaryOperator;
+import AST.operations.Operator;
 
 import java.util.stream.IntStream;
 
-public class Factorial extends UnaryOperator {
+public class Factorial extends Operator {
     public Factorial(){}
     public Factorial(SyntaxNode value) {
         addChild(value);
@@ -14,7 +14,7 @@ public class Factorial extends UnaryOperator {
 
     static {
         addEvaluationOperation("factorial");
-        setEvaluation("factorial", new Int(), new Int(), x -> {
+        setUnaryEvaluation("factorial", new Int(), new Int(), x -> {
             if (x.getValue() < 0){
                 throw new Error("Invalid integer argument: integer cannot be negative");
             }

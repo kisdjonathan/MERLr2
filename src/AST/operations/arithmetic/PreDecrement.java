@@ -3,9 +3,9 @@ package AST.operations.arithmetic;
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.numerical.Float;
 import AST.baseTypes.numerical.Int;
-import AST.operations.UnaryOperator;
+import AST.operations.Operator;
 
-public class PreDecrement extends UnaryOperator {
+public class PreDecrement extends Operator {
 
     public PreDecrement(){}
 
@@ -15,11 +15,11 @@ public class PreDecrement extends UnaryOperator {
 
     static {
         addEvaluationOperation("predec");
-        setEvaluation("predec",new Int(), new Int(), x -> {
+        setUnaryEvaluation("predec",new Int(), new Int(), x -> {
             x.setValue(x.asInt() - 1);
             return x;
         });
-        setEvaluation("predec",new Float(), new Float(), x -> {
+        setUnaryEvaluation("predec",new Float(), new Float(), x -> {
             x.setValue(x.asDouble() - 1);
             return x;
         });

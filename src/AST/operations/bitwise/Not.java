@@ -3,15 +3,15 @@ package AST.operations.bitwise;
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.numerical.Bool;
 import AST.baseTypes.numerical.Int;
-import AST.operations.UnaryOperator;
+import AST.operations.Operator;
 
-public class Not extends UnaryOperator {
+public class Not extends Operator {
     public Not(){}
 
     static  {
         addEvaluationOperation("not");
-        setEvaluation("not", new Bool(), new Bool(), (x) -> new Bool(!x.getValue()));
-        setEvaluation("not", new Int(), new Int(), (x) -> new Int(~x.getValue()));
+        setUnaryEvaluation("not", new Bool(), new Bool(), (x) -> new Bool(!x.getValue()));
+        setUnaryEvaluation("not", new Int(), new Int(), (x) -> new Int(~x.getValue()));
     }
 
     public Not(SyntaxNode value) {

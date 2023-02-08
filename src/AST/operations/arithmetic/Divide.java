@@ -3,9 +3,9 @@ package AST.operations.arithmetic;
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.numerical.Float;
 import AST.baseTypes.numerical.Int;
-import AST.operations.BinaryOperator;
+import AST.operations.Operator;
 
-public class Divide extends BinaryOperator {
+public class Divide extends Operator {
     public Divide(){}
     public Divide(SyntaxNode origin, SyntaxNode vector) {
         super(origin, vector);
@@ -13,10 +13,10 @@ public class Divide extends BinaryOperator {
 
     static  {
         addEvaluationOperation("div");
-        setEvaluation("div", new Int(), new Int(), new Int(), (x, y) -> new Int(x.asInt() / y.asInt()));
-        setEvaluation("div", new Float(), new Int(), new Float(), (x, y) -> new Float(x.asDouble() / y.asDouble()));
-        setEvaluation("div", new Int(), new Float(), new Float(), (x, y) -> new Float(x.asDouble() / y.asDouble()));
-        setEvaluation("div", new Float(), new Float(), new Float(), (x, y) -> new Float(x.asDouble() / y.asDouble()));
+        setBinaryEvaluation("div", new Int(), new Int(), new Int(), (x, y) -> new Int(x.asInt() / y.asInt()));
+        setBinaryEvaluation("div", new Float(), new Int(), new Float(), (x, y) -> new Float(x.asDouble() / y.asDouble()));
+        setBinaryEvaluation("div", new Int(), new Float(), new Float(), (x, y) -> new Float(x.asDouble() / y.asDouble()));
+        setBinaryEvaluation("div", new Float(), new Float(), new Float(), (x, y) -> new Float(x.asDouble() / y.asDouble()));
     }
 
     public String getName() {

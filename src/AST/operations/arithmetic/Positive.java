@@ -3,9 +3,9 @@ package AST.operations.arithmetic;
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.numerical.Float;
 import AST.baseTypes.numerical.Int;
-import AST.operations.UnaryOperator;
+import AST.operations.Operator;
 
-public class Positive extends UnaryOperator {
+public class Positive extends Operator {
     public Positive(){}
     public Positive(SyntaxNode value) {
         addChild(value);
@@ -13,8 +13,8 @@ public class Positive extends UnaryOperator {
 
     static {
         addEvaluationOperation("positive");
-        setEvaluation("positive", new Int(), new Int(), x -> x);
-        setEvaluation("positive", new Float(), new Float(), x -> x);
+        setUnaryEvaluation("positive", new Int(), new Int(), x -> x);
+        setUnaryEvaluation("positive", new Float(), new Float(), x -> x);
     }
 
     public String getName() {

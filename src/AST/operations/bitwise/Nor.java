@@ -3,9 +3,9 @@ package AST.operations.bitwise;
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.numerical.Bool;
 import AST.baseTypes.numerical.Int;
-import AST.operations.BinaryOperator;
+import AST.operations.Operator;
 
-public class Nor extends BinaryOperator {
+public class Nor extends Operator {
     public Nor() {}
     public Nor(SyntaxNode origin, SyntaxNode vector) {
         super(origin, vector);
@@ -13,8 +13,8 @@ public class Nor extends BinaryOperator {
 
     static  {
         addEvaluationOperation("nor");
-        setEvaluation("nor", new Bool(), new Bool(), new Bool(), (x, y) -> new Bool(!(x.getValue() || y.getValue())));
-        setEvaluation("nor", new Int(), new Int(), new Int(), (x, y) -> new Int(~(x.getValue() | y.getValue())));
+        setBinaryEvaluation("nor", new Bool(), new Bool(), new Bool(), (x, y) -> new Bool(!(x.getValue() || y.getValue())));
+        setBinaryEvaluation("nor", new Int(), new Int(), new Int(), (x, y) -> new Int(~(x.getValue() | y.getValue())));
     }
 
     public Nor clone() {

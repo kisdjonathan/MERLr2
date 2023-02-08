@@ -1,9 +1,9 @@
 package AST.operations.bitwise;
 
 import AST.abstractNode.SyntaxNode;
-import AST.operations.BinaryOperator;
+import AST.operations.Operator;
 
-public class LeftShift extends BinaryOperator {
+public class LeftShift extends Operator {
     public LeftShift() {}
     public LeftShift(SyntaxNode origin, SyntaxNode vector) {
         super(origin, vector);

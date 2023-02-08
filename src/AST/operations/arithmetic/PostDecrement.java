@@ -3,9 +3,9 @@ package AST.operations.arithmetic;
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.numerical.Float;
 import AST.baseTypes.numerical.Int;
-import AST.operations.UnaryOperator;
+import AST.operations.Operator;
 
-public class PostDecrement extends UnaryOperator {
+public class PostDecrement extends Operator {
 
     public PostDecrement(){}
 
@@ -15,12 +15,12 @@ public class PostDecrement extends UnaryOperator {
 
     static {
         addEvaluationOperation("postdec");
-        setEvaluation("postdec",new Int(), new Int(), x -> {
+        setUnaryEvaluation("postdec",new Int(), new Int(), x -> {
             Int result = x.clone();
             x.setValue(x.asInt() - 1);
             return result;
         });
-        setEvaluation("postdec",new Float(), new Float(), x -> {
+        setUnaryEvaluation("postdec",new Float(), new Float(), x -> {
             Float result = x.clone();
             x.setValue(x.asDouble() - 1);
             return result;
