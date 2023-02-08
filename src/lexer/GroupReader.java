@@ -3,6 +3,7 @@ package lexer;
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.*;
 import AST.baseTypes.advanced.*;
+import AST.operations.arithmetic.AbsoluteValue;
 
 public class GroupReader {
     /**
@@ -59,6 +60,7 @@ public class GroupReader {
             case "[)"   -> fillRange(new RangeIE(), body);
             case "[]"   -> new DynamicArray(Tuple.asTuple(body));
             case "{}"   -> new UnorderedSet(Tuple.asTuple(body));
+            case "||"   -> new AbsoluteValue(body);
             case "EOF"  -> body;    //TODO this is the entire file, so more analysis should be performed
             default     -> throw new Error("invalid combination of start and end delimiters " + startdelim + enddelim);
         };

@@ -15,9 +15,10 @@ while a < 100: (
 )
 */
 
-@(!true);
+@("fizzbuzz"*|-4|);
 
 //prints out primes
+/*
 repeat 100: (
     n = repetitions + 2;    //consider only numbers >= 2
     repeat n ** 0.5: (
@@ -27,3 +28,4 @@ repeat 100: (
     else:
         @n;
 )
+*/

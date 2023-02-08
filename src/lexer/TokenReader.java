@@ -133,7 +133,7 @@ public class TokenReader {
 
     private boolean isPostfix(String oper) {
         return OperatorReader.isPostfix(oper) && (
-                eof() || GroupReader.isEndDelimiter(source.peek()) || !OperatorReader.isInfix(oper) || (
+                eof() || GroupReader.isEndDelimiter(source.peek()) || (
                         OperatorReader.isInfix(source.peek()) &&
                         (!OperatorReader.isPrefix(source.peek()) || OperatorReader.isAfter(source.peek(), oper))
                 )
@@ -158,6 +158,9 @@ public class TokenReader {
         SyntaxNode ret = OperatorReader.decode(oper); ret.addChild(oper, predecessor);
         //infix
         if(!isPostfix(oper)) {
+            if(!OperatorReader.isInfix(oper))
+                throw new Error("Operator " + oper + " is not an infix");
+
             SyntaxNode next = get();
 
             while (!eof()) {

@@ -1,0 +1,2 @@
+trim_neg(x): if x < 0: 0 else: x;
+round(x,decimals=0): () //TODO

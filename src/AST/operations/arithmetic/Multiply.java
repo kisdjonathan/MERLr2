@@ -23,11 +23,13 @@ public class Multiply extends BinaryOperator {
         setEvaluation("mul", new Float(), new Float(), new Float(), (x, y) -> new Float(x.asDouble() * y.asDouble()));
         setEvaluation("mul", new Str(), new Int(), new Str(), (x, y) -> {
             String s = x.getValue();
-            if (y.getValue() < 0) {
+            int reps = y.getValue();
+            if (reps < 0) {
                 s = new StringBuilder(s).reverse().toString();
+                reps = -reps;
             }
             String finalS = s;
-            return new Str(IntStream.range(0, Math.abs(y.getValue())).mapToObj(i -> finalS).collect(Collectors.joining()));
+            return new Str(IntStream.range(0, reps).mapToObj(i -> finalS).collect(Collectors.joining()));
         });
         setEvaluation("mul", new Int(), new Str(), new Str(), (x, y) -> {
             String s = y.getValue();
