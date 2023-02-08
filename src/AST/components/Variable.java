@@ -42,7 +42,7 @@ public class Variable extends SyntaxNode {
     }
 
     public BasicType interpret() {
-        return type;
+        return type.clone();
     }
 
     public String toString() {

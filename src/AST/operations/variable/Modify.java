@@ -32,6 +32,7 @@ public class Modify extends Operator {
     }
 
     public void unifyVariables(Map<String, Variable> variables) {
+        //take care of variable-to-variable assignments
         for(int i = 0; i < size(); ++i) {
             if(getChild(i) instanceof Variable var) {
                 if (variables.containsKey(var.getName()))
@@ -40,6 +41,7 @@ public class Modify extends Operator {
             else
                 getChild(i).unifyVariables(variables);
         }
+
         SyntaxNode val = getChild(size() - 1);
         val.unifyVariables(variables);
         BasicType resultType = val.getType();

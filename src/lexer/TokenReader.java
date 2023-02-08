@@ -165,7 +165,10 @@ public class TokenReader {
                 else if(OperatorReader.isChainable(oper, source.peek())) {
                     ret.addChild(source.get(), next);
 
-                    if(eof())
+                    if(eof() || (
+                            oper.equals(";") &&
+                            GroupReader.isEndDelimiter(source.peek())
+                    ))
                         return ret;
                     else
                         next = get();

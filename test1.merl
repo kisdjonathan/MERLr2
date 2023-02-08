@@ -1,14 +1,26 @@
+/*
 a = 0;
-while a < 100:
+while a < 100: (
     b = 2;
+    n = a;
     while b < a: (
         if b == a: (
             @n;
-            break;
+            break
         );
         if a % b == 0: (
             break
         );
         b = b + 1
+    );
+)
+*/
+repeat 100: (
+    n = repetitions;
+    repeat n: (
+        if repetitions < 2: continue;
+        if n % repetitions == 0: break;
     )
+    else:
+        @n;
 )

@@ -6,7 +6,7 @@ import AST.baseTypes.BasicType;
 public class InternalMessage extends BasicType {
 
 
-    public SyntaxNode clone() {
+    public InternalMessage clone() {
         return null;//TODO
     }
 

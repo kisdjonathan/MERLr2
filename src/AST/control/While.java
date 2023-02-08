@@ -54,6 +54,7 @@ public class While extends Control {
                 if(c.getChoice() == ControlCode.BREAK && c.getLayers() > 0) {
                     if(c.getLayers() > 1)
                         return c.reduced();
+                    break;
                 }
                 else if(c.getChoice() == ControlCode.RETURN)
                     return c;

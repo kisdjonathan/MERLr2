@@ -1,11 +1,15 @@
 package AST.operations.arithmetic;
 
 import AST.abstractNode.SyntaxNode;
+import AST.baseTypes.BasicType;
 import AST.baseTypes.numerical.Float;
 import AST.baseTypes.numerical.Int;
 import AST.operations.UnaryOperator;
 
 public class PreIncrement extends UnaryOperator {
+    public static BasicType increment(BasicType node) {
+        return interpretEvaluate("preinc", node.interpret());
+    }
 
     public PreIncrement(){}
 

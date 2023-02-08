@@ -19,9 +19,8 @@ public abstract class Locality extends SyntaxNode {
      * this is where variables and functions are added from the locality's children to its variable map
      */
     public void unifyVariables(Map<String, Variable> variables) {
-        Map<String, Variable> temp = new HashMap<>();
-        temp.putAll(variables);
-        temp.putAll(this.variables);
+        Map<String, Variable> temp = new HashMap<>(this.variables);
+        this.variables.putAll(variables);
         this.variables.putAll(temp);
         super.unifyVariables(this.variables);
     }

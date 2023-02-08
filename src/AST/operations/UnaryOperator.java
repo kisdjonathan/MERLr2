@@ -8,6 +8,14 @@ import java.util.*;
 import java.util.function.Function;
 
 public abstract class UnaryOperator extends Operator{
+    public static BasicType interpretEvaluate(String op, BasicType first) {
+        Optional<Map.Entry<BasicType, Pair<BasicType, Function<BasicType, BasicType>>>> evaluation = evaluationList.get(op).stream().filter(e -> first.typeEquals(e.getKey())).findFirst();
+        if (evaluation.isPresent()) {
+            return evaluation.get().getValue().getSecond().apply(first);
+        } else {
+            throw new Error("Unsupported arguments for " + op + " operator: \n\tfirst: " + first);
+        }
+    }
 
     protected static Map<String, List<Map.Entry<BasicType, Pair<BasicType, Function<BasicType, BasicType>>>>> evaluationList = new HashMap<>();
 

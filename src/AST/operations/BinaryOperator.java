@@ -6,8 +6,18 @@ import util.Pair;
 
 import java.util.*;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public abstract class BinaryOperator extends Operator{
+    public static BasicType interpretEvaluate(String op, BasicType first, BasicType second) {
+        Tuple args = new Tuple(first, second);
+        Optional<Map.Entry<Tuple, Pair<BasicType, BiFunction<BasicType, BasicType, BasicType>>>> evaluation = evaluationList.get(op).stream().filter(e -> args.typeEquals(e.getKey())).findFirst();
+        if (evaluation.isPresent()) {
+            return evaluation.get().getValue().getSecond().apply(first, second);
+        } else {
+            throw new Error("Unsupported arguments for " + op + " operator: \n\tfirst: " + first + "\n\tsecond:" + second);
+        }
+    }
 
     protected static Map<String,List<Map.Entry<Tuple, Pair<BasicType, BiFunction<BasicType, BasicType, BasicType>>>>> evaluationList = new HashMap<>();
 
