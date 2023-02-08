@@ -12,4 +12,3 @@ Issues with other things:
     All operators that deal with types don't handle InferredType
     Potential problem when calling a function several times, since the interpreter may modify function variables and not change it back
     and does not short because interpret outside of evaluate
-    reference during assignment

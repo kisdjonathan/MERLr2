@@ -1,8 +1,7 @@
 /*
 a = 0;
 while a < 100: (
-    b = 2;
-    n = a;
+    n = a + 2;
     while b < a: (
         if b == a: (
             @n;
@@ -15,11 +14,13 @@ while a < 100: (
     );
 )
 */
+
+//prints out primes
 repeat 100: (
-    n = repetitions;
-    repeat n: (
-        if repetitions < 2: continue;
-        if n % repetitions == 0: break;
+    n = repetitions + 2;    //consider only numbers >= 2
+    repeat n ** 0.5: (
+        factor = repetitions + 2;   //consider only root n >= factor >= 2
+        if n % factor == 0: break;
     )
     else:
         @n;
