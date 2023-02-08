@@ -2,16 +2,15 @@ package AST.operations;
 
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.*;
-import util.Pair;
+import util.Trio;
 
 import java.util.*;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 public abstract class BinaryOperator extends Operator{
     public static BasicType interpretEvaluate(String op, BasicType first, BasicType second) {
         Tuple args = new Tuple(first, second);
-        Optional<Map.Entry<Tuple, Pair<BasicType, BiFunction<BasicType, BasicType, BasicType>>>> evaluation = evaluationList.get(op).stream().filter(e -> args.typeEquals(e.getKey())).findFirst();
+        Optional<Map.Entry<Tuple, Trio<BasicType, BiFunction<SyntaxNode, SyntaxNode, BasicType>, Boolean>>> evaluation = evaluationList.get(op).stream().filter(e -> args.typeEquals(e.getKey())).findFirst();
         if (evaluation.isPresent()) {
             return evaluation.get().getValue().getSecond().apply(first, second);
         } else {
@@ -19,7 +18,7 @@ public abstract class BinaryOperator extends Operator{
         }
     }
 
-    protected static Map<String,List<Map.Entry<Tuple, Pair<BasicType, BiFunction<BasicType, BasicType, BasicType>>>>> evaluationList = new HashMap<>();
+    protected static Map<String,List<Map.Entry<Tuple, Trio<BasicType, BiFunction<SyntaxNode, SyntaxNode, BasicType>, Boolean>>>> evaluationList = new HashMap<>();
 
     public BinaryOperator(){}
 
@@ -32,14 +31,18 @@ public abstract class BinaryOperator extends Operator{
         evaluationList.put(op, new ArrayList<>());
     }
     protected static <T extends BasicType, U extends BasicType, R extends BasicType> void setEvaluation(String op, T first, U second, R ret, BiFunction<T, U, R> bf) {
-        evaluationList.get(op).add(new AbstractMap.SimpleEntry<>(new Tuple(first, second), new Pair<>(ret, (x, y) -> bf.apply((T) x, (U) y))));
+        evaluationList.get(op).add(new AbstractMap.SimpleEntry<>(new Tuple(first, second), new Trio<>(ret, (x, y) -> bf.apply((T) x, (U) y), false)));
     }
 
-    private Pair<BasicType, BiFunction<BasicType, BasicType, BasicType>> getEvaluation() {
+    protected static <R extends BasicType> void setRawEvaluation(String op, SyntaxNode first, SyntaxNode second, R ret, BiFunction<SyntaxNode, SyntaxNode, R> bf) {
+        evaluationList.get(op).add(new AbstractMap.SimpleEntry<>(new Tuple(first, second), new Trio<>(ret, bf::apply, true)));
+    }
+
+    private Trio<BasicType, BiFunction<SyntaxNode, SyntaxNode, BasicType>, Boolean> getEvaluation() {
         BasicType first = getChild(0).getType();
         BasicType second = getChild(1).getType();
         Tuple args = new Tuple(first, second);
-        Optional<Map.Entry<Tuple, Pair<BasicType, BiFunction<BasicType, BasicType, BasicType>>>> evaluation = evaluationList.get(getName()).stream().filter(e -> args.typeEquals(e.getKey())).findFirst();
+        Optional<Map.Entry<Tuple, Trio<BasicType, BiFunction<SyntaxNode, SyntaxNode, BasicType>, Boolean>>> evaluation = evaluationList.get(getName()).stream().filter(e -> args.typeEquals(e.getKey())).findFirst();
         if (evaluation.isPresent()) {
             return evaluation.get().getValue();
         } else {
@@ -54,9 +57,14 @@ public abstract class BinaryOperator extends Operator{
 
     @Override
     public BasicType interpret() {
-        BasicType first = getChild(0).interpret();
-        BasicType second = getChild(1).interpret();
-        return getEvaluation().getSecond().apply(first, second);
+        Trio<BasicType, BiFunction<SyntaxNode, SyntaxNode, BasicType>, Boolean> evaluation = getEvaluation();
+        if (evaluation.getThird()) {
+            return evaluation.getSecond().apply(getChild(0), getChild(1));
+        } else {
+            BasicType first = getChild(0).interpret();
+            BasicType second = getChild(1).interpret();
+            return getEvaluation().getSecond().apply(first, second);
+        }
     }
 
 }

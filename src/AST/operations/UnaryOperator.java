@@ -3,6 +3,7 @@ package AST.operations;
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
 import util.Pair;
+import util.Trio;
 
 import java.util.*;
 import java.util.function.Function;

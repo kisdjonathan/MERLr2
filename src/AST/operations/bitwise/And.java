@@ -13,7 +13,13 @@ public class And extends BinaryOperator {
 
     static  {
         addEvaluationOperation("and");
-        setEvaluation("and", new Bool(), new Bool(), new Bool(), (x, y) -> new Bool(x.getValue() && y.getValue()));
+        setRawEvaluation("and", new Bool(), new Bool(), new Bool(), (x, y) -> {
+            if (!((Bool) x.interpret()).getValue()){
+                return new Bool(false);
+            } else {
+                return new Bool(((Bool) x.interpret()).getValue() && ((Bool) y.interpret()).getValue());
+            }
+        });
         setEvaluation("and", new Int(), new Int(), new Int(), (x, y) -> new Int(x.getValue() & y.getValue()));
     }
 
