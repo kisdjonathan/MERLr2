@@ -135,7 +135,7 @@ public class TokenReader {
         return OperatorReader.isPostfix(oper) && (
                 eof() ||
                 OperatorReader.isInfix(source.peek()) &&
-                        (!OperatorReader.isPrefix(source.peek()) || OperatorReader.isAfter(source.peek(), oper))
+                        (!OperatorReader.isPrefix(source.peek()) || OperatorReader.isAfter(source.peek(), oper)) || GroupReader.isEndDelimiter(source.peek())
         );
     }
 
