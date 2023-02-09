@@ -1,37 +1,21 @@
-/*
-a = 0;
-while a < 100: (
-    n = a + 2;
-    while b < a: (
-        if b == a: (
-            @n;
-            break
-        );
-        if a % b == 0: (
-            break
-        );
-        b = b + 1
+
+n1 = 7;
+num1 = 0;
+num2 = 1;
+result = 1;
+
+result =
+if n1 == 1:
+    num1
+
+else n1 == 2:
+    num2
+
+else: (
+    repeat (n1 - 2): (
+        num2 = num1 + num2;
+        num1 = num2 - num1;
     );
-)
-*/
-
-a,(b,c) = 3,(4,5);
-@a;
-@b;
-@c;
-
-/*
-@("fizzbuzz"*|-4|);
-
-//prints out primes
-/*
-repeat 100: (
-    n = repetitions + 2;    //consider only numbers >= 2
-    repeat n ** 0.5: (
-        factor = repetitions + 2;   //consider only root n >= factor >= 2
-        if n % factor == 0: break;
-    )
-    else:
-        @n;
-)
-*/
+    num2
+);
+@result;
