@@ -61,7 +61,7 @@ public class Tuple extends BasicType implements Iterable<SyntaxNode>{
         for(SyntaxNode child : getChildren()) {
             if (ret.length() > 1)
                 ret.append(",");
-            ret.append(child.getType().toString());
+            ret.append(child.getType().valueString());
         }
         ret.append(")");
         return ret.toString();

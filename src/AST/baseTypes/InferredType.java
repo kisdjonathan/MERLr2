@@ -17,7 +17,7 @@ public class InferredType extends BasicType{
     }
 
     public InferredType clone() {
-        return null;
+        return new InferredType();
     }
     public List<SyntaxNode> getFields() {
         return new ArrayList<>(fields.values());

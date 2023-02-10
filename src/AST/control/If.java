@@ -18,6 +18,7 @@ public class If extends Control {
         ret.setParent(getParent());
         for(SyntaxNode child : getChildren())
             ret.addChild(child.clone());
+        ret.unifyVariables();
         return ret;
     }
 

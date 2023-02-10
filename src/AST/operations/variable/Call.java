@@ -59,7 +59,7 @@ public class Call extends Operator {
     public Function createFunction(SyntaxNode body) {
         Function ret = new Function();
         BasicType texplicit = getChild(0).getType();
-        ret.setRets(texplicit == null ? body.getType() : texplicit);
+        ret.setRets(texplicit == null ? body.getType() : new InferredType());
         ret.setArgs(getChild(1));
         ret.addChild(body.clone());
         return ret;

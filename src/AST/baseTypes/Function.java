@@ -9,12 +9,15 @@ import java.util.Map;
 
 public class Function extends BasicType {
     private Tuple args = null, rets = null;
+    private Tuple rargs = null, rrets = null;
     private Map<String, Variable> variables = new HashMap<>();
 
     public Function() {}
     public Function(Tuple args, Tuple rets) {
         this.args = args;
         this.rets = rets;
+        rargs = args.clone();
+        rrets = rets.clone();
     }
 
     public String getName() {
@@ -28,6 +31,7 @@ public class Function extends BasicType {
     public void setArgs(SyntaxNode first) {
         args = Tuple.asTuple(first);
         args.setParent(this);
+        rargs = args.clone();
     }
 
     public Tuple getRets() {
@@ -36,6 +40,7 @@ public class Function extends BasicType {
     public void setRets(SyntaxNode second) {
         rets = Tuple.asTuple(second);
         rets.setParent(this);
+        rrets = rets.clone();
     }
 
     public Function clone() {
@@ -58,9 +63,16 @@ public class Function extends BasicType {
             this.variables.put(var.getName(), var);
         }
         super.unifyVariables(this.variables);
+
+        rargs = args.clone();
+        rrets = rets.clone();
     }
 
     public BasicType interpretExecute(Tuple args) {
+        //reset original conditions
+        this.args = rargs.clone();
+        this.rets = rrets.clone();
+
         this.args.interpret();
         for(int i = 0; i < args.size(); ++i)
             this.args.getChild(i).asVariable().setType(args.getChild(i).getType());

@@ -43,6 +43,7 @@ public class Repeat extends Control {
         Repeat ret = new Repeat();
         for(SyntaxNode child : getChildren())
             ret.addChild(child.clone());
+        ret.unifyVariables();
         return ret;
     }
 

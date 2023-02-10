@@ -24,4 +24,8 @@ public abstract class Locality extends SyntaxNode {
         this.variables.putAll(temp);
         super.unifyVariables(this.variables);
     }
+
+    protected void unifyVariables() {
+        super.unifyVariables(variables);
+    }
 }

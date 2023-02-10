@@ -29,6 +29,7 @@ public class For extends Control {
         For ret = new For();
         for(SyntaxNode child : getChildren())
             ret.addChild(child.clone());
+        ret.unifyVariables();
         return ret;
     }
 
