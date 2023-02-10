@@ -47,11 +47,11 @@ public class Function extends BasicType {
         Function ret = new Function(args.clone(), rets.clone());
         for(SyntaxNode child : getChildren())
             ret.addChild(child.clone());
+        unifyVariables();
         return ret;
     }
 
-    public void unifyVariables(Map<String, Variable> variables) {
-        this.variables.putAll(variables);
+    public void unifyVariables() {
         for(SyntaxNode arg : args) {
             Variable var = arg.asVariable();
             this.variables.put(var.getName(), var);
@@ -67,11 +67,18 @@ public class Function extends BasicType {
         rargs = args.clone();
         rrets = rets.clone();
     }
+    public void unifyVariables(Map<String, Variable> variables) {
+        this.variables.putAll(variables);
+        unifyVariables();
+    }
 
     public BasicType interpretExecute(Tuple args) {
         //reset original conditions
-        this.args = rargs.clone();
-        this.rets = rrets.clone();
+        for(int i = 0; i < this.args.size(); ++i)
+            this.args.getChild(i).setType(rargs.getChild(i).interpret());
+        if(this.rets.size() > 1 || !(this.rets.getChild(0) instanceof InferredType))
+            for(int i = 0; i < this.rets.size(); ++i)
+                this.rets.getChild(i).setType(rrets.getChild(i).interpret());
 
         this.args.interpret();
         for(int i = 0; i < args.size(); ++i)

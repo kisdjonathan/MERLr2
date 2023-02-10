@@ -2,6 +2,7 @@ package AST.baseTypes.advanced;
 
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
+import AST.baseTypes.InferredType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ public abstract class Storage extends BasicType {
         return "storage";
     }
 
-    private BasicType storedType = null;
+    private BasicType storedType = new InferredType();
     public void setStoredType(BasicType type) {
         storedType = type;
     }

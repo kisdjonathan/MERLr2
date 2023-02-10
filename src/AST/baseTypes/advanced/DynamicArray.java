@@ -13,9 +13,13 @@ public class DynamicArray extends Storage{
     }
     public DynamicArray(Tuple values) {
         setChildren(values.getChildren());
+        if(values.size() > 0)
+            setStoredType(values.getChild(0).getType());
     }
     public DynamicArray(List<SyntaxNode> values) {
         setChildren(values);
+        if(values.size() > 0)
+            setStoredType(values.get(0).getType());
     }
 
     public boolean typeEquals(BasicType other) {

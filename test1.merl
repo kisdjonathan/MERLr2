@@ -1,3 +1,17 @@
+function(x) :
+    if x>1: function(x-1) + function(x-2)
+    else: 1
+    ;
+repeat 10:
+    @function(repetitions);
+
+
+/*
+b = [1,2];
+if true:
+    b=[];
+@b;
+
 /*
 a = 0;
 while a < 100: (
@@ -15,14 +29,14 @@ while a < 100: (
 )
 */
 
-
-function(x) : @x;
+/*
+function(x=1) : @x;
 function(x, y) : @(x + y);
 
 function(3);
 function(3, 4);
 function(9,9);
-function(9);
+function(1);
 
 /*
 a,b,c,d,e = 1,2,3,4,5;

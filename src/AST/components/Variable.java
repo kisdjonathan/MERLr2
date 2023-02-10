@@ -11,6 +11,10 @@ public class Variable extends SyntaxNode {
     public Variable(String name) {
         this.name = name;
     }
+    public Variable(String name, BasicType type) {
+        this.name = name;
+        this.type = type;
+    }
 
     public String getName() {
         return name;
@@ -34,7 +38,7 @@ public class Variable extends SyntaxNode {
 
 
     public Variable clone() {
-        return this;
+        return new Variable(name, type);
     }
 
     public Variable asVariable() {

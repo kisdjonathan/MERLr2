@@ -1,6 +1,7 @@
 package AST.abstractNode;
 
 import AST.baseTypes.BasicType;
+import AST.baseTypes.InferredType;
 import AST.components.Variable;
 
 import java.util.ArrayList;
@@ -63,8 +64,11 @@ public abstract class SyntaxNode {
             if(getChild(i) instanceof Variable var) {
                 if (variables.containsKey(var.getName()))
                     setChild(i, variables.get(var.getName()));
-                else
-                    throw new Error("Variable used without assignment:" + var.getName());
+                else {
+                    //throw new Error("Variable used without assignment:" + var.getName());
+                    var.setType(new InferredType());
+                    variables.put(var.getName(), var);
+                }
             }
             else
                 getChild(i).unifyVariables(variables);
@@ -79,6 +83,9 @@ public abstract class SyntaxNode {
 
     public void setType(BasicType type) {
         throw new Error("can not set type for " + this);
+    }
+    public boolean assertType(BasicType type) {
+        return getType().typeEquals(type);
     }
 
     public abstract SyntaxNode clone();

@@ -2,6 +2,7 @@ package AST.operations.variable;
 
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
+import AST.baseTypes.InferredType;
 import AST.baseTypes.Tuple;
 import AST.baseTypes.flagTypes.InternalMessage;
 import AST.components.Variable;
@@ -38,7 +39,9 @@ public class Modify extends Operator {
             BasicType resultType = potentialval.getType();
             if (variables.containsKey(var.getName())) {
                 Variable existing = variables.get(var.getName());
-                if(!existing.getType().typeEquals(resultType) && !resultType.typeEquals(existing.getType()))
+                if(existing.getType() instanceof InferredType)
+                    existing.setType(resultType);
+                else if(!existing.getType().typeEquals(resultType) && !resultType.typeEquals(existing.getType()))
                     throw new Error("Modifying variable " + existing + " with incompatible type " + resultType);
                 else if(existing.isConstant())
                     throw new Error("Modifying constant " + existing + " to " + potentialval);
@@ -81,6 +84,8 @@ public class Modify extends Operator {
         }
         else
             val.unifyVariables(variables);
+
+        //Match types between lhs and rhs
         for(int i = size() - 2; i >= 0; --i) {
             setChild(i, typedVariable(getChild(i), val, variables));
         }

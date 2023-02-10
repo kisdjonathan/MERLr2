@@ -2,6 +2,7 @@ package AST.operations.variable;
 
 import AST.baseTypes.BasicType;
 import AST.baseTypes.Function;
+import AST.baseTypes.InferredType;
 import AST.components.Signature;
 import AST.components.Variable;
 import AST.operations.Operator;
@@ -32,19 +33,23 @@ public class Declare extends Operator {
         return getChild(size() - 1).getType();
     }
 
+    private BasicType bodyType(Function f, Map<String, Variable> variables) {
+        return new InferredType();    //TODO
+    }
+
     public void unifyVariables(Map<String, Variable> variables) {
-        //TODO function
         for(int i = size() - 2; i >= 0; --i) {
             if (getChild(i) instanceof Call call) {
-                Function f = call.createFunction(getChild(size() - 1));
                 Signature sig = call.asVariable();
                 if(!variables.containsKey(sig.getName()) || !(variables.get(sig.getName()) instanceof Signature))
                     variables.put(sig.getName(), sig);
                 else
                     sig = (Signature) variables.get(sig.getName());
 
-                f.unifyVariables(variables);
+                Function f = call.createFunction(getChild(size() - 1));
+                f.setRets(bodyType(f,variables));
                 sig.addOverload(f);
+                f.unifyVariables(variables);
                 functionDeclaration = f;
             }
             else {
