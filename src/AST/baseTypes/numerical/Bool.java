@@ -9,10 +9,6 @@ public class Bool extends BasicType {
     public Bool(boolean val) {
         value = val;
     }
-    public Bool(String val) {
-        //TODO val is string literal "true"/"false" or 0,1
-        value = Boolean.parseBoolean(val);
-    }
 
     public String getName() {
         return "bool";

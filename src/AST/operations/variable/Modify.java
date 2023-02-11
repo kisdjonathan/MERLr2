@@ -11,7 +11,6 @@ import AST.operations.Operator;
 
 import java.util.Map;
 
-//TODO
 public class Modify extends Operator {
     public Modify(){}
     public Modify(SyntaxNode dest, SyntaxNode value){

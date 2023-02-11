@@ -20,8 +20,6 @@ public abstract class ComparisonOperator extends Operator {
         return new Bool();
     }
 
-    //TODO
-    @Override
     public BasicType getType() {
         return new Bool();
     }
@@ -43,7 +41,4 @@ public abstract class ComparisonOperator extends Operator {
 
     protected abstract Bool interpretInts(Numerical first, Numerical second);
     protected abstract Bool interpretFloats(Numerical first, Numerical second);
-
-    //TODO
-    protected abstract Bool interpretOthers();
 }

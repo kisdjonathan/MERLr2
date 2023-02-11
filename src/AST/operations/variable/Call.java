@@ -12,7 +12,6 @@ import AST.abstractNode.SyntaxNode;
 
 //Call stores information of a function call
 //TODO L for now, Call is expected to return the values of ret, but in the future, allow Call to write directly to ret
-//TODO L allow calls on non-functions
 //TODO complete
 public class Call extends Operator {
     private BasicType type;

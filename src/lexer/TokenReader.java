@@ -10,7 +10,6 @@ import java.io.File;
 
 //TokenReader reads in the source file as raw tokens (only Groups, Tuples from semicolons, loops, id, Literals, and function calls are returned)
 //read methods take in an additional pre-read argument
-//TODO complete
 public class TokenReader {
     private final SymbolReader source;
 

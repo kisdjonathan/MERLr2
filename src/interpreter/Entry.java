@@ -3,6 +3,7 @@ package interpreter;
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
 import AST.baseTypes.numerical.Bool;
+import AST.components.Locality;
 import AST.components.Variable;
 import lexer.TokenReader;
 
@@ -21,7 +22,7 @@ public class Entry {
         Map<String, Variable> globalVariables = new HashMap<>();
         globalVariables.put("true", new Variable("true"){{setType(new Bool(true));}});
         globalVariables.put("false", new Variable("false"){{setType(new Bool(false));}});
-        body.unifyVariables(globalVariables);
+        body.unifyVariables(new Locality.Wrapper(globalVariables));
         BasicType value = body.interpret();
         System.out.println(value);
         System.out.println(globalVariables);
