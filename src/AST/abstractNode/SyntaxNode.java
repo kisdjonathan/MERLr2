@@ -2,11 +2,11 @@ package AST.abstractNode;
 
 import AST.baseTypes.BasicType;
 import AST.baseTypes.InferredType;
+import AST.components.Locality;
 import AST.components.Variable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public abstract class SyntaxNode {
     private SyntaxNode parent;
@@ -58,16 +58,17 @@ public abstract class SyntaxNode {
     /**
      * implemented in syntaxNodes that store children
      * stops at children locals and calls their unifyVariables function
+     * @param variables manages the locally stored variables and other accessible variables
      */
-    public void unifyVariables(Map<String, Variable> variables){
+    public void unifyVariables(Locality variables){
         for(int i = 0; i < size(); ++i) {
             if(getChild(i) instanceof Variable var) {
-                if (variables.containsKey(var.getName()))
-                    setChild(i, variables.get(var.getName()));
+                if (variables.hasVariable(var.getName()))
+                    setChild(i, variables.getVariable(var.getName()));
                 else {
                     //throw new Error("Variable used without assignment:" + var.getName());
                     var.setType(new InferredType());
-                    variables.put(var.getName(), var);
+                    variables.putVariable(var.getName(), var);
                 }
             }
             else
@@ -75,6 +76,9 @@ public abstract class SyntaxNode {
         }
     }
 
+    public boolean isVariable() {
+        return false;
+    }
     public Variable asVariable() {
         throw new Error(this + " is not a variable");
     }

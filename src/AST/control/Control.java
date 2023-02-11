@@ -7,7 +7,6 @@ import AST.baseTypes.numerical.Bool;
 import AST.baseTypes.VoidType;
 import AST.components.Locality;
 import AST.components.Variable;
-import AST.operations.variable.In;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,9 +34,10 @@ public abstract class Control extends SyntaxNode implements Locality {
             return getChild(1).getType();
         }
 
-        public void unifyVariables(Map<String, Variable> variables) {
-            this.variables.putAll(variables);
-            super.unifyVariables(this.variables);
+        public void unifyVariables(Locality variables) {
+            Locality.Layer localLayer = new Locality.Layer(variables);
+            super.unifyVariables(localLayer);
+            getVariables().putAll(localLayer.getVariables());
         }
 
         public BasicType interpret() {
@@ -63,7 +63,7 @@ public abstract class Control extends SyntaxNode implements Locality {
                 ret.addChild(child.clone());
             ret.executionTrue = executionTrue;
             ret.executionFalse = executionFalse;
-            ret.unifyVariables(getVariableClones());
+            ret.unifyVariables(new Locality.Wrapper(getVariableClones()));
             return ret;
         }
 

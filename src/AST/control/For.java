@@ -5,8 +5,6 @@ import AST.baseTypes.BasicType;
 import AST.baseTypes.Tuple;
 import AST.components.*;
 
-import java.util.Map;
-
 public class For extends Control {
 
     /**
@@ -27,17 +25,18 @@ public class For extends Control {
 
     private For(){}
 
-    public void unifyVariables(Map<String, Variable> variables) {
-        getVariables().putAll(variables);
-        //this.variables.put(counter.getName(), counter);
-        super.unifyVariables(getVariables());
+    public void unifyVariables(Locality variables) {
+        Locality.Layer localLayer = new Locality.Layer(variables);
+        //localLayer.putVariable(controlVariable.getName(), controlVariable);
+        super.unifyVariables(localLayer);
+        getVariables().putAll(localLayer.getVariables());
     }
 
     public For clone() {
         For ret = new For();
         for(SyntaxNode child : getChildren())
             ret.addChild(child.clone());
-        ret.unifyVariables(getVariableClones());
+        ret.unifyVariables(new Locality.Wrapper(getVariableClones()));
         return ret;
     }
 

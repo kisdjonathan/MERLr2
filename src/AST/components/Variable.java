@@ -41,6 +41,9 @@ public class Variable extends SyntaxNode {
         return new Variable(name, type.clone());
     }
 
+    public boolean isVariable() {
+        return true;
+    }
     public Variable asVariable() {
         return this;
     }

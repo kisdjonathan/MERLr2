@@ -29,8 +29,8 @@ public class OperatorReader {
             case "**"       ->new Exponent  ();
             case "!"        ->new Factorial ();
             //boolean, bitwise
-            case "and","&&" ->new And       ();
-            case "or","||"  ->new Or        ();
+            case "and","&"  ->new And       ();
+            case "or","|"   ->new Or        ();
             case "nor","~|" ->new Nor       ();
             case "xor","^^" ->new Xor       ();
             case "xnor","~^"->new Xnor      ();

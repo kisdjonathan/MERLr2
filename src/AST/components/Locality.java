@@ -6,8 +6,45 @@ import java.util.HashMap;
 import java.util.Map;
 
 public interface Locality {
+    class Layer implements Locality {
+        private Locality parent = null;
+        private final Map<String, Variable> variables = new HashMap<>();
+
+        public Layer(){}
+        public Layer(Locality parent) {
+            this.parent = parent;
+        }
+
+        public Map<String, Variable> getVariables() {
+            return variables;
+        }
+
+        public boolean hasVariable(String name) {
+            return variables.containsKey(name) || parent != null && parent.hasVariable(name);
+        }
+
+        public Variable getVariable(String name) {
+            return (parent == null || variables.containsKey(name)) ? variables.get(name) : parent.getVariable(name);
+        }
+    }
+
+    class Wrapper implements Locality {
+        private final Map<String, Variable> variables = new HashMap<>();
+
+        public Wrapper(Map<String, Variable> vars) {
+            this.variables.putAll(vars);
+        }
+
+        public Map<String, Variable> getVariables() {
+            return variables;
+        }
+    }
+
     Map<String, Variable> getVariables();
 
+    default boolean hasVariable(String name) {
+        return getVariables().containsKey(name);
+    }
     default Variable getVariable(String name) {
         return getVariables().get(name);
     }
@@ -22,29 +59,4 @@ public interface Locality {
         }
         return ret;
     }
-
-//    protected final Map<String, Variable> variables = new HashMap<>();
-//
-//    public Variable getVariable(String name) {
-//        return variables.get(name);
-//    }
-//    public void putVariable(String name, Variable var) {
-//        variables.put(name, var);
-//    }
-
-    /**
-     * this is where variables and functions are added from the locality's children to its variable map
-     */
-//    public void unifyVariables(Map<String, Variable> variables) {
-//        this.variables.putAll(variables);
-//        super.unifyVariables(this.variables);
-//    }
-//
-//    public Map<String, Variable> getVariableClones() {
-//        Map<String, Variable> ret = new HashMap<>();
-//        for(String varName : variables.keySet()) {
-//            ret.put(varName, variables.get(varName).clone());
-//        }
-//        return ret;
-//    }
 }

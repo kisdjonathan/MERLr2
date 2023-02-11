@@ -5,6 +5,7 @@ import AST.baseTypes.BasicType;
 import AST.baseTypes.InferredType;
 import AST.baseTypes.Tuple;
 import AST.baseTypes.flagTypes.InternalMessage;
+import AST.components.Locality;
 import AST.components.Variable;
 import AST.operations.Operator;
 
@@ -33,12 +34,12 @@ public class Modify extends Operator {
     }
 
 
-    private static SyntaxNode typedVariable(SyntaxNode potentialvar, SyntaxNode potentialval, Map<String,Variable> variables) {
+    private static SyntaxNode typedVariable(SyntaxNode potentialvar, SyntaxNode potentialval, Locality variables) {
         //take care of variable-to-variable assignments
         if(potentialvar instanceof Variable var) {
             BasicType resultType = potentialval.getType();
-            if (variables.containsKey(var.getName())) {
-                Variable existing = variables.get(var.getName());
+            if (variables.hasVariable(var.getName())) {
+                Variable existing = variables.getVariable(var.getName());
                 if(existing.getType() instanceof InferredType)
                     existing.setType(resultType);
                 else if(!existing.getType().typeEquals(resultType) && !resultType.typeEquals(existing.getType()))
@@ -49,7 +50,7 @@ public class Modify extends Operator {
             }
             else {
                 var.setType(resultType);
-                variables.put(var.getName(), var);
+                variables.putVariable(var.getName(), var);
             }
         }
         else if (potentialvar instanceof Tuple multivar){
@@ -71,12 +72,12 @@ public class Modify extends Operator {
         return potentialvar;
     }
 
-    public void unifyVariables(Map<String, Variable> variables) {
+    public void unifyVariables(Locality variables) {
         //take care of variable-to-variable assignments
         SyntaxNode val = getChild(size() - 1);
         if(val instanceof Variable var){
-            if(variables.containsKey(var.getName())) {
-                val = var = variables.get(var.getName());
+            if(variables.hasVariable(var.getName())) {
+                val = var = variables.getVariable(var.getName());
                 setChild(size() - 1, var);
             }
             else

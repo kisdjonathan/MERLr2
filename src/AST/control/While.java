@@ -6,11 +6,11 @@ import AST.baseTypes.*;
 import AST.baseTypes.advanced.Sequence;
 import AST.baseTypes.flagTypes.ControlCode;
 import AST.baseTypes.numerical.Bool;
+import AST.components.Locality;
 import AST.components.Variable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class While extends Control {
     private Variable conditionVariable = new Variable("condition"){{
@@ -25,10 +25,11 @@ public class While extends Control {
         putVariable(conditionVariable.getName(), conditionVariable);
     }
 
-    public void unifyVariables(Map<String, Variable> variables) {
-        getVariables().putAll(variables);
-        getVariables().put(conditionVariable.getName(), conditionVariable);
-        super.unifyVariables(getVariables());
+    public void unifyVariables(Locality variables) {
+        Locality.Layer localLayer = new Locality.Layer(variables);
+        localLayer.putVariable(conditionVariable.getName(), conditionVariable);
+        super.unifyVariables(localLayer);
+        getVariables().putAll(localLayer.getVariables());
     }
 
     public While clone() {
@@ -36,7 +37,7 @@ public class While extends Control {
         ret.setParent(getParent());
         for(SyntaxNode child : getChildren())
             ret.addChild(child.clone());
-        ret.unifyVariables(getVariableClones());
+        ret.unifyVariables(new Locality.Wrapper(getVariableClones()));
         return ret;
     }
 

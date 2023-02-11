@@ -47,23 +47,25 @@ public class Function extends BasicType implements Locality {
         Function ret = new Function(args.clone(), rets.clone());
         for(SyntaxNode child : getChildren())
             ret.addChild(child.clone());
-        ret.unifyVariables(getVariableClones());
+        ret.unifyVariables(new Locality.Wrapper(getVariableClones()));
         return ret;
     }
 
-    public void unifyVariables(Map<String, Variable> variables) {
-        this.variables.putAll(variables);
+    public void unifyVariables(Locality variables) {
+        Locality.Layer localLayer = new Locality.Layer(variables);
+
         for(SyntaxNode arg : args) {
             Variable var = arg.asVariable();
-            this.variables.put(var.getName(), var);
+            localLayer.putVariable(var.getName(), var);
         }
         for(SyntaxNode ret : rets) {
             if(ret instanceof BasicType)
                 break;
             Variable var = ret.asVariable();
-            this.variables.put(var.getName(), var);
+            localLayer.putVariable(var.getName(), var);
         }
-        super.unifyVariables(this.variables);
+        super.unifyVariables(localLayer);
+        getVariables().putAll(localLayer.getVariables());
     }
 
     public BasicType interpretExecute(Tuple args) {

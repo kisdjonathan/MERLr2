@@ -3,12 +3,11 @@ package AST.operations.variable;
 import AST.baseTypes.BasicType;
 import AST.baseTypes.Function;
 import AST.baseTypes.InferredType;
+import AST.components.Locality;
 import AST.components.Signature;
 import AST.components.Variable;
 import AST.operations.Operator;
 import AST.abstractNode.SyntaxNode;
-
-import java.util.Map;
 
 public class Declare extends Operator {
     private Function functionDeclaration = null;
@@ -33,14 +32,14 @@ public class Declare extends Operator {
         return getChild(size() - 1).getType();
     }
 
-    public void unifyVariables(Map<String, Variable> variables) {
+    public void unifyVariables(Locality variables) {
         for(int i = size() - 2; i >= 0; --i) {
             if (getChild(i) instanceof Call call) {
                 Signature sig = call.asVariable();
-                if(!variables.containsKey(sig.getName()) || !(variables.get(sig.getName()) instanceof Signature))
-                    variables.put(sig.getName(), sig);
+                if(!variables.hasVariable(sig.getName()) || !(variables.getVariable(sig.getName()) instanceof Signature))
+                    variables.putVariable(sig.getName(), sig);
                 else
-                    sig = (Signature) variables.get(sig.getName());
+                    sig = (Signature) variables.getVariable(sig.getName());
 
                 Function f = call.createFunctionHeader(getChild(size() - 1));
                 sig.addOverload(f);
@@ -51,15 +50,15 @@ public class Declare extends Operator {
             }
             else {
                 Variable var = getChild(i).asVariable();
-                if(variables.get(var.getName()).getType() instanceof InferredType)
-                    var = variables.get(var.getName());
-                else if(variables.containsKey(var.getName()))
-                    throw new Error("attempting to perform constant assignment on defined " + variables.get(var.getName()));
+                if(variables.getVariable(var.getName()).getType() instanceof InferredType)
+                    var = variables.getVariable(var.getName());
+                else if(variables.hasVariable(var.getName()))
+                    throw new Error("attempting to perform constant assignment " + getChild(size() - 1) + " on defined " + variables.getVariable(var.getName()));
                 SyntaxNode val = getChild(size() - 1);
                 val.unifyVariables(variables);
                 var.setType(val.getType());
                 var.setConstant(true);
-                variables.put(var.getName(), var);
+                variables.putVariable(var.getName(), var);
             }
         }
     }

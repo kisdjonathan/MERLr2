@@ -2,9 +2,7 @@ package AST.control;
 
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
-import AST.components.Variable;
-
-import java.util.Map;
+import AST.components.Locality;
 
 public class If extends Control {
     public If(SyntaxNode condition, SyntaxNode body) {
@@ -16,9 +14,10 @@ public class If extends Control {
         return getBase().getType();
     }
 
-    public void unifyVariables(Map<String, Variable> variables) {
-        getVariables().putAll(variables);
-        super.unifyVariables(getVariables());
+    public void unifyVariables(Locality variables) {
+        Locality.Layer localLayer = new Locality.Layer(variables);
+        super.unifyVariables(localLayer);
+        getVariables().putAll(localLayer.getVariables());
     }
 
     public If clone() {
@@ -26,7 +25,7 @@ public class If extends Control {
         ret.setParent(getParent());
         for(SyntaxNode child : getChildren())
             ret.addChild(child.clone());
-        ret.unifyVariables(getVariableClones());
+        ret.unifyVariables(new Locality.Wrapper(getVariableClones()));
         return ret;
     }
 

@@ -4,13 +4,11 @@ import AST.baseTypes.BasicType;
 import AST.baseTypes.InferredType;
 import AST.baseTypes.Tuple;
 import AST.baseTypes.Function;
+import AST.components.Locality;
 import AST.components.Signature;
 import AST.components.Variable;
 import AST.operations.Operator;
 import AST.abstractNode.SyntaxNode;
-import AST.operations.bitwise.Not;
-
-import java.util.Map;
 
 //Call stores information of a function call
 //TODO L for now, Call is expected to return the values of ret, but in the future, allow Call to write directly to ret
@@ -75,16 +73,20 @@ public class Call extends Operator {
         return new Signature(var.getName());
     }
 
-    public void unifyVariables(Map<String, Variable> variables) {
+    public void unifyVariables(Locality variables) {
         super.unifyVariables(variables);
         if(getChild(0) instanceof Variable var) {
             if (//!(var instanceof Signature) &&
-                    !variables.containsKey(var.getName()))
-                variables.put(var.getName(), new Signature(var.getName()));
-            Signature signature = (Signature) variables.get(var.getName());
-            setChild(0, signature);
-            if(!signature.hasOverload(Tuple.asTuple(getChild(1)), Tuple.asTuple(getType())))
-                signature.addOverload(new Function(Tuple.asTuple(getChild(1)), Tuple.asTuple(getType())));
+                    !variables.hasVariable(var.getName()))
+                variables.putVariable(var.getName(), new Signature(var.getName()));
+            Variable func = variables.getVariable(var.getName());
+            setChild(0, func);
+
+            if(func instanceof  Signature signature) {
+                setChild(0, signature);
+                if (!signature.hasOverload(Tuple.asTuple(getChild(1)), Tuple.asTuple(getType())))
+                    signature.addOverload(new Function(Tuple.asTuple(getChild(1)), Tuple.asTuple(getType())));
+            }
         }
     }
 
