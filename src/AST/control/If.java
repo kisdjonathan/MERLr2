@@ -2,6 +2,9 @@ package AST.control;
 
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
+import AST.components.Variable;
+
+import java.util.Map;
 
 public class If extends Control {
     public If(SyntaxNode condition, SyntaxNode body) {
@@ -13,12 +16,17 @@ public class If extends Control {
         return getBase().getType();
     }
 
+    public void unifyVariables(Map<String, Variable> variables) {
+        getVariables().putAll(variables);
+        super.unifyVariables(getVariables());
+    }
+
     public If clone() {
         If ret = new If();
         ret.setParent(getParent());
         for(SyntaxNode child : getChildren())
             ret.addChild(child.clone());
-        ret.unifyVariables();
+        ret.unifyVariables(getVariableClones());
         return ret;
     }
 

@@ -53,15 +53,19 @@ public class Call extends Operator {
     }
 
     public Call clone() {
-        return new Call(getChild(0).clone(), getChild(1).clone());
+        Call ret = new Call(getChild(0).clone(), getChild(1).clone(), type);
+        return ret;
     }
 
-    public Function createFunction(SyntaxNode body) {
+    protected BasicType bodyType(SyntaxNode body) {
+        return body.getType();  //TODO check for returns
+    }
+
+    public Function createFunctionHeader(SyntaxNode body) {
         Function ret = new Function();
         BasicType texplicit = getChild(0).getType();
-        ret.setRets(texplicit == null ? body.getType() : new InferredType());
+        ret.setRets(texplicit == null ? bodyType(body) : texplicit);
         ret.setArgs(getChild(1));
-        ret.addChild(body.clone());
         return ret;
     }
 
@@ -74,7 +78,8 @@ public class Call extends Operator {
     public void unifyVariables(Map<String, Variable> variables) {
         super.unifyVariables(variables);
         if(getChild(0) instanceof Variable var) {
-            if (!(var instanceof Signature))
+            if (//!(var instanceof Signature) &&
+                    !variables.containsKey(var.getName()))
                 variables.put(var.getName(), new Signature(var.getName()));
             Signature signature = (Signature) variables.get(var.getName());
             setChild(0, signature);
@@ -89,6 +94,6 @@ public class Call extends Operator {
             f = sig.getOverload((Tuple)getChild(1), Tuple.asTuple(getType()));
         else
             f = (Function)getChild(0).interpret();
-        return f.interpretExecute((Tuple)getChild(1));
+        return f.clone().interpretExecute(Tuple.asTuple(getChild(1).interpret()));
     }
 }

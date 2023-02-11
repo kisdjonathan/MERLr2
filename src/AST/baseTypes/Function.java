@@ -2,22 +2,20 @@ package AST.baseTypes;
 
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.flagTypes.ReturnCode;
+import AST.components.Locality;
 import AST.components.Variable;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class Function extends BasicType {
+public class Function extends BasicType implements Locality {
     private Tuple args = null, rets = null;
-    private Tuple rargs = null, rrets = null;
     private Map<String, Variable> variables = new HashMap<>();
 
     public Function() {}
     public Function(Tuple args, Tuple rets) {
         this.args = args;
         this.rets = rets;
-        rargs = args.clone();
-        rrets = rets.clone();
     }
 
     public String getName() {
@@ -31,7 +29,6 @@ public class Function extends BasicType {
     public void setArgs(SyntaxNode first) {
         args = Tuple.asTuple(first);
         args.setParent(this);
-        rargs = args.clone();
     }
 
     public Tuple getRets() {
@@ -40,18 +37,22 @@ public class Function extends BasicType {
     public void setRets(SyntaxNode second) {
         rets = Tuple.asTuple(second);
         rets.setParent(this);
-        rrets = rets.clone();
+    }
+
+    public Map<String, Variable> getVariables() {
+        return variables;
     }
 
     public Function clone() {
         Function ret = new Function(args.clone(), rets.clone());
         for(SyntaxNode child : getChildren())
             ret.addChild(child.clone());
-        unifyVariables();
+        ret.unifyVariables(getVariableClones());
         return ret;
     }
 
-    public void unifyVariables() {
+    public void unifyVariables(Map<String, Variable> variables) {
+        this.variables.putAll(variables);
         for(SyntaxNode arg : args) {
             Variable var = arg.asVariable();
             this.variables.put(var.getName(), var);
@@ -63,23 +64,10 @@ public class Function extends BasicType {
             this.variables.put(var.getName(), var);
         }
         super.unifyVariables(this.variables);
-
-        rargs = args.clone();
-        rrets = rets.clone();
-    }
-    public void unifyVariables(Map<String, Variable> variables) {
-        this.variables.putAll(variables);
-        unifyVariables();
     }
 
     public BasicType interpretExecute(Tuple args) {
         //reset original conditions
-        for(int i = 0; i < this.args.size(); ++i)
-            this.args.getChild(i).setType(rargs.getChild(i).interpret());
-        if(this.rets.size() > 1 || !(this.rets.getChild(0) instanceof InferredType))
-            for(int i = 0; i < this.rets.size(); ++i)
-                this.rets.getChild(i).setType(rrets.getChild(i).interpret());
-
         this.args.interpret();
         for(int i = 0; i < args.size(); ++i)
             this.args.getChild(i).asVariable().setType(args.getChild(i).getType());

@@ -22,11 +22,9 @@ public class Repeat extends Control {
     }};
 
     public Repeat(SyntaxNode count, SyntaxNode body) {
-        putVariable(counter.getName(), counter);
         setBase(count, body);
     }
     private Repeat(){
-        putVariable(counter.getName(), counter);
     }
 
     protected void setBase(Node node) {
@@ -39,11 +37,17 @@ public class Repeat extends Control {
         return ret;
     }
 
+    public void unifyVariables(Map<String, Variable> variables) {
+        getVariables().putAll(variables);
+        getVariables().put(counter.getName(), counter);
+        super.unifyVariables(getVariables());
+    }
+
     public Repeat clone() {
         Repeat ret = new Repeat();
         for(SyntaxNode child : getChildren())
             ret.addChild(child.clone());
-        ret.unifyVariables();
+        ret.unifyVariables(getVariableClones());
         return ret;
     }
 

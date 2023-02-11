@@ -33,10 +33,6 @@ public class Declare extends Operator {
         return getChild(size() - 1).getType();
     }
 
-    private BasicType bodyType(Function f, Map<String, Variable> variables) {
-        return new InferredType();    //TODO
-    }
-
     public void unifyVariables(Map<String, Variable> variables) {
         for(int i = size() - 2; i >= 0; --i) {
             if (getChild(i) instanceof Call call) {
@@ -46,15 +42,18 @@ public class Declare extends Operator {
                 else
                     sig = (Signature) variables.get(sig.getName());
 
-                Function f = call.createFunction(getChild(size() - 1));
-                f.setRets(bodyType(f,variables));
+                Function f = call.createFunctionHeader(getChild(size() - 1));
                 sig.addOverload(f);
+
+                f.addChild(getChild(size() - 1));
                 f.unifyVariables(variables);
                 functionDeclaration = f;
             }
             else {
                 Variable var = getChild(i).asVariable();
-                if(variables.containsKey(var.getName()))
+                if(variables.get(var.getName()).getType() instanceof InferredType)
+                    var = variables.get(var.getName());
+                else if(variables.containsKey(var.getName()))
                     throw new Error("attempting to perform constant assignment on defined " + variables.get(var.getName()));
                 SyntaxNode val = getChild(size() - 1);
                 val.unifyVariables(variables);

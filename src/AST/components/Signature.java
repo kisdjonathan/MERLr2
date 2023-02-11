@@ -38,6 +38,9 @@ public class Signature extends Variable {
     }
 
     public Signature clone() {
-        return new Signature(getName());
+        Signature ret = new Signature(getName());
+        for(Function f : overloads)
+            ret.addOverload(f); //TODO clone?
+        return ret;
     }
 }

@@ -6,11 +6,20 @@ import AST.baseTypes.flagTypes.ControlCode;
 import AST.baseTypes.numerical.Bool;
 import AST.baseTypes.VoidType;
 import AST.components.Locality;
+import AST.components.Variable;
 import AST.operations.variable.In;
 
-public abstract class Control extends Locality {
+import java.util.HashMap;
+import java.util.Map;
+
+public abstract class Control extends SyntaxNode implements Locality {
     protected SyntaxNode conditionControl = new Bool(true);
-    protected class Node extends Locality {
+    protected class Node extends SyntaxNode implements Locality {
+        private final Map<String, Variable> variables = new HashMap<>();
+        public Map<String, Variable> getVariables() {
+            return variables;
+        }
+
         //TODO condition does not have to be bool, but any value, and the loop will execute while the two are equal
         //-1: unassigned, -2: always stop
         protected int executionFalse = -1, executionTrue = -1;
@@ -24,6 +33,11 @@ public abstract class Control extends Locality {
 
         public BasicType getType() {
             return getChild(1).getType();
+        }
+
+        public void unifyVariables(Map<String, Variable> variables) {
+            this.variables.putAll(variables);
+            super.unifyVariables(this.variables);
         }
 
         public BasicType interpret() {
@@ -49,6 +63,7 @@ public abstract class Control extends Locality {
                 ret.addChild(child.clone());
             ret.executionTrue = executionTrue;
             ret.executionFalse = executionFalse;
+            ret.unifyVariables(getVariableClones());
             return ret;
         }
 
@@ -57,7 +72,10 @@ public abstract class Control extends Locality {
         }
     }
 
-    //private final List<Node> nodes = new ArrayList<>();
+    private final Map<String, Variable> variables = new HashMap<>();
+    public Map<String, Variable> getVariables() {
+        return variables;
+    }
 
     /**
      * pass null for condition for always true

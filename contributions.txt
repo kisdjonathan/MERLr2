@@ -1,0 +1,4 @@
+Jonathan Yang - main owner, developer
+Aidan Lai - owner, developer
+Aayush Ishware - found bugs in loops (in interpreter)
+Daniel Cheung - found bugs in recursion (in interpreter)
