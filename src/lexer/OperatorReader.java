@@ -57,7 +57,7 @@ public class OperatorReader {
         return switch (startDelim + endDelim) {
             case "()"   ->new Call      (caller, args);
             case "[]"   ->new Index     (caller, args);
-            case "{}"   ->new Structure (caller, args);
+            case "{}"   ->new Construct (caller, args);
             default     ->throw new Error("invalid calling brackets " + startDelim + endDelim);
         };
     }

@@ -14,7 +14,7 @@ import java.util.Map;
 //entry point of the program
 //TODO complete
 public class Entry {
-    private static String path = "test files/test1.merl";
+    private static String path = "test files/test2.merl";
 
     public static void main(String[] args) {
         TokenReader reader = new TokenReader(new File(path));

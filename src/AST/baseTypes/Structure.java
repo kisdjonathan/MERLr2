@@ -19,10 +19,6 @@ public class Structure extends BasicType implements Locality {
         this.fields.putAll(fields);
     }
 
-    public void extendBody(SyntaxNode extension, Locality variables) {
-        //TODO
-    }
-
     public void unifyVariables(Locality variables) {
         //TODO?
     }
