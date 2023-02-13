@@ -55,7 +55,7 @@ public class Modify extends Operator {
             }
         }
         else if (potentialvar instanceof Tuple multivar){
-            if(potentialval instanceof Tuple multival) {
+            if(potentialval.getType() instanceof Tuple multival) {
                 //TODO tuples with skipped elements ie (a,b,...,c) = (1,2,3,4,5,6)
                 int j = 0, k = 0;   //j:lhs, k:rhs
                 while (j < multivar.size() && k < multival.size()) {

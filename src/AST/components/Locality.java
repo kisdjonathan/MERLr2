@@ -27,7 +27,29 @@ public interface Locality {
             return (parent == null || variables.containsKey(name)) ? variables.get(name) : parent.getVariable(name);
         }
     }
+    class Inserted implements Locality {
+        private Locality parent = null, insertion;
 
+        public Inserted(Locality insertion){
+            this.insertion = insertion;
+        }
+        public Inserted(Locality insertion, Locality parent) {
+            this.parent = parent;
+            this.insertion = insertion;
+        }
+
+        public Map<String, Variable> getVariables() {
+            return insertion.getVariables();
+        }
+
+        public boolean hasVariable(String name) {
+            return insertion.hasVariable(name) || parent != null && parent.hasVariable(name);
+        }
+
+        public Variable getVariable(String name) {
+            return (parent == null || insertion.hasVariable(name)) ? insertion.getVariable(name) : parent.getVariable(name);
+        }
+    }
     class Wrapper implements Locality {
         private final Map<String, Variable> variables = new HashMap<>();
 

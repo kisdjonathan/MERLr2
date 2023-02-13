@@ -36,18 +36,19 @@ public class Field extends Operator {
                 throw new Error("Attempting to access field from non-structure " + var);
 
             Structure varType = (Structure)var.getType();
+            Locality fieldLayer = new Locality.Inserted(varType, variables);
 
             SyntaxNode field = getChild(1);
             if(field instanceof Variable val){
-                if(varType.hasVariable(val.getName())) {
-                    val = varType.getVariable(val.getName());
+                if(fieldLayer.hasVariable(val.getName())) {
+                    val = fieldLayer.getVariable(val.getName());
                     setChild(1, val);
                 }
                 else
-                    varType.putVariable(val.getName(), val);
+                    fieldLayer.putVariable(val.getName(), val);
             }
             else
-                field.unifyVariables(varType);
+                field.unifyVariables(fieldLayer);
         }
         else {
             //TODO assert field in the type of potentialVar
@@ -75,6 +76,9 @@ public class Field extends Operator {
 
     public BasicType getType() {
         return getChild(1).getType();
+    }
+    public void setType(BasicType type) {
+        getChild(1).setType(type);
     }
 
     public BasicType interpret() {

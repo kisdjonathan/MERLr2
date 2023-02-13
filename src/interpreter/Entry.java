@@ -1,19 +1,13 @@
 package interpreter;
 
 import AST.abstractNode.SyntaxNode;
-import AST.baseTypes.BasicType;
-import AST.baseTypes.Function;
-import AST.baseTypes.Structure;
-import AST.baseTypes.Tuple;
+import AST.baseTypes.*;
 import AST.baseTypes.advanced.Str;
 import AST.baseTypes.flagTypes.ControlCode;
 import AST.baseTypes.flagTypes.ReturnCode;
-import AST.baseTypes.numerical.Bool;
+import AST.baseTypes.numerical.*;
 import AST.baseTypes.numerical.Float;
-import AST.baseTypes.numerical.Int;
-import AST.components.Locality;
-import AST.components.Signature;
-import AST.components.Variable;
+import AST.components.*;
 import AST.control.Return;
 import lexer.TokenReader;
 
@@ -35,7 +29,7 @@ public class Entry {
         globalVariables.putVariable("true", new Variable("true"){{setType(new Bool(true));}});
         globalVariables.putVariable("false", new Variable("false"){{setType(new Bool(false));}});
         globalVariables.putVariable("IO", getIOVar());
-        body.unifyVariables(globalVariables);
+        body.unifyVariables(loadBaseTypes(globalVariables));
         BasicType value = body.interpret();
 //        System.out.println(value);
 //        System.out.println(globalVariables.getVariables());
@@ -46,7 +40,7 @@ public class Entry {
     private static Scanner scanner = new Scanner(System.in);
 
     private static class ReadValue extends ReturnCode {
-        public static final int INT = 0, FLOAT = 1, STR = 2, LINE = 3;
+        public static final int INT = 0, FLOAT = 1, STR = 2, LINE = 3, CHAR = 4;
         private final int readType;
 
         public ReadValue(int readtype) {
@@ -59,6 +53,7 @@ public class Entry {
                 case FLOAT -> new Float(scanner.nextDouble());
                 case STR -> new Str(scanner.next());
                 case LINE -> new Str(scanner.nextLine());
+                case CHAR -> new Char(scanner.nextByte());
                 default -> throw new Error("trying to read an invalid type ");
             };
         }
@@ -66,6 +61,24 @@ public class Entry {
         public ReadValue clone() {
             return new ReadValue(readType);
         }
+    }
+
+    private static Locality loadBaseTypes(Locality variables) {
+        Variable ivar = new Variable("int", new Int());
+        Variable fvar = new Variable("float", new Float());
+        Variable cvar = new Variable("char", new Char());
+        Variable bvar = new Variable("bool", new Bool());
+        Variable vvar = new Variable("void", new VoidType());
+        Variable svar = new Variable("str", new Str());
+
+        variables.putVariable(ivar.getName(), ivar);
+        variables.putVariable(fvar.getName(), fvar);
+        variables.putVariable(cvar.getName(), cvar);
+        variables.putVariable(bvar.getName(), bvar);
+        variables.putVariable(vvar.getName(), vvar);
+        variables.putVariable(svar.getName(), svar);
+
+        return variables;
     }
 
     private static Variable getIOVar() {
@@ -86,6 +99,11 @@ public class Entry {
         readf.setArgs(new Tuple());
         readf.setRets(new Float());
         readf.addChild(new ReadValue(ReadValue.FLOAT));
+
+        Function readc = new Function();
+        readc.setArgs(new Tuple());
+        readc.setRets(new Float());
+        readc.addChild(new ReadValue(ReadValue.CHAR));
 
         Signature read = new Signature("read");
         read.addOverload(readl);

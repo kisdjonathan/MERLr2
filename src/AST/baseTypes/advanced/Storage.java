@@ -3,6 +3,7 @@ package AST.baseTypes.advanced;
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
 import AST.baseTypes.InferredType;
+import AST.baseTypes.flagTypes.ControlCode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,19 @@ public abstract class Storage extends BasicType {
     public SyntaxNode getField(String name) {
         return null;    //TODO
     }
+
+    public BasicType interpret(){
+        Storage ret = this.emptyClone();
+        for(SyntaxNode child : getChildren()) {
+            BasicType value = child.interpret();
+            if(value instanceof ControlCode)
+                return value;
+            ret.addChild(value);
+        }
+        return ret;
+    }
+
+    public abstract Storage emptyClone();
 
     public String valueString() {
         List<String> values = new ArrayList<>();

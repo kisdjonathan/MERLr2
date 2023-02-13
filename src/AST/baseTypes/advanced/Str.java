@@ -40,6 +40,13 @@ public class Str extends Storage{
     public Str clone() {
         return new Str(value);
     }
+    public Str emptyClone() {
+        return new Str();
+    }
+
+    public BasicType interpret() {
+        return this;
+    }
 
     public String valueString() {
         return value;

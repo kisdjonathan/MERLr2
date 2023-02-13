@@ -63,6 +63,9 @@ public abstract class BasicType extends SyntaxNode {
         return null;    //TODO
     }
 
+    /**
+     * @return true if this can be converted to obj inherently
+     */
     public abstract boolean typeEquals(BasicType obj);
 
     public abstract BasicType clone();

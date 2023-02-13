@@ -14,7 +14,6 @@ Issues with other things:
     and does not short because interpret outside of evaluate
 
     automatic inverse evaluation
-    structures/classes
     inheritance
     function argument with types
     function overload with default values

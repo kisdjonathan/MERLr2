@@ -28,4 +28,7 @@ public class FixedArray extends Storage{
     public DynamicArray clone() {
         return null;    //TODO
     }
+    public FixedArray emptyClone() {
+        return new FixedArray();
+    }
 }

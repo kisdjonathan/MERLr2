@@ -30,4 +30,7 @@ public class Sequence extends Storage{
             ret.addChild(child);
         return ret;
     }
+    public Sequence emptyClone() {
+        return new Sequence();
+    }
 }

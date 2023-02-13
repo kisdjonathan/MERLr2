@@ -27,13 +27,47 @@ public class Cast extends Operator {
     public BasicType getType() {
         return getChild(1).getType();
     }
+    public void setType(BasicType type) {
+        if(size() == 1)
+            addChild(type);
+        else if(!getChild(1).getType().typeEquals(type))
+            throw new Error("Can not set type of cast statement " + this);
+    }
 
     public void unifyVariables(Locality variables) {
-        //TODO v this doesn't seem right
-        super.unifyVariables(variables);
+        if(getChild(1) instanceof Variable var) {
+            if (variables.hasVariable(var.getName()))
+                setChild(1, variables.getVariable(var.getName()));
+            else {
+                //throw new Error("Variable used without assignment:" + var.getName());
+                var.setType(new InferredType());
+                variables.putVariable(var.getName(), var);
+            }
+        }
+        else
+            getChild(1).unifyVariables(variables);
 
-        //TODO user-defined casting
-        getChild(0).setType(getType());
+
+        if(getChild(0) instanceof Variable var) {
+            if (variables.hasVariable(var.getName())) {
+                var = variables.getVariable(var.getName());
+                setChild(0, var);
+
+                //TODO user-defined casting
+                if(!var.getType().typeEquals(getType()))
+                    throw new Error("Can not convert " + var + " to " + getType());
+            }
+            else {
+                //throw new Error("Variable used without assignment:" + var.getName());
+                var.setType(getType());
+                variables.putVariable(var.getName(), var);
+            }
+        }
+        else {
+            //TODO user-defined casting
+            getChild(0).setType(getType());
+            getChild(0).unifyVariables(variables);
+        }
     }
 
     public BasicType interpret() {

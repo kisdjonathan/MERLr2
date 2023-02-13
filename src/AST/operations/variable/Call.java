@@ -75,14 +75,13 @@ public class Call extends Operator {
     public void unifyVariables(Locality variables) {
         super.unifyVariables(variables);
         if(getChild(0) instanceof Variable var) {
-            if (//!(var instanceof Signature) &&
+            if (!(var instanceof Signature) ||
                     !variables.hasVariable(var.getName()))
                 variables.putVariable(var.getName(), new Signature(var.getName()));
             Variable func = variables.getVariable(var.getName());
             setChild(0, func);
 
             if(func instanceof  Signature signature) {
-                setChild(0, signature);
                 if (!signature.hasOverload(Tuple.asTuple(getChild(1)), Tuple.asTuple(getType())))
                     signature.addOverload(new Function(Tuple.asTuple(getChild(1)), Tuple.asTuple(getType())));
             }

@@ -4,6 +4,7 @@ import AST.baseTypes.BasicType;
 import AST.baseTypes.Tuple;
 
 public class UnorderedMap extends Storage {
+    public UnorderedMap(){}
     public UnorderedMap(Tuple values) {
         //TODO
     }
@@ -13,5 +14,8 @@ public class UnorderedMap extends Storage {
     }
     public UnorderedMap clone() {
         return null;    //TODO
+    }
+    public UnorderedMap emptyClone() {
+        return new UnorderedMap();
     }
 }

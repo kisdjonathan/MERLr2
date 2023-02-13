@@ -9,7 +9,6 @@ import java.util.List;
 
 public class DynamicArray extends Storage{
     public DynamicArray(){
-        //TODO
     }
     public DynamicArray(Tuple values) {
         setChildren(values.getChildren());
@@ -27,8 +26,11 @@ public class DynamicArray extends Storage{
     }
     public DynamicArray clone() {
         DynamicArray ret = new DynamicArray();
-        for(SyntaxNode child : ret.getChildren())
-            ret.addChild(child);
+        for(SyntaxNode child : getChildren())
+            ret.addChild(child.clone());
         return ret;
+    }
+    public DynamicArray emptyClone() {
+        return new DynamicArray();
     }
 }

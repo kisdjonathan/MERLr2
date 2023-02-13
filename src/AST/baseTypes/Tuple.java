@@ -77,6 +77,19 @@ public class Tuple extends BasicType implements Iterable<SyntaxNode>{
         return ret.toString();
     }
 
+    public void setType(BasicType type) {
+        if(type instanceof Tuple tother && typeEquals(tother)) {
+            for(int i = 0; i < size(); ++i) {
+                if(getChild(i).getType() instanceof InferredType)
+                    getChild(i).setType(tother.getChild(i).getType());
+                else
+                    throw new Error("unable to set type for tuple " + this + " to " + type);
+            }
+        }
+        else
+            throw new Error("unable to set type for tuple " + this + " to " + type);
+    }
+
     public boolean typeEquals(BasicType other) {
         if(other instanceof Tuple tother) {
             if (other.size() != size())
