@@ -6,31 +6,31 @@ import java.util.Queue;
 
 //SymbolReader breaks the input into tokens as it is being read
 public class SymbolReader {
-    private static final boolean[] literalChars = new boolean[256];
+    private static final boolean[] identifierChars = new boolean[256];
     static{
-        //all literal chars
+        //all identifier chars
         for(char i = '0'; i <= '9'; ++i)
-            literalChars[i] = true;
+            identifierChars[i] = true;
         for(char i = 'A'; i <= 'Z'; ++i)
-            literalChars[i] = true;
+            identifierChars[i] = true;
         for(char i = 'a'; i <= 'z'; ++i)
-            literalChars[i] = true;
-        literalChars['$'] = literalChars['?'] = literalChars['.'] = literalChars['_'] = true;
+            identifierChars[i] = true;
+        identifierChars['$'] = identifierChars['?'] = identifierChars['.'] = identifierChars['_'] = true;
     }
 
-    private static class ReadStringLiteral {
+    private static class PostReadPosition {
         public String line;
         public int position;
 
-        public ReadStringLiteral(){}
-        public ReadStringLiteral(String line, int pos) {
+        public PostReadPosition(){}
+        public PostReadPosition(String line, int pos) {
             this.line = line;
             this.position = pos;
         }
     }
 
     private BufferedReader source;
-    private Queue<String> lineBuffer = new LinkedList<>();  //lineBuffer is always full unless eof
+    private final Queue<String> lineBuffer = new LinkedList<>();  //lineBuffer is always full unless eof
     private boolean eof = false;
 
     public SymbolReader(File source) {
@@ -86,7 +86,23 @@ public class SymbolReader {
                     if (line.charAt(cind + 1) == '*')
                         ++len;
                     break;
-                case ';':	//;
+                case ';': {    //;, ;else, ;nelse
+                    PostReadPosition temp = clearSpaces(line, cind+1);
+                    line = temp.line;
+                    cind = temp.position;
+                    if(stringIn("else", line, cind) && !isIdentifierChar(line.charAt(cind+4))) {
+                        lineBuffer.add(";else");
+                        cind += 4;
+                    }
+                    else if(stringIn("nelse", line, cind) && !isIdentifierChar(line.charAt(cind+5))) {
+                        lineBuffer.add(";nelse");
+                        cind += 5;
+                    }
+                    else {
+                        lineBuffer.add(";");
+                    }
+                    continue;
+                }
                 case ',':	//,
                 case '\\':  //\
                 case '.':   //.
@@ -119,12 +135,12 @@ public class SymbolReader {
                     break;
                 }
 
-                case '\'':	//'...'
-                case '"':	//"..."
+                case '\'':	//'...', '''...'''
+                case '"':{	//"...", """..."""
                     char c = line.charAt(cind);
                     StringBuilder val = new StringBuilder();
-                    ReadStringLiteral temp;
-                    if(line.length() > cind + 2 && line.charAt(cind + 1) == c && line.charAt(cind + 2) == c)
+                    PostReadPosition temp;
+                    if (line.length() > cind + 2 && line.charAt(cind + 1) == c && line.charAt(cind + 2) == c)
                         temp = getStringLiteral(line, val, cind + 3, line.substring(cind, cind + 3), true);
                     else
                         temp = getStringLiteral(line, val, cind + 1, line.substring(cind, cind + 1), false);
@@ -133,9 +149,10 @@ public class SymbolReader {
                     lineBuffer.add(String.valueOf(c));
                     lineBuffer.add(val.toString());
                     continue;
+                }
 
                 default:	//id
-                    while(isLiteralChar(line.charAt(cind + len)))
+                    while(isIdentifierChar(line.charAt(cind + len)))
                         ++len;
             }
 
@@ -149,8 +166,8 @@ public class SymbolReader {
             loadLine();
     }
 
-    private boolean isLiteralChar(char charAt) {
-        return literalChars[charAt];
+    private boolean isIdentifierChar(char charAt) {
+        return identifierChars[charAt];
     }
 
     private String getLine() {
@@ -177,7 +194,7 @@ public class SymbolReader {
         return true;
     }
 
-    private ReadStringLiteral clearSpaces(String line, int cind){
+    private PostReadPosition clearSpaces(String line, int cind){
         while(cind < line.length()) {
             if(line.charAt(cind) == ' ' || line.charAt(cind) == '\t')
                 ++cind;
@@ -185,18 +202,19 @@ public class SymbolReader {
                 line = getLine();
                 cind = 0;
             }
+            else break;
         }
-        return new ReadStringLiteral(line, cind);
+        return new PostReadPosition(line, cind);
     }
 
-    private ReadStringLiteral getStringLiteral(String line, StringBuilder ret, int cind, String endDelim, boolean replaceSpaceTrailingNewline) {
+    private PostReadPosition getStringLiteral(String line, StringBuilder ret, int cind, String endDelim, boolean replaceSpaceTrailingNewline) {
         while (!stringIn(endDelim, line, cind))
         {
             if(line.charAt(cind) == '\n') {
                 ret.append('\n');
                 line = getLine();
                 if(replaceSpaceTrailingNewline) {
-                    ReadStringLiteral r = clearSpaces(line, cind);
+                    PostReadPosition r = clearSpaces(line, cind);
                     line = r.line;
                     cind = r.position;
                 }
@@ -219,7 +237,7 @@ public class SymbolReader {
                         line = getLine();
                         cind = 0;
                         if(replaceSpaceTrailingNewline) {
-                            ReadStringLiteral r = clearSpaces(line, cind);
+                            PostReadPosition r = clearSpaces(line, cind);
                             line = r.line;
                             cind = r.position;
                         }
@@ -245,7 +263,7 @@ public class SymbolReader {
         }
         ++cind; //end delimiter
 
-        return new ReadStringLiteral(line, cind);
+        return new PostReadPosition(line, cind);
     }
 
     //strings are split into (",value)

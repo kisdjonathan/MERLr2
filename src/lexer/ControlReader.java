@@ -12,7 +12,7 @@ public class ControlReader {
             "if", "repeat", "while", "for"
     ));
     private static final HashSet<String> cases = new HashSet<>(Arrays.asList(
-            "else", "nelse"
+            "else", "nelse",";else", ";nelse"
     ));
     private static final HashSet<String> statements = new HashSet<>(Arrays.asList(
             "break", "continue", "return"

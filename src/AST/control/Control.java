@@ -102,6 +102,8 @@ public abstract class Control extends SyntaxNode implements Locality {
         switch (chainName) {
             case "else" -> addElse(condition, body);
             case "nelse" -> addNelse(condition, body);
+            case ";else" -> addElse(condition, body);   //TODO
+            case ";nelse" -> addNelse(condition, body); //TODO
             default -> throw new Error("no chain by the name of " + chainName);
         }
     }

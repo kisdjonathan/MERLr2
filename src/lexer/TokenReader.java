@@ -113,7 +113,8 @@ public class TokenReader {
         }
 
         while(ControlReader.isCase(source.peek())) {
-            String name = source.get();     //else/nelse
+            String name = source.get();     //else/nelse/;else/;nelse
+
             SyntaxNode control = getSection(":");
 
             SyntaxNode body = get();
