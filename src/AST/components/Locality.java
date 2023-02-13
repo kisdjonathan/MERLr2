@@ -34,6 +34,7 @@ public interface Locality {
         public Wrapper(Map<String, Variable> vars) {
             this.variables.putAll(vars);
         }
+        public Wrapper() {}
 
         public Map<String, Variable> getVariables() {
             return variables;

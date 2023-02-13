@@ -2,6 +2,8 @@ package AST.operations.variable;
 
 import AST.baseTypes.BasicType;
 import AST.baseTypes.Function;
+import AST.baseTypes.InferredType;
+import AST.baseTypes.Structure;
 import AST.operations.Operator;
 import AST.abstractNode.SyntaxNode;
 import AST.components.*;
@@ -11,22 +13,52 @@ import java.util.List;
 import java.util.Map;
 
 //AST.Contextualization simply makes the fields of a variable available to its children
-//TODO complete
 public class Field extends Operator {
-    private Map<String, Variable> loadedVariables = new HashMap<>();
-    private Map<String, List<Function>> loadedFunctions = new HashMap<>();
-
-    public Field() {
-    }
+    public Field() {}
     public Field(SyntaxNode context, SyntaxNode body) {
-        addChild("field", context);
-        addChild(null, body);
+        addChild(context);
+        addChild(body);
     }
 
-    public Variable getVariable(String name) {
-        if(loadedVariables.containsKey(name))
-            return loadedVariables.get(name);
-        return super.getVariable(name);
+    public void unifyVariables(Locality variables) {
+        SyntaxNode potentialVar = getChild(0);
+        if(potentialVar instanceof Variable var) {
+            if(variables.hasVariable(var.getName())) {
+                var = variables.getVariable(var.getName());
+                setChild(0, var);
+            }
+            else
+                variables.putVariable(var.getName(), var);
+
+            if(var.getType() instanceof InferredType)
+                var.setType(new Structure());
+            else if(!(var.getType() instanceof Structure))
+                throw new Error("Attempting to access field from non-structure " + var);
+
+            Structure varType = (Structure)var.getType();
+
+            SyntaxNode field = getChild(size() - 1);
+            if(field instanceof Variable val){
+                if(varType.hasVariable(val.getName())) {
+                    val = varType.getVariable(val.getName());
+                    setChild(size() - 1, val);
+                }
+                else
+                    varType.putVariable(val.getName(), val);
+            }
+            else
+                field.unifyVariables(varType);
+        }
+        else {
+            //TODO assert field in the type of potentialVar
+            //ie could be function
+            //ie could be another field
+            throw new Error("Field of non-variable is not implemented");
+        }
+    }
+
+    public Variable asVariable() {
+        return getChild(1).asVariable();
     }
 
     public String getName() {
@@ -37,14 +69,11 @@ public class Field extends Operator {
         return new Field(getChild(0).clone(), getChild(1).clone());
     }
 
-    //TODO
-    @Override
     public BasicType getType() {
-        return null;
+        return getChild(1).getType();
     }
 
-    @Override
     public BasicType interpret() {
-        return null;
+        return getChild(1).interpret();
     }
 }

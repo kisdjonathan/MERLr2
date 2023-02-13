@@ -51,10 +51,6 @@ public abstract class SyntaxNode {
         return children.size();
     }
 
-    public Variable getVariable(String name) {
-        return getParent().getVariable(name);
-    }
-
     /**
      * implemented in syntaxNodes that store children
      * stops at children locals and calls their unifyVariables function

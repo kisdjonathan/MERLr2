@@ -19,12 +19,12 @@ public class Entry {
     public static void main(String[] args) {
         TokenReader reader = new TokenReader(new File(path));
         SyntaxNode body = reader.readGroup("");
-        Map<String, Variable> globalVariables = new HashMap<>();
-        globalVariables.put("true", new Variable("true"){{setType(new Bool(true));}});
-        globalVariables.put("false", new Variable("false"){{setType(new Bool(false));}});
-        body.unifyVariables(new Locality.Wrapper(globalVariables));
+        Locality.Wrapper globalVariables = new Locality.Wrapper();
+        globalVariables.putVariable("true", new Variable("true"){{setType(new Bool(true));}});
+        globalVariables.putVariable("false", new Variable("false"){{setType(new Bool(false));}});
+        body.unifyVariables(globalVariables);
         BasicType value = body.interpret();
         System.out.println(value);
-        System.out.println(globalVariables);
+        System.out.println(globalVariables.getVariables());
     }
 }

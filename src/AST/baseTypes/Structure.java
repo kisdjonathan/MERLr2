@@ -15,6 +15,7 @@ public class Structure extends BasicType implements Locality {
         return fields;
     }
 
+    public Structure(){}
     public Structure(Map<String, Variable> fields) {
         this.fields.putAll(fields);
     }
