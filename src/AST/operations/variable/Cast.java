@@ -2,6 +2,9 @@ package AST.operations.variable;
 
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
+import AST.baseTypes.InferredType;
+import AST.components.Locality;
+import AST.components.Variable;
 import AST.operations.Operator;
 
 /**
@@ -25,8 +28,15 @@ public class Cast extends Operator {
         return getChild(1).getType();
     }
 
-    //TODO
+    public void unifyVariables(Locality variables) {
+        //TODO v this doesn't seem right
+        super.unifyVariables(variables);
+
+        //TODO user-defined casting
+        getChild(0).setType(getType());
+    }
+
     public BasicType interpret() {
-        return null;
+        return getChild(0).interpret();
     }
 }

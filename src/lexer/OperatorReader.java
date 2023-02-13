@@ -39,7 +39,7 @@ public class OperatorReader {
             case ">>"       ->new Field     ();
             case ":"        ->new Declare   ();
             case "="        ->new Modify    ();
-            case "->"       ->new Cast      ();
+            case "as"       ->new Cast      ();
             case "with"     ->new With      ();
             case "then"     ->new Without   ();
             case "in"       ->new In        ();

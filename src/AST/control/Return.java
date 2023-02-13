@@ -16,7 +16,7 @@ public class Return extends SyntaxNode {
     }
 
     public BasicType getType() {
-        return new ReturnCode(ControlCode.RETURN, getChild(0).getType());
+        return new ReturnCode(getChild(0).getType());
     }
 
 
@@ -25,6 +25,6 @@ public class Return extends SyntaxNode {
     }
 
     public BasicType interpret() {
-        return new ReturnCode(ControlCode.RETURN, getChild(0).interpret());
+        return new ReturnCode(getChild(0).interpret());
     }
 }

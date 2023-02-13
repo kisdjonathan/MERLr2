@@ -49,7 +49,7 @@ public class SymbolReader {
             return;
 
         int cind = 0;
-        while (cind + 1 < line.length()) {   //before newline
+        while (!eof && cind + 1 < line.length()) {   //before newline
             int len = 1;
             switch (line.charAt(cind)) {
                 case '~': 	//~=, ~
@@ -90,17 +90,16 @@ public class SymbolReader {
                     PostReadPosition temp = clearSpaces(line, cind+1);
                     line = temp.line;
                     cind = temp.position;
-                    if(stringIn("else", line, cind) && !isIdentifierChar(line.charAt(cind+4))) {
-                        lineBuffer.add(";else");
-                        cind += 4;
+                    if(!eof) {
+                        if (stringIn("else", line, cind) && !isIdentifierChar(line.charAt(cind + 4))) {
+                            lineBuffer.add(";else");
+                            cind += 4;
+                        } else if (stringIn("nelse", line, cind) && !isIdentifierChar(line.charAt(cind + 5))) {
+                            lineBuffer.add(";nelse");
+                            cind += 5;
+                        }
                     }
-                    else if(stringIn("nelse", line, cind) && !isIdentifierChar(line.charAt(cind+5))) {
-                        lineBuffer.add(";nelse");
-                        cind += 5;
-                    }
-                    else {
-                        lineBuffer.add(";");
-                    }
+                    lineBuffer.add(";");
                     continue;
                 }
                 case ',':	//,
@@ -162,7 +161,7 @@ public class SymbolReader {
     }
 
     private void loadBuffer() {
-        while (lineBuffer.isEmpty() && !eof())
+        while (lineBuffer.isEmpty() && !eof)
             loadLine();
     }
 
@@ -195,7 +194,7 @@ public class SymbolReader {
     }
 
     private PostReadPosition clearSpaces(String line, int cind){
-        while(cind < line.length()) {
+        while(!eof && cind < line.length()) {
             if(line.charAt(cind) == ' ' || line.charAt(cind) == '\t')
                 ++cind;
             else if(line.charAt(cind) == '\n') {
@@ -280,6 +279,6 @@ public class SymbolReader {
     }
 
     public boolean eof() {
-        return eof;
+        return eof && lineBuffer.isEmpty();
     }
 }

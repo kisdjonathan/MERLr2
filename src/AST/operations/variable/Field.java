@@ -37,11 +37,11 @@ public class Field extends Operator {
 
             Structure varType = (Structure)var.getType();
 
-            SyntaxNode field = getChild(size() - 1);
+            SyntaxNode field = getChild(1);
             if(field instanceof Variable val){
                 if(varType.hasVariable(val.getName())) {
                     val = varType.getVariable(val.getName());
-                    setChild(size() - 1, val);
+                    setChild(1, val);
                 }
                 else
                     varType.putVariable(val.getName(), val);
@@ -60,6 +60,9 @@ public class Field extends Operator {
     public Variable asVariable() {
         return getChild(1).asVariable();
     }
+    public boolean isVariable() {
+        return true;
+    }
 
     public String getName() {
         return "field";
@@ -68,6 +71,7 @@ public class Field extends Operator {
     public Field clone() {
         return new Field(getChild(0).clone(), getChild(1).clone());
     }
+
 
     public BasicType getType() {
         return getChild(1).getType();

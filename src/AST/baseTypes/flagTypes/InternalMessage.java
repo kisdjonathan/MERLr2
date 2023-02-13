@@ -4,10 +4,13 @@ import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
 
 public class InternalMessage extends BasicType {
-
+    public InternalMessage(){}
+    public InternalMessage(String msg) {
+        message = msg;
+    }
 
     public InternalMessage clone() {
-        return null;//TODO
+        return new InternalMessage(message);
     }
 
     private String message = "internal message";

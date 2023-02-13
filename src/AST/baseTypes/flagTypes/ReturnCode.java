@@ -13,11 +13,15 @@ public class ReturnCode extends ControlCode{
         this.value = value;
     }
 
-    public ReturnCode(int choice, BasicType value) {
-        super(choice);
+    public ReturnCode(BasicType value) {
+        super(ControlCode.RETURN);
         this.value = value;
     }
-    public ReturnCode(int choice) {
-        super(choice);
+    public ReturnCode() {
+        super(ControlCode.RETURN);
+    }
+
+    public ControlCode clone() {
+        return new ReturnCode(value.clone());
     }
 }

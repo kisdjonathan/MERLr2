@@ -16,6 +16,15 @@ public class ControlCode extends InternalMessage{
     private int choice = 0;
     private int layers = 1;
 
+    public ControlCode(int choice, int layers) {
+        this.choice = choice;
+        this.layers = layers;
+    }
+    public ControlCode(int choice) {
+        this.choice = choice;
+    }
+
+
     public int getChoice() {
         return choice;
     }
@@ -37,11 +46,7 @@ public class ControlCode extends InternalMessage{
         return this;
     }
 
-    public ControlCode(int choice, int layers) {
-        this.choice = choice;
-        this.layers = layers;
-    }
-    public ControlCode(int choice) {
-        this.choice = choice;
+    public ControlCode clone() {
+        return new ControlCode(choice, layers);
     }
 }

@@ -91,7 +91,7 @@ public class Call extends Operator {
 
     public BasicType interpret() {
         Function f;
-        if(getChild(0) instanceof Signature sig)
+        if(getChild(0).isVariable() && getChild(0).asVariable() instanceof Signature sig)
             f = sig.getOverload((Tuple)getChild(1), Tuple.asTuple(getType()));
         else
             f = (Function)getChild(0).interpret();

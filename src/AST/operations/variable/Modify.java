@@ -41,6 +41,8 @@ public class Modify extends Operator {
                 Variable existing = variables.getVariable(var.getName());
                 if(existing.getType() instanceof InferredType)
                     existing.setType(resultType);
+                else if(resultType instanceof  InferredType)
+                    potentialval.setType(existing.getType());
                 else if(!existing.getType().typeEquals(resultType) && !resultType.typeEquals(existing.getType()))
                     throw new Error("Modifying variable " + existing + " with incompatible type " + resultType);
                 else if(existing.isConstant())

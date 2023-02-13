@@ -1,0 +1,2 @@
+a = IO read() as 1;
+@a;

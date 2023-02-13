@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class Function extends BasicType implements Locality {
     private Tuple args = null, rets = null;
-    private Map<String, Variable> variables = new HashMap<>();
+    private final Map<String, Variable> variables = new HashMap<>();
 
     public Function() {}
     public Function(Tuple args, Tuple rets) {
@@ -86,8 +86,10 @@ public class Function extends BasicType implements Locality {
         }
         else{
             this.rets.interpret();
-            getChild(0).interpret();
-            if(rets.size() == 1)
+            BasicType val = getChild(0).interpret();
+            if(val instanceof ReturnCode rval)
+                return rval.getValue();
+            else if(rets.size() == 1)
                 return rets.getChild(0).getType();
             else
                 return rets.getType();
