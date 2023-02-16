@@ -1,0 +1,33 @@
+/*  LAB
+*       given N lines of input,
+*       let a[i] be the i-th line of input (i=1 is the first line, etc)
+*       find the indices i and j (i!=j) that minimize the average value between i and j, inclusive
+*       i.e. the sum of all values in the range [i,j] divided by (j-i+1) is minimum
+*   INPUT
+*       N
+*       a[0] a[1] a[2] ...
+*   OUTPUT
+*       i
+*       j
+*/
+
+/*  SAMPLE INPUT
+5
+1 7 5 9 3
+*/
+
+/*  SAMPLE OUTPUT
+1
+2
+*/
+
+N = IO read as int;
+a = [repeat N: IO read() as int];
+vmin = 999999;
+imin, jmin = 0,0;
+for S in sample range series([0 ... a length)):
+    if S < vmin:
+        imin = S range start;
+        jmin = S range stop;
+@i;
+@j;

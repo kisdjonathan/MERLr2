@@ -93,7 +93,7 @@ public class OperatorReader {
             {":", "="},
             {"<<", ">>"},
             {","},
-            {"or"}, {"nor"}, {"xor"}, {"xnor"}, {"and"},
+            {"or","|"}, {"nor","~|"}, {"xor","^"}, {"xnor","~^"}, {"and","&"},
             {"=="}, {"!="}, {"<", ">", "<=", ">="},
             {"not"},
             {"+", "-"}, {"||"}, {"%"}, {"*", "/"}, {"**"}, {"!"},
@@ -111,12 +111,12 @@ public class OperatorReader {
             "with", "then",
             ",", ";",
             "or", "nor", "xor", "xnor", "and",
+            "|", "~|", "^", "~^", "&",
             "=", ":",
             "<<", ">>",
             "==", "!=", "<", ">", "<=", ">=",
             "+", "-", "||", "%", "*", "/", "**",
             "$up", "$down", "$left", "$right",
-            "$or", "$nor", "$xor", "$xnor", "$and",
             "as"
     ));
     private static final Set<String> prefixes = new HashSet<>(Arrays.asList(

@@ -143,12 +143,12 @@ public class TokenReader {
     //takes in a SymbolReader (starting right after the operator) and generates nodes with consideration to chaining and precedence
     private SyntaxNode readOperator(SyntaxNode predecessor, String oper) {
         //group
-        if(GroupReader.isStartDelimiter(oper)) {
+        if(GroupReader.isStartDelimiter(oper) && !OperatorReader.isInfix(oper)) {
             String startdelim = oper;
             SyntaxNode args = null;
-            if(!source.eof() && !GroupReader.isEndDelimiter(source.peek())) {
+            if(!source.eof() && !GroupReader.isEndDelimiter(startdelim, source.peek())) {
                 args = get();
-                while (!source.eof() && !GroupReader.isEndDelimiter(source.peek()))
+                while (!source.eof() && !GroupReader.isEndDelimiter(startdelim, source.peek()))
                     args = getOperator(args);
             }
             String endDelim = source.eof() ? "EOF" : source.get();
@@ -190,9 +190,9 @@ public class TokenReader {
     //takes in a SymbolReader (starting right after the starting delimiter) and generates nodes for which it constructs a local up to the next delimiter
     public SyntaxNode readGroup(String startDelim) {
         SyntaxNode body = null;
-        if(!source.eof() && !GroupReader.isEndDelimiter(source.peek())) {
+        if(!source.eof() && !GroupReader.isEndDelimiter(startDelim, source.peek())) {
             body = get();
-            while (!source.eof() && !GroupReader.isEndDelimiter(source.peek()))
+            while (!source.eof() && !GroupReader.isEndDelimiter(startDelim, source.peek()))
                 body = getOperator(body);
         }
         String endDelim = source.eof() ? "EOF" : source.get();

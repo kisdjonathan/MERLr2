@@ -18,3 +18,4 @@ Issues with other things:
     function argument with types
     function overload with default values
     semicolons in control
+    | and ) conflict

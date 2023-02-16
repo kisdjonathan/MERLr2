@@ -102,13 +102,14 @@ public class Entry {
 
         Function readc = new Function();
         readc.setArgs(new Tuple());
-        readc.setRets(new Float());
+        readc.setRets(new Char());
         readc.addChild(new ReadValue(ReadValue.CHAR));
 
         Signature read = new Signature("read");
         read.addOverload(readl);
         read.addOverload(readi);
         read.addOverload(readf);
+        read.addOverload(readc);
 
         retBody.putVariable(read.getName(), read);
 

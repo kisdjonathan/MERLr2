@@ -1,7 +1,10 @@
 @"enter the number of lines to sum";
+x = [1,2,3,4,5,6];
+@(x[3]);
 N = IO read() as int;
 repeat N: {
     @"enter 2 numbers to add";
     a,b = IO >> (read(), read()) as (int, int);
+
     @(a+b);
 }

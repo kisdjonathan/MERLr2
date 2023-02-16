@@ -67,14 +67,21 @@ public class GroupReader {
     }
 
     public static boolean isStartDelimiter(String s) {
-        return s.length() == 1 && switch(s.charAt(0)){
-            case '[', '{', '(', '|' ->true;
+        return switch(s){
+            case "[", "{", "(", "|" ->true;
+            default -> false;
+        };
+    }
+    public static boolean isEndDelimiter(String start, String s) {
+        return switch(s){
+            case "]", "}", ")"->true;
+            case "|" ->start.equals("|");
             default -> false;
         };
     }
     public static boolean isEndDelimiter(String s) {
-        return s.length() == 1 && switch(s.charAt(0)){
-            case ']', '}', ')', '|' ->true;
+        return switch(s){
+            case "]", "}", ")"->true;
             default -> false;
         };
     }
