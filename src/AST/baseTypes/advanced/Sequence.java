@@ -4,6 +4,7 @@ import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
 import AST.baseTypes.Tuple;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class Sequence extends Storage{
@@ -19,10 +20,6 @@ public class Sequence extends Storage{
         setChildren(values);
         if(values.size() > 0)
             setStoredType(values.get(0).getType());
-    }
-
-    public Sequence asSequence() {
-        return this;
     }
 
     public boolean typeEquals(BasicType other) {

@@ -58,8 +58,8 @@ public class GroupReader {
             case "()"   -> body;
             case "(]"   -> fillRange(new RangeEI(), body);
             case "[)"   -> fillRange(new RangeIE(), body);
-            case "[]"   -> new DynamicArray(Tuple.asTuple(body));
-            case "{}"   -> new UnorderedSet(Tuple.asTuple(body));
+            case "[]"   -> DynamicArray.castFrom(body);
+            case "{}"   -> UnorderedSet.castFrom(body);
             case "||"   -> new AbsoluteValue(body);
             case "EOF"  -> body;    //TODO this is the entire file, so more analysis should be performed
             default     -> throw new Error("invalid combination of start and end delimiters " + startdelim + enddelim);

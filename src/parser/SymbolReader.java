@@ -15,7 +15,7 @@ public class SymbolReader {
             identifierChars[i] = true;
         for(char i = 'a'; i <= 'z'; ++i)
             identifierChars[i] = true;
-        identifierChars['$'] = identifierChars['?'] = identifierChars['.'] = identifierChars['_'] = true;
+        identifierChars['$'] = identifierChars['?'] = identifierChars['_'] = true;
     }
 
     private static class PostReadPosition {

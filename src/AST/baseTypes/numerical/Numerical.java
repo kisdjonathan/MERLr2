@@ -8,6 +8,8 @@ public abstract class Numerical extends BasicType {
             return f.getValue();
         } else if (this instanceof Int i) {
             return i.getValue();
+        } else if (this instanceof Char c) {
+            return c.getValue();
         } else {
             //TODO
             return 0.0;
@@ -18,7 +20,9 @@ public abstract class Numerical extends BasicType {
             return (int) f.getValue();
         } else if (this instanceof Int i) {
             return i.getValue();
-        } else {
+        } else if (this instanceof Char c) {
+            return c.getValue();
+        } else{
             //TODO
             return 0;
         }

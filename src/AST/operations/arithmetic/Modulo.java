@@ -1,11 +1,16 @@
 package AST.operations.arithmetic;
 
 import AST.abstractNode.SyntaxNode;
+import AST.baseTypes.BasicType;
 import AST.baseTypes.numerical.Float;
 import AST.baseTypes.numerical.Int;
 import AST.operations.BinaryOperator;
 
 public class Modulo extends BinaryOperator {
+    public static BasicType modulo(BasicType node1, BasicType node2) {
+        return interpretEvaluate("mod", node1.interpret(), node2.interpret());
+    }
+
     public Modulo(){}
     public Modulo(SyntaxNode origin, SyntaxNode vector) {
         super(origin, vector);

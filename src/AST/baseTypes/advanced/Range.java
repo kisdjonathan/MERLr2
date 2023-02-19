@@ -4,22 +4,24 @@ package AST.baseTypes.advanced;
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
 import AST.baseTypes.Function;
+import AST.baseTypes.InferredType;
 import AST.baseTypes.numerical.Int;
+import AST.operations.BinaryOperator;
+import AST.operations.arithmetic.Add;
 
+import java.util.Iterator;
 import java.util.List;
 
-public abstract class Range extends BasicType {
-    private SyntaxNode start = new Int(0), stop, step = new Int(1);   //TODO compare between values of literals
-
+public abstract class Range extends Container {
     public Range(){}
     public Range(int start, int stop) {
-        this.start = new Int(start);
-        this.stop = new Int(stop);
+        addChild(new Int(start));
+        addChild(new Int(stop));
     }
     public Range(int start, int stop, int step) {
-        this.start = new Int(start);
-        this.stop = new Int(stop);
-        this.step = new Int(step);
+        addChild(new Int(start));
+        addChild(new Int(stop));
+        addChild(new Int(step));
     }
 
     public String getName() {
@@ -28,30 +30,90 @@ public abstract class Range extends BasicType {
 
 
     public SyntaxNode getStart() {
-        return start;
+        return getChild(0);
     }
     public void setStart(SyntaxNode v) {
         v.setParent(this);
-        start = v;
+        setChild(0, v);
     }
 
     public SyntaxNode getStop() {
-        return stop;
+        return getChild(1);
     }
     public void setStop(SyntaxNode v) {
         v.setParent(this);
-        stop = v;
+        setChild(1, v);
     }
 
     /**
      * null step means consecutive
      */
     public SyntaxNode getStep() {
-        return step;
+        if(size() < 3)
+            return null;
+        return getChild(2);
     }
     public void setStep(SyntaxNode v) {
         v.setParent(this);
-        step = v;
+        setChild(2, v);
+    }
+
+    public void setStoredType(BasicType type) {
+        if(getStoredType() instanceof InferredType) {
+            getStart().setType(type);
+            getStop().setType(type);
+        }
+        else
+            throw new Error("unable to set stored type for Range to " + type);
+    }
+    public BasicType getStoredType() {
+        return getStart().getType();
+    }
+
+
+    public abstract boolean containsIndex(BasicType index);
+    public Iterator<SyntaxNode> asIterator() {
+        return new RangeIterator(this);
+    }
+
+    //interpreter use only
+    private static class RangeIterator implements Iterator<SyntaxNode> {
+        private final Range storage;
+        private BasicType index, step;
+
+        public RangeIterator(Range storage) {
+            if(storage.getStep() == null)
+                throw new Error("can not iterate over continuous range " + storage);
+            this.storage = storage;
+            index = (BasicType)storage.getStart(); step = (BasicType)storage.getStep();
+            if(!hasNext()) next();
+        }
+
+        public boolean hasNext() {
+            return storage.containsIndex(index);
+        }
+
+        public SyntaxNode next() {
+            BasicType original = index;
+            index = Add.add(index, step);
+            return original;
+        }
+    }
+
+    public abstract Range emptyClone();
+    public Range clone() {
+        Range ret = emptyClone();
+        ret.setStart(getStart().clone());
+        ret.setStop(getStop().clone());
+        ret.setStep(getStep().clone());
+        return ret;
+    }
+
+    public BasicType interpret() {
+        Range ret = emptyClone();
+        for(SyntaxNode child: getChildren())
+            ret.addChild(child.interpret());
+        return ret;
     }
 
     public List<SyntaxNode> getFields() {

@@ -4,6 +4,8 @@ import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
 import AST.baseTypes.numerical.Char;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 //TODO
@@ -35,7 +37,7 @@ public class Str extends Storage{
         return null;
     }
 
-    private class CharSequence extends Sequence{
+    private static class CharSequence extends Sequence{
         private final String strval;
         public CharSequence(String s) {
             strval = s;
@@ -45,8 +47,21 @@ public class Str extends Storage{
             return strval;
         }
 
+        public int size() {
+            return strval.length();
+        }
+
+        public void setChild(int index, SyntaxNode value) {
+            throw new Error("unable to set child of CharSequence " + this);
+        }
         public Char getChild(int index) {
             return new Char((short) strval.charAt(index));
+        }
+        public List<SyntaxNode> getChildren() {
+            ArrayList<SyntaxNode> ret = new ArrayList<>();
+            for(char c : strval.toCharArray())
+                ret.add(new Char((short) c));
+            return ret;
         }
         public CharSequence clone() {
             CharSequence ret = new CharSequence(strval);
@@ -57,8 +72,8 @@ public class Str extends Storage{
             return other instanceof CharSequence daother;   //TODO or simply sequence
         }
     }
-    public Sequence asSequence() {
-        return new CharSequence(value);
+    public Iterator<SyntaxNode> asIterator() {
+        return (new CharSequence(value)).asIterator();
     }
 
     public boolean typeEquals(BasicType other) {

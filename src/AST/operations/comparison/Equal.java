@@ -1,6 +1,7 @@
 package AST.operations.comparison;
 
 import AST.abstractNode.SyntaxNode;
+import AST.baseTypes.BasicType;
 import AST.baseTypes.numerical.Bool;
 import AST.baseTypes.numerical.Int;
 import AST.baseTypes.numerical.Float;
@@ -8,6 +9,10 @@ import AST.baseTypes.numerical.Numerical;
 import AST.operations.BinaryOperator;
 
 public class Equal extends BinaryOperator {
+    public static BasicType equal(BasicType node1, BasicType node2) {
+        return interpretEvaluate("equal", node1.interpret(), node2.interpret());
+    }
+
     public Equal(){}
     public Equal(SyntaxNode a, SyntaxNode b) {
         addChild(a);

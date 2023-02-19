@@ -7,26 +7,28 @@ import AST.baseTypes.Tuple;
 
 import java.util.List;
 
-public class FixedArray extends Storage{
-    public FixedArray() {
-        //TODO
-    }
-    public FixedArray(int size) {
-        //TODO
+public class FixedArray extends Sequence{
+    public FixedArray(){
     }
     public FixedArray(Tuple values) {
         setChildren(values.getChildren());
+        if(values.size() > 0)
+            setStoredType(values.getChild(0).getType());
     }
     public FixedArray(List<SyntaxNode> values) {
         setChildren(values);
+        if(values.size() > 0)
+            setStoredType(values.get(0).getType());
     }
 
-    public boolean typeEquals(BasicType obj) {
-        return false;
+    public boolean typeEquals(BasicType other) {
+        return other instanceof FixedArray daother && getStoredType().typeEquals(daother.getStoredType());
     }
-
-    public DynamicArray clone() {
-        return null;    //TODO
+    public FixedArray clone() {
+        FixedArray ret = new FixedArray();
+        for(SyntaxNode child : getChildren())
+            ret.addChild(child.clone());
+        return ret;
     }
     public FixedArray emptyClone() {
         return new FixedArray();

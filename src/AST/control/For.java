@@ -3,13 +3,15 @@ package AST.control;
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
 import AST.baseTypes.Tuple;
+import AST.baseTypes.advanced.Container;
 import AST.baseTypes.advanced.Sequence;
+import AST.baseTypes.advanced.Storage;
 import AST.baseTypes.flagTypes.ControlCode;
-import AST.baseTypes.numerical.Int;
 import AST.components.*;
 import AST.operations.variable.In;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class For extends Control {
@@ -50,13 +52,12 @@ public class For extends Control {
         Node base = getBase();
         SyntaxNode condition = base.getChild(0), body = base.getChild(1);
         Variable iterVar = condition.getChild(0).asVariable();
-        BasicType iterParent = condition.getChild(1).interpret();
+        Iterator<SyntaxNode> iterator = ((Container)condition.getChild(1).interpret()).asIterator();
 
         List<SyntaxNode> values = new ArrayList<>();
 
-        int i = 0;
-        while(i < iterParent.size()) {
-            iterVar.setType(iterParent.getChild(i).interpret());
+        while(iterator.hasNext()) {
+            iterVar.setType(iterator.next().interpret());
             BasicType value = body.interpret();
             if(value instanceof ControlCode c) {
                 if(c.getChoice() == ControlCode.BREAK && c.getLayers() > 0) {
@@ -66,15 +67,12 @@ public class For extends Control {
                 }
                 else if(c.getChoice() == ControlCode.RETURN)
                     return c;
-                else if(c.getChoice() == ControlCode.CONTINUE) {
-                    i += c.getLayers();   //-1 because this is in a for loop
+                else if(c.getChoice() == ControlCode.CONTINUE)
                     continue;
-                }
             }
             values.add(value);
-            ++i;
         }
-        if(i >= iterParent.size()) {
+        if(iterator.hasNext()) {
             if (base.executionTrue > 0)  //strictly greater than 0, otherwise this would not make sense
                 return getChild(base.executionTrue).interpret();
         }

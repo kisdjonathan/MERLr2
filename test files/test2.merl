@@ -8,8 +8,3 @@ foo {
     c = 3;
 };
 @foo;
-
-gg=[repeat 4: @repetitions];
-for ex in gg:
-    @ex;
-@gg;

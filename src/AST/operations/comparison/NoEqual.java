@@ -1,6 +1,7 @@
 package AST.operations.comparison;
 
 import AST.abstractNode.SyntaxNode;
+import AST.baseTypes.BasicType;
 import AST.baseTypes.numerical.Bool;
 import AST.baseTypes.numerical.Float;
 import AST.baseTypes.numerical.Int;
@@ -8,6 +9,10 @@ import AST.baseTypes.numerical.Numerical;
 import AST.operations.BinaryOperator;
 
 public class NoEqual extends BinaryOperator {
+    public static BasicType noEqual(BasicType node1, BasicType node2) {
+        return interpretEvaluate("not equal", node1.interpret(), node2.interpret());
+    }
+
     public NoEqual(){}
     public NoEqual(SyntaxNode a, SyntaxNode b) {
         addChild(a);

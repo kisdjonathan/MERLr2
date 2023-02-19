@@ -17,5 +17,5 @@ Issues with other things:
     inheritance
     function argument with types
     function overload with default values
-    semicolons in control
-    | and ) conflict
+    static list of operators don't load until the class is used (use class methods to interpret-evaluate rather than a general one in BinaryOperators)
+    discrete range

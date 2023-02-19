@@ -8,7 +8,8 @@ public class In extends Operator {
     public In(){}
 
     public In(SyntaxNode value, SyntaxNode iterator){
-
+        addChild(value);
+        addChild(iterator);
     }
 
     public String getName() {

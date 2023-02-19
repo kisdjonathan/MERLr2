@@ -2,24 +2,18 @@ package AST.baseTypes.advanced;
 
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
-import AST.baseTypes.InferredType;
 import AST.baseTypes.flagTypes.ControlCode;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-//TODO define storage (ie does it only store values of the same type...)
-public abstract class Storage extends BasicType {
+/**
+ * types which store specific values
+ */
+public abstract class Storage extends Container {
     public String getName() {
         return "storage";
-    }
-
-    private BasicType storedType = new InferredType();
-    public void setStoredType(BasicType type) {
-        storedType = type;
-    }
-    public BasicType getStoredType() {
-        return storedType;
     }
 
     public List<SyntaxNode> getFields() {
@@ -41,8 +35,27 @@ public abstract class Storage extends BasicType {
         return ret;
     }
 
+
+    private static class SequenceIterator implements Iterator<SyntaxNode> {
+        private final Storage storage;
+        private int index = 0;
+
+        public SequenceIterator(Storage storage) {
+            this.storage = storage;
+        }
+
+        public boolean hasNext() {
+            return index < storage.size();
+        }
+
+        public SyntaxNode next() {
+            return storage.getChild(index++);
+        }
+    }
     //Interpreter function
-    public abstract Sequence asSequence();
+    public Iterator<SyntaxNode> asIterator() {
+        return new SequenceIterator(this);
+    }
 
     public abstract Storage emptyClone();
 

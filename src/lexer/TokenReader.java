@@ -72,8 +72,17 @@ public class TokenReader {
             else
                 return LiteralReader.decodeString(value, delim);
         }
-        else if(Character.isDigit(value.charAt(0)))    //number
-            return LiteralReader.decodeNumber(value);
+        else if(Character.isDigit(value.charAt(0))) {    //number
+            if(source.peek().equals(".")) {
+                source.get();
+                if(Character.isDigit(source.peek().charAt(0)))
+                    return LiteralReader.decodeNumber(value + "." + source.get());
+                else
+                    return LiteralReader.decodeNumber(value + ".");
+            }
+            else
+                return LiteralReader.decodeNumber(value);
+        }
         else
             return null;
     }
