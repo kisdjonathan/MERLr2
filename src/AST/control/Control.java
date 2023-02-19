@@ -120,7 +120,7 @@ public abstract class Control extends SyntaxNode implements Locality {
     }
     protected void setBase(Node node) {
         if(size() > 1) {
-            throw new Error("can not modify base after conditions have been aded");
+            throw new Error("can not modify base after conditions have been added");
         }
         if(node == null) {
             removeChild(0);

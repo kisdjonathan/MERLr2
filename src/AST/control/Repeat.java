@@ -21,12 +21,7 @@ public class Repeat extends Control {
     public Repeat(SyntaxNode count, SyntaxNode body) {
         setBase(count, body);
     }
-    private Repeat(){
-    }
-
-    protected void setBase(Node node) {
-        super.setBase(node);
-    }
+    private Repeat(){}
 
     public BasicType getType() {
         Sequence ret = new Sequence();

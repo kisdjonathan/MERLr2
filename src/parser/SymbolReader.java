@@ -102,9 +102,14 @@ public class SymbolReader {
                     lineBuffer.add(";");
                     continue;
                 }
+                case '.':   //., ...
+                    if(stringIn("...", line, cind)) {
+                        lineBuffer.add("...");
+                        cind += 3;
+                        continue;
+                    }
                 case ',':	//,
                 case '\\':  //\
-                case '.':   //.
                 case '(':	//(
                 case ')':	//)
                 case '{':	//{

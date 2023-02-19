@@ -2,6 +2,7 @@ package lexer;
 
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
+import AST.baseTypes.advanced.DiscreteRange;
 import AST.baseTypes.numerical.Bool;
 import AST.baseTypes.Structure;
 import AST.baseTypes.Tuple;
@@ -43,10 +44,11 @@ public class OperatorReader {
             case "with"     ->new With      ();
             case "then"     ->new Without   ();
             case "in"       ->new In        ();
-            case "@"        ->new Print     ();
 
             case ";",","    ->new Tuple     ();
 
+            //range
+            case "..."      ->new DiscreteRange();
             //comparison
             case "!=","==",">=",">","<=","<" -> new ComparisonChain();
 
@@ -68,6 +70,7 @@ public class OperatorReader {
             case "not","!"  ->new Not       (opand);
             case "@"        ->new Print     (opand);
             case "ref"      ->null;
+            case "loc"      ->null;
             default         ->throw new Error("invalid prefix " + oper);
         };
     }
@@ -88,11 +91,12 @@ public class OperatorReader {
             {";"},
             {"if", "while", "repeat", "for", "else", "nelse"},
             {"break", "continue", "return"},
-            {"in"},
             {"with", "then"},
             {":", "="},
+            {"in"},
             {"<<", ">>"},
             {","},
+            {"..."},
             {"or","|"}, {"nor","~|"}, {"xor","^"}, {"xnor","~^"}, {"and","&"},
             {"=="}, {"!="}, {"<", ">", "<=", ">="},
             {"not"},
@@ -102,14 +106,16 @@ public class OperatorReader {
             {"$invert"},
             {"@"},
             {"as"},
-            {"ref"},
+            {"ref", "loc"},
             {"(", "[", "{"}
     };
 
     private static final Set<String> infixes = new HashSet<>(Arrays.asList(
             "else", "nelse",
             "with", "then",
+            "in",
             ",", ";",
+            "...",
             "or", "nor", "xor", "xnor", "and",
             "|", "~|", "^", "~^", "&",
             "=", ":",

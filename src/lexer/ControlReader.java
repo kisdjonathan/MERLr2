@@ -63,7 +63,7 @@ public class ControlReader {
                 return new While(condition, body);
             case "for":
                 if(condition instanceof In icondition)
-                    return new For(icondition.getChild(0), icondition.getChild(1), body);
+                    return new For(icondition, body);
             default:
                 throw new Error("no control by the name " + controlName);
         }

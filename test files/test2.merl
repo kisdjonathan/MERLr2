@@ -7,4 +7,9 @@ foo {
     a = 2;
     c = 3;
 };
-@foo
+@foo;
+
+gg=[repeat 4: @repetitions];
+for ex in gg:
+    @ex;
+@gg;

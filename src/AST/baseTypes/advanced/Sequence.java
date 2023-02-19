@@ -21,9 +21,14 @@ public class Sequence extends Storage{
             setStoredType(values.get(0).getType());
     }
 
-    public boolean typeEquals(BasicType other) {
-        return other instanceof DynamicArray daother && getStoredType().typeEquals(daother.getStoredType());
+    public Sequence asSequence() {
+        return this;
     }
+
+    public boolean typeEquals(BasicType other) {
+        return other instanceof Sequence daother && getStoredType().typeEquals(daother.getStoredType());
+    }
+
     public Sequence clone() {
         Sequence ret = new Sequence();
         for(SyntaxNode child : ret.getChildren())

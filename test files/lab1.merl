@@ -1,0 +1,34 @@
+/*  BACKGROUND
+*       there are N people, numbered 1 through N, who are playing a game.
+*       a number - M - is chosen.
+*       the people sit in order in a circle, and every M-th person is removed (in the same order) until only one person is left.
+*       the last person left is the winner.
+*       for example, for N=7, and M=3, if the game starts with player 1, then the people lose in the following order: 3,6,2,7,5,1
+*           in which case player 4 wins
+*   LAB
+*       given N and M, output the starting player (x) in order for player 1 to win
+*   INPUT
+*       N, M
+*   OUTPUT
+*       x
+*/
+
+/*  SAMPLE INPUT
+7 3
+*/
+
+/*  SAMPLE OUTPUT
+5
+*/
+
+N,M = IO >> (read(), read()) as (int, int);
+players = [1...N];
+
+current_player = 0
+while players size > 1:
+    players remove(current_player) with current_player = (current_player + M) % players size
+;
+delta = players[0]-1;
+starter = N - delta;
+
+@starter;

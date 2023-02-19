@@ -41,6 +41,9 @@ public abstract class Storage extends BasicType {
         return ret;
     }
 
+    //Interpreter function
+    public abstract Sequence asSequence();
+
     public abstract Storage emptyClone();
 
     public String valueString() {
