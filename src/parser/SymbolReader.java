@@ -68,12 +68,16 @@ public class SymbolReader {
                     if (line.charAt(cind + 1) == '=' || line.charAt(cind + 1) == '>')
                         ++len;
                     break;
-                case '-':	//->, -
-                    if (line.charAt(cind + 1) == '>')
+                case '-':	//->, --, -
+                    if (line.charAt(cind + 1) == '>' || line.charAt(cind + 1) == '-')
                         ++len;
                     break;
                 case '|':	//|
                     if (line.charAt(cind + 1) == '|')
+                        ++len;
+                    break;
+                case '+':	//+, ++
+                    if (line.charAt(cind + 1) == '+')
                         ++len;
                     break;
                 case '@':	//@
@@ -81,7 +85,6 @@ public class SymbolReader {
                 case '%':	//%
                 case '^':	//^
                 case '&':	//&
-                case '+':	//+
                 case '*':	//*, **
                     if (line.charAt(cind + 1) == '*')
                         ++len;

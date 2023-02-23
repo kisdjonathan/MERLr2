@@ -1,16 +1,11 @@
 package AST.operations.variable;
 
 import AST.baseTypes.BasicType;
-import AST.baseTypes.Function;
 import AST.baseTypes.InferredType;
 import AST.baseTypes.Structure;
 import AST.operations.Operator;
 import AST.abstractNode.SyntaxNode;
 import AST.components.*;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 //AST.Contextualization simply makes the fields of a variable available to its children
 public class Field extends Operator {
@@ -36,11 +31,12 @@ public class Field extends Operator {
                 throw new Error("Attempting to access field from non-structure " + var);
 
             Structure varType = (Structure)var.getType();
-            Locality fieldLayer = new Locality.Inserted(varType, variables);
+            Locality fieldLayer = new Locality.StructInsertion(varType, variables, var);
 
             SyntaxNode field = getChild(1);
             if(field instanceof Variable val){
                 if(fieldLayer.hasVariable(val.getName())) {
+                    //getChild(1).setType(fieldLayer.getVariable(val.getName()).getType());
                     val = fieldLayer.getVariable(val.getName());
                     setChild(1, val);
                 }
@@ -59,10 +55,11 @@ public class Field extends Operator {
     }
 
     public Variable asVariable() {
-        return getChild(1).asVariable();
+        Structure struct = (Structure)getChild(0).getType();
+        return struct.getVariable(getChild(1).asVariable().getName());
     }
     public boolean isVariable() {
-        return true;
+        return getChild(1).isVariable();
     }
 
     public String getName() {
@@ -82,6 +79,9 @@ public class Field extends Operator {
     }
 
     public BasicType interpret() {
+//        Structure struct = (Structure)getChild(0).interpret();
+//        Variable var = struct.getVariable(getChild(1).asVariable().getName());
+//        return var.interpret();
         return getChild(1).interpret();
     }
 }

@@ -3,6 +3,8 @@ package AST.operations.variable;
 import AST.baseTypes.BasicType;
 import AST.baseTypes.Tuple;
 import AST.baseTypes.advanced.Sequence;
+import AST.baseTypes.advanced.Str;
+import AST.baseTypes.numerical.Char;
 import AST.baseTypes.numerical.Numerical;
 import AST.components.Variable;
 import AST.operations.Operator;
@@ -34,12 +36,18 @@ public class Index extends Operator {
         }
         else if(parentType instanceof Sequence seqType)
             return seqType.getStoredType();
+        else if(parentType instanceof Str)  //TODO
+            return new Char();
         else
             throw new Error("Can not index " + parentType);
     }
 
     public BasicType interpret() {
+        BasicType indexee = getChild(0).interpret();
         //TODO non-numerical index
-        return getChild(0).interpret().getChild(((Numerical)getChild(1).interpret()).asInt()).interpret();
+        if(indexee instanceof Str sindexee)
+            return new Char((short)sindexee.getValue().charAt(((Numerical)getChild(1).interpret()).asInt()));
+        else
+            return indexee.getChild(((Numerical)getChild(1).interpret()).asInt()).interpret();
     }
 }

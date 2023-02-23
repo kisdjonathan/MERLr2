@@ -2,6 +2,7 @@ package AST.operations.arithmetic;
 
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
+import AST.baseTypes.numerical.Bool;
 import AST.baseTypes.numerical.Float;
 import AST.baseTypes.numerical.Int;
 import AST.operations.UnaryOperator;
@@ -19,13 +20,13 @@ public class PreIncrement extends UnaryOperator {
 
     static {
         addEvaluationOperation("preinc");
-        setEvaluation("preinc",new Int(), new Int(), x -> {
-            x.setValue(x.asInt() + 1);
-            return x;
+        setRawEvaluation("preinc", new Int(), new Bool(), (x) -> {
+            x.setType(new Int(((Int)x.getType()).getValue() + 1));
+            return x.interpret();
         });
-        setEvaluation("preinc",new Float(), new Float(), x -> {
-            x.setValue(x.asDouble() + 1);
-            return x;
+        setRawEvaluation("preinc", new Float(), new Float(), (x) -> {
+            x.setType(new Float(((Float)x.getType()).getValue() + 1));
+            return x.interpret();
         });
     }
 

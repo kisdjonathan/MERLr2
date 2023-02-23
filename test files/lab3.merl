@@ -1,0 +1,36 @@
+/*  BACKGROUND
+*       Albert the ant is walking across a page of a book.
+*       he is currently at the first letter of the page, and can walk left or right (denoted L and R),
+*           as long as it does not take him off of the page.
+*       given the letters of the page (S) and the directions that Albert moves in (D), find the order of the letters that he comes across (L).
+*       for example, for S="Hello, World!", and D="RRLRRLLL", Albert will come across letters in the following order: "elellleH"
+*   LAB
+*       given strings S and D, output the string of letters that Albert comes across
+*   INPUT
+*       S
+*       D
+*   OUTPUT
+*       L
+*/
+
+/*  SAMPLE INPUT
+Four score and seven years ago our fathers brought forth on this continent...
+RRRRRRRRRRRRRRRRRRRRLLRRRRRRLRRLRLLRLLLLLLLLLLLLL
+*/
+
+/*  SAMPLE OUTPUT
+our score and seven nen yeararsrsraraey neves dna
+*/
+
+line = IO read() as str;
+path = IO read() as str;
+
+index = 0;
+for d in path: {
+    if d == 'R':
+        ++index;
+    else:
+        --index;
+    IO write(line[index]);
+};
+

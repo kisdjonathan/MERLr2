@@ -1,0 +1,28 @@
+/*  LAB
+*       given two lists of N numbers: S and T, repeat the each of the numbers of set S[i] a number of times indicated by T[i].
+*       then output the numbers of the combined list, U.
+*       for example, for N=5, S=[3,2,2,9,1], and T=[3,2,2,2,1], A=4, B=7, the list would be:
+*           [3,3,3,2,2,2,2,9,9,1],
+*   INPUT
+*       N
+*       S[1] S[2] ... S[N]
+*       T[1] T[2] ... T[N]
+*   OUTPUT
+*       U[1] U[2] ...
+*/
+
+/*  SAMPLE INPUT
+6
+8 0 2 9 7 12
+3 2 3 7 4 2
+*/
+
+/*  SAMPLE OUTPUT
+8 8 8 0 0 2 2 2 9 9 9 9 9 9 9 7 7 7 7 12 12
+*/
+
+N = IO read() as int;
+S = [repeat N: IO read() as int];
+T = [repeat N: IO read() as int];
+
+for i in 0...N-1: repeat T[i]: IO write(S[i]+" ");

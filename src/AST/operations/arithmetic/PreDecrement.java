@@ -1,6 +1,7 @@
 package AST.operations.arithmetic;
 
 import AST.abstractNode.SyntaxNode;
+import AST.baseTypes.numerical.Bool;
 import AST.baseTypes.numerical.Float;
 import AST.baseTypes.numerical.Int;
 import AST.operations.UnaryOperator;
@@ -15,13 +16,13 @@ public class PreDecrement extends UnaryOperator {
 
     static {
         addEvaluationOperation("predec");
-        setEvaluation("predec",new Int(), new Int(), x -> {
-            x.setValue(x.asInt() - 1);
-            return x;
+        setRawEvaluation("predec", new Int(), new Bool(), (x) -> {
+            x.setType(new Int(((Int)x.getType()).getValue() - 1));
+            return x.interpret();
         });
-        setEvaluation("predec",new Float(), new Float(), x -> {
-            x.setValue(x.asDouble() - 1);
-            return x;
+        setRawEvaluation("predec", new Float(), new Float(), (x) -> {
+            x.setType(new Float(((Float)x.getType()).getValue() - 1));
+            return x.interpret();
         });
     }
 

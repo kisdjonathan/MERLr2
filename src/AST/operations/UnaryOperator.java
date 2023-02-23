@@ -2,6 +2,7 @@ package AST.operations;
 
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
+import AST.baseTypes.Tuple;
 import util.Pair;
 import util.Trio;
 
@@ -10,7 +11,8 @@ import java.util.function.Function;
 
 public abstract class UnaryOperator extends Operator{
     public static BasicType interpretEvaluate(String op, BasicType first) {
-        Optional<Map.Entry<BasicType, Pair<BasicType, Function<BasicType, BasicType>>>> evaluation = evaluationList.get(op).stream().filter(e -> first.typeEquals(e.getKey())).findFirst();
+        //TODO first should be SyntaxNode?
+        Optional<Map.Entry<BasicType, Trio<BasicType, Function<SyntaxNode, BasicType>, Boolean>>> evaluation = evaluationList.get(op).stream().filter(e -> first.typeEquals(e.getKey())).findFirst();
         if (evaluation.isPresent()) {
             return evaluation.get().getValue().getSecond().apply(first);
         } else {
@@ -18,7 +20,7 @@ public abstract class UnaryOperator extends Operator{
         }
     }
 
-    protected static Map<String, List<Map.Entry<BasicType, Pair<BasicType, Function<BasicType, BasicType>>>>> evaluationList = new HashMap<>();
+    protected static Map<String, List<Map.Entry<BasicType, Trio<BasicType, Function<SyntaxNode, BasicType>, Boolean>>>> evaluationList = new HashMap<>();
 
     public UnaryOperator(){}
 
@@ -30,12 +32,16 @@ public abstract class UnaryOperator extends Operator{
         evaluationList.put(op, new ArrayList<>());
     }
     public static <T extends BasicType, R extends BasicType> void setEvaluation(String op, T t, R r, Function<T, R> f) {
-        evaluationList.get(op).add(new AbstractMap.SimpleEntry<>(t, new Pair<>(r, (Function<BasicType, BasicType>) f)));
+        evaluationList.get(op).add(new AbstractMap.SimpleEntry<>(t, new Trio<>(r, (x)->f.apply((T) x), false)));
     }
 
-    private Pair<BasicType, Function<BasicType, BasicType>> getEvaluation() {
+    public static <R extends BasicType> void setRawEvaluation(String op, SyntaxNode i, R r, Function<SyntaxNode, R> f) {
+        evaluationList.get(op).add(new AbstractMap.SimpleEntry<>((BasicType) i, new Trio<>(r, (Function<SyntaxNode, BasicType>) f, true)));
+    }
+
+    private Trio<BasicType, Function<SyntaxNode, BasicType>, Boolean> getEvaluation() {
         BasicType first = getChild(0).getType();
-        Optional<Map.Entry<BasicType, Pair<BasicType, Function<BasicType, BasicType>>>> evaluation = evaluationList.get(getName()).stream().filter(e -> first.typeEquals(e.getKey())).findFirst();
+        Optional<Map.Entry<BasicType, Trio<BasicType, Function<SyntaxNode, BasicType>, Boolean>>> evaluation = evaluationList.get(getName()).stream().filter(e -> first.typeEquals(e.getKey())).findFirst();
         if (evaluation.isPresent()) {
             return evaluation.get().getValue();
         } else {
@@ -50,6 +56,10 @@ public abstract class UnaryOperator extends Operator{
 
     @Override
     public BasicType interpret() {
+        Trio<BasicType, Function<SyntaxNode, BasicType>, Boolean> evaluation = getEvaluation();
+        if (evaluation.getThird()) {
+            return getEvaluation().getSecond().apply(getChild(0));
+        }
         BasicType first = getChild(0).interpret();
         return getEvaluation().getSecond().apply(first);
     }

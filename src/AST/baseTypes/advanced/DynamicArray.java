@@ -34,6 +34,35 @@ public class DynamicArray extends Sequence{
             throw new Error("unable to get empty clone of from-value array " + this);
         }
     }
+    private static class FromIterator extends DynamicArray{
+        public FromIterator(SyntaxNode value) {
+            addChild(value);
+        }
+
+        public BasicType getStoredType() {
+            return ((Container)getChild(0).getType()).getStoredType();
+        }
+
+        public DynamicArray clone() {
+            FromIterator ret = new FromIterator(getChild(1).clone());
+            return ret;
+        }
+
+        public DynamicArray interpret() {
+            DynamicArray ret = new DynamicArray();
+            Iterator<SyntaxNode> iterator = ((Container)getChild(0).interpret()).asIterator();
+            while(iterator.hasNext())
+                ret.addChild(iterator.next());
+            return ret;
+        }
+
+        public Iterator<SyntaxNode> asIterator() {
+            throw new Error("unable to get compiled sequence from run-time array " + this);
+        }
+        public FromIterator emptyClone() {
+            throw new Error("unable to get empty clone of from-value array " + this);
+        }
+    }
 
     public static DynamicArray castFrom(SyntaxNode value) {
         if(value instanceof Tuple tvalue)
@@ -42,6 +71,8 @@ public class DynamicArray extends Sequence{
             return new DynamicArray(svalue);
         else if(value.getType() instanceof Sequence || value.getType() instanceof Tuple)
             return new FromValue(value);
+        else if(value.getType() instanceof Container)
+            return new FromIterator(value);
         throw new Error("unable to cast " + value + " to UnorderedSet");
     }
 

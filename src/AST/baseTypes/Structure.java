@@ -7,7 +7,6 @@ import AST.components.Variable;
 import java.util.HashMap;
 import java.util.Map;
 
-//TODO
 public class Structure extends BasicType implements Locality {
     private final Map<String, Variable> fields = new HashMap<>();
 
@@ -15,21 +14,16 @@ public class Structure extends BasicType implements Locality {
         return fields;
     }
 
+
     public Structure(){}
     public Structure(Map<String, Variable> fields) {
         this.fields.putAll(fields);
     }
 
-    public void unifyVariables(Locality variables) {
-        //TODO?
-    }
+    //unifyVariables handled in Construct
 
     public String getName() {
         return "struct";
-    }
-
-    public Variable asVariable() {
-        return getChild(0).asVariable();
     }
 
     public boolean typeEquals(BasicType other) {

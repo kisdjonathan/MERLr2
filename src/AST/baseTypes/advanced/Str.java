@@ -28,14 +28,6 @@ public class Str extends Storage{
         return this;
     }
 
-    public List<SyntaxNode> getFields() {
-        //TODO length
-        return null;
-    }
-    public SyntaxNode getField(String name) {
-        //TODO length
-        return null;
-    }
 
     private static class CharSequence extends Sequence{
         private final String strval;
@@ -90,6 +82,10 @@ public class Str extends Storage{
         return this;
     }
 
+
+    public int length(){
+        return value.length();
+    }
     public String valueString() {
         return value;
     }

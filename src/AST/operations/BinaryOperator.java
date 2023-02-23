@@ -63,7 +63,12 @@ public abstract class BinaryOperator extends Operator{
         } else {
             BasicType first = getChild(0).interpret();
             BasicType second = getChild(1).interpret();
-            return getEvaluation().getSecond().apply(first, second);
+            try {
+                return getEvaluation().getSecond().apply(first, second);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new Error("\noperator: " + getName() + "\n" + "first: " + first + "\n" + "second: " + first);
+            }
         }
     }
 

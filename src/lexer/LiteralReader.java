@@ -104,7 +104,7 @@ public class LiteralReader {
     }
 
     public static boolean isLiteral(String s) {
-        return s.equals("\"") || Character.isDigit(s.charAt(0));
+        return s.equals("\"") || s.equals("\'") || Character.isDigit(s.charAt(0));
     }
     private static HashSet<String> suffixes = new HashSet<>(Arrays.asList(
             "d", "ud", "ld", "uld",

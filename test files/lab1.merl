@@ -8,7 +8,7 @@
 *   LAB
 *       given N and M, output the starting player (x) in order for player 1 to win
 *   INPUT
-*       N, M
+*       N M
 *   OUTPUT
 *       x
 */
@@ -24,11 +24,12 @@
 N,M = IO >> (read(), read()) as (int, int);
 players = [1...N];
 
-current_player = 0
-while players size > 1:
-    players remove(current_player) with current_player = (current_player + M) % players size
-;
+current_player = -1;
+while players# > 1:{
+    current_player = (current_player + M-1) % players#;   //-1 to account for the 1 that was just removed
+    players remove(current_player);
+};
 delta = players[0]-1;
 starter = N - delta;
 
-@starter;
+IO write(starter);

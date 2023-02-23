@@ -29,6 +29,9 @@ public class OperatorReader {
             case "%"        ->new Modulo    ();
             case "**"       ->new Exponent  ();
             case "!"        ->new Factorial ();
+
+            case "++"       ->new PostIncrement  ();
+            case "--"       ->new PostDecrement  ();
             //boolean, bitwise
             case "and","&"  ->new And       ();
             case "or","|"   ->new Or        ();
@@ -44,6 +47,7 @@ public class OperatorReader {
             case "with"     ->new With      ();
             case "then"     ->new Without   ();
             case "in"       ->new In        ();
+            case "#"        ->new Cardinal  ();
 
             case ";",","    ->new Tuple     ();
 
@@ -65,6 +69,8 @@ public class OperatorReader {
     }
     public static Operator decodePrefix(String oper, SyntaxNode opand) {
         return switch (oper) {
+            case "++"       ->new PreIncrement  (opand);
+            case "--"       ->new PreDecrement  (opand);
             case "+"        ->new Positive  (opand);
             case "-"        ->new Negative  (opand);
             case "not","!"  ->new Not       (opand);
@@ -89,7 +95,7 @@ public class OperatorReader {
     private static final String[][] builtinOperators = new String[][]{  //sorted by low to high precedence
             {"|", ")", "}", "]"},
             {";"},
-            {"if", "while", "repeat", "for", "else", "nelse"},
+            {"if", "while", "repeat", "for", "else", "nelse", ";else", ";nelse"},
             {"break", "continue", "return"},
             {"with", "then"},
             {":", "="},
@@ -104,6 +110,8 @@ public class OperatorReader {
             {"$up", "$down", "$left", "$right"},
             {"$or"}, {"$nor"}, {"$xor"}, {"$xnor"}, {"$and"},
             {"$invert"},
+            {"#"},
+            {"++", "--"},
             {"@"},
             {"as"},
             {"ref", "loc"},
@@ -128,12 +136,14 @@ public class OperatorReader {
     private static final Set<String> prefixes = new HashSet<>(Arrays.asList(
             "if", "for", "while", "repeat",
             "+", "-",
+            "++", "--",
             "!", "not", "$invert",
             "@",
             "ref"
     ));
     private static final Set<String> postfixes = new HashSet<>(Arrays.asList(
-            ";", "%", "!"
+            "++", "--",
+            ";", "%", "!","#"
     ));
     private static final List<Set<String>> chainGroups = Arrays.asList(
             new HashSet<>(Arrays.asList("<", "<=", "==")),

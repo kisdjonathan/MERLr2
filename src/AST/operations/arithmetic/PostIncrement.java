@@ -1,6 +1,8 @@
 package AST.operations.arithmetic;
 
 import AST.abstractNode.SyntaxNode;
+import AST.baseTypes.BasicType;
+import AST.baseTypes.numerical.Bool;
 import AST.baseTypes.numerical.Float;
 import AST.baseTypes.numerical.Int;
 import AST.operations.UnaryOperator;
@@ -15,15 +17,15 @@ public class PostIncrement extends UnaryOperator {
 
     static {
         addEvaluationOperation("postinc");
-        setEvaluation("postinc",new Int(), new Int(), x -> {
-            Int result = x.clone();
-            x.setValue(x.asInt() + 1);
-            return result;
+        setRawEvaluation("postinc", new Int(), new Bool(), (x) -> {
+            BasicType val = x.getType();
+            x.setType(new Int(((Int)x.getType()).getValue() - 1));
+            return val;
         });
-        setEvaluation("postinc",new Float(), new Float(), x -> {
-            Float result = x.clone();
-            x.setValue(x.asDouble() + 1);
-            return result;
+        setRawEvaluation("postinc", new Float(), new Float(), (x) -> {
+            BasicType val = x.getType();
+            x.setType(new Float(((Float)x.getType()).getValue() - 1));
+            return val;
         });
     }
 

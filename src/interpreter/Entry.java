@@ -19,7 +19,7 @@ import java.util.Scanner;
 //entry point of the program
 //TODO complete
 public class Entry {
-    private static String path = "test files/test2.merl";
+    private static String path = "test files/lab3.merl";
 
     public static void main(String[] args) {
         //path = args[0];
@@ -60,6 +60,30 @@ public class Entry {
 
         public ReadValue clone() {
             return new ReadValue(readType);
+        }
+    }
+    private static class WriteValue extends ReturnCode {
+        public static final int INT = 0, FLOAT = 1, STR = 2, CHAR = 4;
+        private final int writetype;
+
+        public WriteValue(int wtype, SyntaxNode val) {
+            writetype = wtype;
+            addChild(val);
+        }
+
+        public BasicType getValue() {
+            System.out.print(switch(writetype){
+                case INT -> ((Int)getChild(0).interpret()).getValue();
+                case FLOAT -> ((Float)getChild(0).interpret()).getValue();
+                case STR -> ((Str)getChild(0).interpret()).getValue();
+                case CHAR -> (char)(((Char)getChild(0).interpret()).getValue());
+                default -> throw new Error("trying to read an invalid type ");
+            });
+            return new VoidType();
+        }
+
+        public WriteValue clone() {
+            return new WriteValue(writetype, getChild(0).clone());
         }
     }
 
@@ -111,9 +135,40 @@ public class Entry {
         read.addOverload(readf);
         read.addOverload(readc);
 
-        retBody.putVariable(read.getName(), read);
 
-        Function write = new Function();
+        Function writei = new Function();
+        Variable vari = new Variable("written", new Int());
+        writei.setArgs(vari);
+        writei.setRets(new VoidType());
+        writei.addChild(new WriteValue(WriteValue.INT, vari));
+
+        Function writef = new Function();
+        Variable varf = new Variable("written", new Float());
+        writef.setArgs(varf);
+        writef.setRets(new VoidType());
+        writef.addChild(new WriteValue(WriteValue.FLOAT, varf));
+
+        Function writec = new Function();
+        Variable varc = new Variable("written", new Char());
+        writec.setArgs(varc);
+        writec.setRets(new VoidType());
+        writec.addChild(new WriteValue(WriteValue.CHAR, varc));
+
+        Function writes = new Function();
+        Variable vars = new Variable("written", new Str());
+        writes.setArgs(vars);
+        writes.setRets(new VoidType());
+        writes.addChild(new WriteValue(WriteValue.STR, vars));
+
+        Signature write = new Signature("write");
+        write.addOverload(writei);
+        write.addOverload(writef);
+        write.addOverload(writec);
+        write.addOverload(writes);
+
+
+        retBody.putVariable(read.getName(), read);
+        retBody.putVariable(write.getName(), write);
 
         ret.setType(retBody);
         return ret;

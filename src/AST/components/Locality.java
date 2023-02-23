@@ -27,15 +27,18 @@ public interface Locality {
             return (parent == null || variables.containsKey(name)) ? variables.get(name) : parent.getVariable(name);
         }
     }
-    class Inserted implements Locality {
+    class StructInsertion implements Locality {
         private Locality parent = null, insertion;
+        private SyntaxNode structParent;
 
-        public Inserted(Locality insertion){
+        public StructInsertion(Locality insertion, SyntaxNode structParent){
             this.insertion = insertion;
+            this.structParent = structParent;
         }
-        public Inserted(Locality insertion, Locality parent) {
+        public StructInsertion(Locality insertion, Locality parent, SyntaxNode structParent) {
             this.parent = parent;
             this.insertion = insertion;
+            this.structParent = structParent;
         }
 
         public Map<String, Variable> getVariables() {
@@ -45,9 +48,11 @@ public interface Locality {
         public boolean hasVariable(String name) {
             return insertion.hasVariable(name) || parent != null && parent.hasVariable(name);
         }
-
         public Variable getVariable(String name) {
             return (parent == null || insertion.hasVariable(name)) ? insertion.getVariable(name) : parent.getVariable(name);
+        }
+        public void putVariable(String name, Variable var) {
+            Locality.super.putVariable(name, new RelativeVariable(var, structParent));
         }
     }
     class Wrapper implements Locality {

@@ -8,7 +8,7 @@ public class VoidType extends BasicType {
     }
 
     public boolean typeEquals(BasicType other) {
-        return false;
+        return true;
     }
     public VoidType clone() {
         return new VoidType();

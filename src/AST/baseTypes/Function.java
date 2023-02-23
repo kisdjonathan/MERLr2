@@ -11,6 +11,7 @@ import java.util.Map;
 public class Function extends BasicType implements Locality {
     private Tuple args = null, rets = null;
     private final Map<String, Variable> variables = new HashMap<>();
+    private Locality externs = null;    //fix for methods that lose access to instance variables when cloned
 
     public Function() {}
     public Function(Tuple args, Tuple rets) {
@@ -47,11 +48,13 @@ public class Function extends BasicType implements Locality {
         Function ret = new Function(args.clone(), rets.clone());
         for(SyntaxNode child : getChildren())
             ret.addChild(child.clone());
-        ret.unifyVariables(new Locality.Wrapper(getVariableClones()));
+        ret.variables.putAll(getVariableClones());
+        ret.unifyVariables(externs);
         return ret;
     }
 
     public void unifyVariables(Locality variables) {
+        externs = variables;
         Locality.Layer localLayer = new Locality.Layer(variables);
 
         for(SyntaxNode arg : args) {
