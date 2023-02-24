@@ -3,6 +3,7 @@ package AST.operations;
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
 import AST.baseTypes.Tuple;
+import AST.baseTypes.advanced.Str;
 import util.Pair;
 import util.Trio;
 
@@ -11,8 +12,17 @@ import java.util.function.Function;
 
 public abstract class UnaryOperator extends Operator{
     public static BasicType interpretEvaluate(String op, BasicType first) {
-        //TODO first should be SyntaxNode?
         Optional<Map.Entry<BasicType, Trio<BasicType, Function<SyntaxNode, BasicType>, Boolean>>> evaluation = evaluationList.get(op).stream().filter(e -> first.typeEquals(e.getKey())).findFirst();
+        if (evaluation.isPresent()) {
+            return evaluation.get().getValue().getSecond().apply(first);
+        } else {
+            throw new Error("Unsupported arguments for " + op + " operator: \n\tfirst: " + first);
+        }
+    }
+
+    public static BasicType interpretRawEvaluate(String op, SyntaxNode first) {
+        BasicType firstType = first.getType();
+        Optional<Map.Entry<BasicType, Trio<BasicType, Function<SyntaxNode, BasicType>, Boolean>>> evaluation = evaluationList.get(op).stream().filter(e -> firstType.typeEquals(e.getKey())).findFirst();
         if (evaluation.isPresent()) {
             return evaluation.get().getValue().getSecond().apply(first);
         } else {

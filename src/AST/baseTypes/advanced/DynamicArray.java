@@ -73,7 +73,7 @@ public class DynamicArray extends Sequence{
             return new FromValue(value);
         else if(value.getType() instanceof Container)
             return new FromIterator(value);
-        throw new Error("unable to cast " + value + " to UnorderedSet");
+        throw new Error("unable to cast " + value + " to DynamicArray");
     }
 
     public DynamicArray(){

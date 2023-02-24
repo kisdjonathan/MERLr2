@@ -1,0 +1,46 @@
+/*  BACKGROUND
+*       24 people are going on a trip on a bus with 14 seats, and they are worried that they won't fit.
+*       every seat on the bus is of size B, and every person is of size a[i] (0<=i<=23).
+*       every seat can fit at least 1 person, but no more than 2 people.
+*       two people will fit in the same seat if the sum of their sizes is less than or equal to the size of the bench (a[i]+a[j]<=B)
+*       for example, for B = 8, {a}=2,3,3,3,3,3,4,4,4,4,4,4,5,5,5,5,6,6,6,7,7,7,7,8, the people will not fit in any combination,
+*           but if B=9, they will if they sit as follows: (2,7),(3,6),(3,6),(3,6),(3,5),(3,5),(4,4),(4,4),(4,5),(4,5),(7),(7),(7),(8)
+*   LAB
+*       given strings B and the sorted sequence {a}, respond YES or NO - whether they fit or do not fit
+*   INPUT
+*       B
+*       a[0] a[1] a[2] a[3] a[4] a[5] a[6] a[7] a[8] a[9] a[10] a[11] a[12] a[13] a[14] a[15] a[16] a[17] a[18] a[19] a[20] a[21] a[22] a[23]
+*   OUTPUT
+*       YES/NO
+*/
+
+/*  SAMPLE INPUT
+14
+2 3 3 3 5 6 6 6 7 7 8 8 8 8 8 9 9 10 10 11 12 13 14 14
+*/
+
+/*  SAMPLE OUTPUT
+NO
+*/
+
+B = IO read() as int;
+a = [repeat 24: IO read() as int];
+p1 = 0;
+p2 = 23;
+seatsTaken = 0;
+
+while(p1 < p2):{
+    if(a[p1] + a[p2] <= B): {
+        ++p1;
+        --p2;
+    }
+    else:
+        --p2;
+    seatsTaken++;
+};
+
+if(seatsTaken <= 14):
+    IO write("YES");
+else:
+    IO write("NO");
+

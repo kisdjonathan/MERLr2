@@ -19,12 +19,12 @@ public class PostIncrement extends UnaryOperator {
         addEvaluationOperation("postinc");
         setRawEvaluation("postinc", new Int(), new Bool(), (x) -> {
             BasicType val = x.getType();
-            x.setType(new Int(((Int)x.getType()).getValue() - 1));
+            x.setType(new Int(((Int)x.getType()).getValue() + 1));
             return val;
         });
         setRawEvaluation("postinc", new Float(), new Float(), (x) -> {
             BasicType val = x.getType();
-            x.setType(new Float(((Float)x.getType()).getValue() - 1));
+            x.setType(new Float(((Float)x.getType()).getValue() + 1));
             return val;
         });
     }

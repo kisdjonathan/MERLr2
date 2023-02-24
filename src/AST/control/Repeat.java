@@ -69,7 +69,7 @@ public class Repeat extends Control {
                 }
             }
             values.add(value);
-            PreIncrement.increment(counter.getType());
+            PreIncrement.increment(counter);
         }
         if(((Int)counter.interpret()).getValue() < conditionValue) {
             if (base.executionTrue > 0)  //strictly greater than 0, otherwise this would not make sense

@@ -8,8 +8,8 @@ import AST.baseTypes.numerical.Int;
 import AST.operations.UnaryOperator;
 
 public class PreIncrement extends UnaryOperator {
-    public static BasicType increment(BasicType node) {
-        return interpretEvaluate("preinc", node.interpret());
+    public static BasicType increment(SyntaxNode node) {
+        return interpretRawEvaluate("preinc", node);
     }
 
     public PreIncrement(){}

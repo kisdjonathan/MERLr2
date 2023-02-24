@@ -15,5 +15,4 @@ Issues with other things:
     inheritance
     function argument with types
     function overload with default values
-    char literal
-    ;else option
+    lists with 1 value literal
