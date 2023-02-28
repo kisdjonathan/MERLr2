@@ -18,7 +18,7 @@ public class UnorderedSet extends Storage {
         }
 
         public UnorderedSet clone() {
-            FromValue ret = new FromValue(getChild(1).clone());
+            FromValue ret = new FromValue(getChild(0).clone());
             return ret;
         }
 

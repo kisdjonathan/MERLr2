@@ -79,7 +79,7 @@ public class For extends Control {
         else if(base.executionFalse > 0)
             return getChild(base.executionFalse).interpret();
 
-        return new Sequence(values);
+        return new Sequence(values).flatten();
     }
 
     public String toString() {

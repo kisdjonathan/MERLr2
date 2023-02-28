@@ -56,7 +56,7 @@ public class Declare extends Operator {
                     throw new Error("attempting to perform constant assignment " + getChild(size() - 1) + " on defined " + variables.getVariable(var.getName()));
                 SyntaxNode val = getChild(size() - 1);
                 val.unifyVariables(variables);
-                var.setType(val.getType());
+                var.setType(val.getType().clone());
                 var.setConstant(true);
                 variables.putVariable(var.getName(), var);
             }

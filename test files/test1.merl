@@ -1,5 +1,32 @@
 //fibonacci
 
+/*
+inch = 1/12.0;
+
+race {
+    color = true;
+    bigc = true;
+    clength = 12*inch;
+    fat = false;
+};
+
+@race;
+
+ethnicity = race;
+ethnicity {
+    gobble = "goo";
+};
+
+@ethnicity;
+
+*/
+x = [1...9];
+y = [2,3,2,1,2,1,2,1,2];
+z = [for i in 0...x#-1: repeat y[i]: x[i]];
+@z;
+//z = [for i in 0...x#-1: repeat y[i]: x[i]];
+
+/*
 function(x) :
     if x>1: function(x-1) + function(x-2)
     else: 1

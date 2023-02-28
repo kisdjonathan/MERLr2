@@ -18,7 +18,7 @@ public class DynamicArray extends Sequence{
         }
 
         public DynamicArray clone() {
-            FromValue ret = new FromValue(getChild(1).clone());
+            FromValue ret = new FromValue(getChild(0).clone());
             return ret;
         }
 
@@ -44,7 +44,7 @@ public class DynamicArray extends Sequence{
         }
 
         public DynamicArray clone() {
-            FromIterator ret = new FromIterator(getChild(1).clone());
+            FromIterator ret = new FromIterator(getChild(0).clone());
             return ret;
         }
 

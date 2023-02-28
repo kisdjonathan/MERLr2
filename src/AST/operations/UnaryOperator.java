@@ -51,7 +51,7 @@ public abstract class UnaryOperator extends Operator{
 
     private Trio<BasicType, Function<SyntaxNode, BasicType>, Boolean> getEvaluation() {
         BasicType first = getChild(0).getType();
-        Optional<Map.Entry<BasicType, Trio<BasicType, Function<SyntaxNode, BasicType>, Boolean>>> evaluation = evaluationList.get(getName()).stream().filter(e -> first.typeEquals(e.getKey())).findFirst();
+        Optional<Map.Entry<BasicType, Trio<BasicType, Function<SyntaxNode, BasicType>, Boolean>>> evaluation = evaluationList.get(getName()).stream().filter(e -> e.getKey().typeEquals(first)).findFirst();
         if (evaluation.isPresent()) {
             return evaluation.get().getValue();
         } else {

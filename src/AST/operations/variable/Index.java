@@ -1,6 +1,7 @@
 package AST.operations.variable;
 
 import AST.baseTypes.BasicType;
+import AST.baseTypes.InferredType;
 import AST.baseTypes.Tuple;
 import AST.baseTypes.advanced.Sequence;
 import AST.baseTypes.advanced.Str;
@@ -38,6 +39,8 @@ public class Index extends Operator {
             return seqType.getStoredType();
         else if(parentType instanceof Str)  //TODO
             return new Char();
+        else if(parentType instanceof InferredType)
+            return new InferredType();
         else
             throw new Error("Can not index " + parentType);
     }

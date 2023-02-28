@@ -53,8 +53,21 @@ public class Sequence extends Storage{
         return other instanceof Sequence daother && getStoredType().typeEquals(daother.getStoredType());
     }
 
-    public Sequence clone() {
+    public Sequence flatten() {
         Sequence ret = new Sequence();
+        for(SyntaxNode child : getChildren()) {
+            BasicType value = (BasicType) child;
+            if(value instanceof Sequence seqvalue)
+                for(SyntaxNode otherChild : seqvalue.flatten().getChildren())
+                    ret.addChild(otherChild);
+            else
+                ret.addChild(value);
+        }
+        return ret;
+    }
+
+    public Sequence clone() {
+        Sequence ret = emptyClone();
         for(SyntaxNode child : ret.getChildren())
             ret.addChild(child);
         return ret;

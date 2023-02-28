@@ -2,6 +2,7 @@ package AST.operations.variable;
 
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
+import AST.components.Locality;
 import AST.operations.Operator;
 
 public class Print extends Operator {
@@ -20,6 +21,11 @@ public class Print extends Operator {
     @Override
     public SyntaxNode clone() {
         return new Print(getChild(0).clone());
+    }
+
+    @Override
+    public void unifyVariables(Locality variables) {
+        super.unifyVariables(variables);
     }
 
     @Override

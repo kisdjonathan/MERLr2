@@ -17,6 +17,8 @@ public abstract class Container extends Structure {
         storedType = type;
     }
     public BasicType getStoredType() {
+        if(storedType instanceof InferredType && size() > 0)
+                storedType = getChild(0).getType();
         return storedType;
     }
 

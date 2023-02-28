@@ -3,13 +3,14 @@ package AST.operations.variable;
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
 import AST.baseTypes.InferredType;
+import AST.baseTypes.Structure;
 import AST.baseTypes.Tuple;
+import AST.baseTypes.advanced.Container;
+import AST.baseTypes.advanced.Storage;
 import AST.baseTypes.flagTypes.InternalMessage;
 import AST.components.Locality;
 import AST.components.Variable;
 import AST.operations.Operator;
-
-import java.util.Map;
 
 public class Modify extends Operator {
     public Modify(){}
@@ -33,15 +34,15 @@ public class Modify extends Operator {
     }
 
 
-    private static SyntaxNode typedVariable(SyntaxNode potentialvar, SyntaxNode potentialval, Locality variables) {
+    private static SyntaxNode matchTypes(SyntaxNode potentialvar, SyntaxNode potentialval, Locality variables) {
         //take care of variable-to-variable assignments
         if(potentialvar instanceof Variable var) {
             BasicType resultType = potentialval.getType();
             if (variables.hasVariable(var.getName())) {
                 Variable existing = variables.getVariable(var.getName());
                 if(existing.getType() instanceof InferredType)
-                    existing.setType(resultType);
-                else if(resultType instanceof  InferredType)
+                    existing.setType(resultType.clone());
+                else if(resultType instanceof InferredType)
                     potentialval.setType(existing.getType());
                 else if(!existing.getType().typeEquals(resultType) && !resultType.typeEquals(existing.getType()))
                     throw new Error("Modifying variable " + existing + " with incompatible type " + resultType);
@@ -50,8 +51,9 @@ public class Modify extends Operator {
                 return existing;
             }
             else {
-                var.setType(resultType);
+                var.setType(resultType.clone());
                 variables.putVariable(var.getName(), var);
+                return var;
             }
         }
         else if (potentialvar instanceof Tuple multivar){
@@ -59,7 +61,7 @@ public class Modify extends Operator {
                 //TODO tuples with skipped elements ie (a,b,...,c) = (1,2,3,4,5,6)
                 int j = 0, k = 0;   //j:lhs, k:rhs
                 while (j < multivar.size() && k < multival.size()) {
-                    multivar.setChild(j, typedVariable(multivar.getChild(j), multival.getChild(k), variables));
+                    multivar.setChild(j, matchTypes(multivar.getChild(j), multival.getChild(k), variables));
                     ++j; ++k;
                 }
                 return multivar;
@@ -78,8 +80,8 @@ public class Modify extends Operator {
         SyntaxNode val = getChild(size() - 1);
         if(val instanceof Variable var){
             if(variables.hasVariable(var.getName())) {
-                val = var = variables.getVariable(var.getName());
-                setChild(size() - 1, var);
+                val = variables.getVariable(var.getName());
+                setChild(size() - 1, val);
             }
             else
                 throw new Error("Using undefined variable " + val);
@@ -89,7 +91,7 @@ public class Modify extends Operator {
 
         //Match types between lhs and rhs
         for(int i = size() - 2; i >= 0; --i) {
-            setChild(i, typedVariable(getChild(i), val, variables));
+            setChild(i, matchTypes(getChild(i), val, variables));
         }
     }
 
@@ -99,7 +101,13 @@ public class Modify extends Operator {
 
     private BasicType interpretPair(SyntaxNode a, SyntaxNode b) {
         if(a instanceof Variable var) {
-            var.setType(b.interpret());
+            if(!(a.getType() instanceof Container) && //TODO not a complete fix for Container. Should allow inter-container assign
+                    a.getType() instanceof Structure struct1 && b.getType() instanceof Structure struct2) {
+                for(Variable field : struct2.getVariables().values())
+                    struct1.getVariable(field.getName()).setType(field.getType().clone());
+            }
+            else
+                var.setType(b.interpret());
             return var.interpret();
         }
         else if(a instanceof Tuple multivar && b instanceof Tuple multival) {
@@ -120,15 +128,25 @@ public class Modify extends Operator {
     public BasicType interpret() {
         BasicType value = getChild(size() - 1).interpret();
         for(int i = 0; i < size()-1; ++i) {
-            if(getChild(i) instanceof Tuple multi) {
-                int j = 0, k = 0;
-                while(j < multi.size() && k < value.size()){
-                    interpretPair(multi.getChild(j), value.getChild(k));
-                    ++j; ++k;
-                }
-            }
-            else
-                getChild(i).setType(value); //TODO non-variable assign
+            interpretPair(getChild(i), value);
+//            if(getChild(i) instanceof Tuple multi) {
+//                int j = 0, k = 0;
+//                while(j < multi.size() && k < value.size()){
+//                    interpretPair(multi.getChild(j), value.getChild(k));
+//                    ++j; ++k;
+//                }
+//            }
+//            else if(getChild(i) instanceof Variable var) {
+//                if(getChild(i).getType() instanceof Structure struct && value instanceof Structure structValue) {
+//                    for(Variable field : struct.getVariables().values())
+//                        field.setType(structValue.getVariable(field.getName()).getType().clone());
+//                }
+//                else
+//                    var.setType(value.interpret());
+//                return var.interpret();
+//            }
+//            else
+//                getChild(i).setType(value); //TODO non-variable assign
         }
         return value;
     }

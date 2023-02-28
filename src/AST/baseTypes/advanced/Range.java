@@ -103,9 +103,9 @@ public abstract class Range extends Container {
     public abstract Range emptyClone();
     public Range clone() {
         Range ret = emptyClone();
-        ret.setStart(getStart().clone());
-        ret.setStop(getStop().clone());
-        ret.setStep(getStep().clone());
+        ret.addChild(getStart().clone());
+        ret.addChild(getStop().clone());
+        ret.addChild(getStep().clone());
         return ret;
     }
 
