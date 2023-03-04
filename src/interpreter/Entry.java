@@ -22,7 +22,8 @@ public class Entry {
     private static String path = "test files/test1.merl";
 
     public static void main(String[] args) {
-        //path = args[0];
+        if(args.length > 0)
+            path = args[0];
         TokenReader reader = new TokenReader(new File(path));
         SyntaxNode body = reader.readGroup("");
         Locality.Wrapper globalVariables = new Locality.Wrapper();
