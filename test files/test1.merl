@@ -23,6 +23,7 @@ ethnicity {
 x = [1...9];
 y = [2,3,2,1,2,1,2,1,2];
 z = [for i in 0...x#-1: repeat y[i]: x[i]];
+z append(3);
 @z;
 //z = [for i in 0...x#-1: repeat y[i]: x[i]];
 

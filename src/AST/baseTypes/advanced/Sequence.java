@@ -26,24 +26,51 @@ public class Sequence extends Storage{
             return new RemoveIndex(getChild(0).clone());
         }
     }
+    private class Append extends ReturnCode {
+        public Append(SyntaxNode index) {
+            addChild(index);
+        }
+
+        public BasicType getValue() {
+            BasicType interpretedValue = getChild(0).interpret();
+            Sequence.this.addChild(interpretedValue);
+            return new VoidType();
+        }
+
+        public Append clone() {
+            return new Append(getChild(0).clone());
+        }
+    }
     public Sequence(){
         //interpreter
         Signature remove = new Signature("remove");
         putVariable(remove.getName(), remove);
         {
-            Variable removed = new Variable("removed");
+            Variable removed = new Variable("removed"); removed.setType(new Int());
             Function removal = new Function(Tuple.asTuple(removed), Tuple.asTuple(new InferredType()));
             removal.addChild(new RemoveIndex(removed));
             //removal.unifyVariables(variables);
             remove.addOverload(removal);
         }
+
+        Signature append = new Signature("append");
+        putVariable(append.getName(), append);
+        {
+            Variable appended = new Variable("appended"); appended.setType(new InferredType());
+            Function appending = new Function(Tuple.asTuple(appended), Tuple.asTuple(new InferredType()));
+            appending.addChild(new Append(appended));
+            //removal.unifyVariables(variables);
+            append.addOverload(appending);
+        }
     }
     public Sequence(Tuple values) {
+        this();
         setChildren(values.getChildren());
         if(values.size() > 0)
             setStoredType(values.getChild(0).getType());
     }
     public Sequence(List<SyntaxNode> values) {
+        this();
         setChildren(values);
         if(values.size() > 0)
             setStoredType(values.get(0).getType());
