@@ -21,3 +21,16 @@ RRRRRRRRRRRRRRRRRRRRLLRRRRRRLRRLRLLRLLLLLLLLLLLLL
 /*  SAMPLE OUTPUT
 our score and seven nen yeararsrsraraey neves dna
 */
+
+line = IO read() as str;
+path = IO read() as str;
+
+index = 0;
+for d in path: {
+    if d == 'R':
+        ++index;
+    else:
+        --index;
+    IO write(line[index]);
+};
+

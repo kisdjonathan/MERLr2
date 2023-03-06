@@ -3,6 +3,7 @@ package AST.baseTypes.advanced;
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
 import AST.baseTypes.Tuple;
+import AST.components.Locality;
 
 import java.util.Iterator;
 
@@ -48,8 +49,6 @@ public class UnorderedSet extends Storage {
     public UnorderedSet(){}
     public UnorderedSet(Tuple values) {
         setChildren(values.getChildren());
-        if(values.size() > 0)
-            setStoredType(values.getChild(0).getType());
     }
     public UnorderedSet(Storage values) {
         setChildren(values.getChildren());
@@ -58,6 +57,12 @@ public class UnorderedSet extends Storage {
 
     public String getName() {
         return "storage";
+    }
+
+    public void unifyVariables(Locality variables) {
+        super.unifyVariables(variables);
+        if(size() > 0)
+            setStoredType(getChild(0).getType());
     }
 
     public boolean typeEquals(BasicType other) {

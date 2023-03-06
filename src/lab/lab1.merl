@@ -20,3 +20,33 @@
 /*  SAMPLE OUTPUT
 5
 */
+
+/*
+n = IO read() as int;
+--n;
+m = IO read() as int;
+
+lastWinnerIsOne = false;
+pos = 0;
+people = [0...n];
+
+while(people# > 1): {
+    pos = (pos+m) % people#;
+    people remove(pos);
+};
+last = people[0];
+IO write(n-last);
+*/
+
+N,M = IO >> (read(), read()) as (int, int);
+players = [1...N];
+
+current_player = -1;
+while players# > 1:{
+    current_player = (current_player + M-1) % players#;   //-1 to account for the 1 that was just removed
+    players remove(current_player);
+};
+delta = players[0]-1;
+starter = N - delta;
+
+IO write(starter);

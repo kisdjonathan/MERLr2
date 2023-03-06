@@ -20,3 +20,9 @@
 /*  SAMPLE OUTPUT
 8 8 8 0 0 2 2 2 9 9 9 9 9 9 9 7 7 7 7 12 12
 */
+
+N = IO read() as int;
+S = [repeat N: IO read() as int];
+T = [repeat N: IO read() as int];
+
+for i in 0...N-1: repeat T[i]: IO write(S[i]+" ");

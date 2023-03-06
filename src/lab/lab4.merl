@@ -23,4 +23,24 @@
 NO
 */
 
+B = IO read() as int;
+a = [repeat 24: IO read() as int];
+p1 = 0;
+p2 = 23;
+seatsTaken = 0;
+
+while(p1 < p2):{
+    if(a[p1] + a[p2] <= B): {
+        ++p1;
+        --p2;
+    }
+    else:
+        --p2;
+    seatsTaken++;
+};
+
+if(seatsTaken <= 14):
+    IO write("YES");
+else:
+    IO write("NO");
 
