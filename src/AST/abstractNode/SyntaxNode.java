@@ -3,7 +3,7 @@ package AST.abstractNode;
 import AST.baseTypes.BasicType;
 import AST.baseTypes.InferredType;
 import AST.components.Locality;
-import AST.components.Variable;
+import AST.variables.Variable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,17 +58,7 @@ public abstract class SyntaxNode {
      */
     public void unifyVariables(Locality variables){
         for(int i = 0; i < size(); ++i) {
-            if(getChild(i) instanceof Variable var) {
-                if (variables.hasVariable(var.getName()))
-                    setChild(i, variables.getVariable(var.getName()));
-                else {
-                    //throw new Error("Variable used without assignment:" + var.getName());
-                    var.setType(new InferredType());
-                    variables.putVariable(var.getName(), var);
-                }
-            }
-            else
-                getChild(i).unifyVariables(variables);
+            getChild(i).unifyVariables(variables);
         }
     }
 

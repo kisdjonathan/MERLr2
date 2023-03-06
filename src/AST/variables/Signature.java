@@ -1,7 +1,5 @@
-package AST.components;
+package AST.variables;
 
-import AST.abstractNode.SyntaxNode;
-import AST.baseTypes.BasicType;
 import AST.baseTypes.Function;
 import AST.baseTypes.Tuple;
 

@@ -7,7 +7,7 @@ import AST.baseTypes.advanced.Sequence;
 import AST.baseTypes.flagTypes.ControlCode;
 import AST.baseTypes.numerical.Bool;
 import AST.components.Locality;
-import AST.components.Variable;
+import AST.variables.Variable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,16 +18,16 @@ public class While extends Control {
     }};
 
     public While(SyntaxNode condition, SyntaxNode body) {
-        putVariable(conditionVariable.getName(), conditionVariable);
+        putVariable(conditionVariable.getName(), conditionVariable.getEntry());
         setBase(condition, body);
     }
     private While(){
-        putVariable(conditionVariable.getName(), conditionVariable);
+        putVariable(conditionVariable.getName(), conditionVariable.getEntry());
     }
 
     public void unifyVariables(Locality variables) {
         Locality.Layer localLayer = new Locality.Layer(variables);
-        localLayer.putVariable(conditionVariable.getName(), conditionVariable);
+        localLayer.putVariable(conditionVariable.getName(), conditionVariable.getEntry());
         super.unifyVariables(localLayer);
         getVariables().putAll(localLayer.getVariables());
     }

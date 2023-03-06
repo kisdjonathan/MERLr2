@@ -15,7 +15,7 @@ public class Bool extends BasicType {
     }
 
     public Bool clone() {
-        return new Bool(value);
+        return (Bool)(new Bool(value).acceptFields(getFieldClones()));
     }
 
     public boolean getValue(){

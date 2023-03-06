@@ -29,7 +29,7 @@ public class Int extends Numerical {
     }
 
     public Int clone() {
-        return new Int(value);
+        return (Int)(new Int(value).acceptFields(getFieldClones()));
     }
 
     public boolean typeEquals(BasicType other) {

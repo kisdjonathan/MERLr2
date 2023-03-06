@@ -37,7 +37,7 @@ public class Tuple extends BasicType implements Iterable<SyntaxNode>{
         Tuple ret = new Tuple();
         for(SyntaxNode child : getChildren())
             ret.addChild(child.clone());
-        return ret;
+        return (Tuple)ret.acceptFields(getFields());    //TODO should Tuples have fields?
     }
 
     @Override

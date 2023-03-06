@@ -11,18 +11,11 @@ public class InferredType extends BasicType{
 
     //TODO
 
-    private Map<String, SyntaxNode> fields = null;
-    public SyntaxNode getField(String name) {
-        return null;    //TODO
-    }
 
     public InferredType clone() {
-        return new InferredType();
+        return (InferredType)(new InferredType().acceptFields(getFieldClones()));
     }
-    public List<SyntaxNode> getFields() {
-        return new ArrayList<>(fields.values());
-    }
-
+    
     public boolean typeEquals(BasicType other) {
         return true;
     }

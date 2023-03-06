@@ -19,6 +19,7 @@ public class DynamicArray extends Sequence{
 
         public DynamicArray clone() {
             FromValue ret = new FromValue(getChild(0).clone());
+            ret.getFields().putAll(getFieldClones());
             return ret;
         }
 
@@ -45,6 +46,7 @@ public class DynamicArray extends Sequence{
 
         public DynamicArray clone() {
             FromIterator ret = new FromIterator(getChild(0).clone());
+            ret.getFields().putAll(getFieldClones());
             return ret;
         }
 
@@ -90,12 +92,6 @@ public class DynamicArray extends Sequence{
 
     public boolean typeEquals(BasicType other) {
         return other instanceof DynamicArray daother && getStoredType().typeEquals(daother.getStoredType());
-    }
-    public DynamicArray clone() {
-        DynamicArray ret = new DynamicArray();
-        for(SyntaxNode child : getChildren())
-            ret.addChild(child.clone());
-        return ret;
     }
     public DynamicArray emptyClone() {
         return new DynamicArray();

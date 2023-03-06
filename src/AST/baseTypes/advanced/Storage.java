@@ -3,12 +3,6 @@ package AST.baseTypes.advanced;
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.*;
 import AST.baseTypes.flagTypes.ControlCode;
-import AST.baseTypes.flagTypes.ReturnCode;
-import AST.baseTypes.numerical.Int;
-import AST.components.Locality;
-import AST.components.RelativeVariable;
-import AST.components.Signature;
-import AST.components.Variable;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -18,59 +12,59 @@ import java.util.List;
  * types which store specific values
  */
 public abstract class Storage extends Container {
-    private class RemoveValue extends ReturnCode{
-        public RemoveValue(SyntaxNode removed) {
-            addChild(removed);
-        }
-
-        public BasicType getValue() {
-            BasicType interpretedValue = getChild(0).interpret();
-            for(int i = 0; i < Storage.this.size(); ++i) {
-                if(Storage.this.getChild(i).equals(interpretedValue)) {
-                    return Storage.this.removeChild(i).interpret();
-                }
-            }
-            return new VoidType();
-        }
-
-        public RemoveValue clone() {
-            return new RemoveValue(getChild(0).clone());
-        }
-    }
-    private class StorageSize extends Variable{
-        public StorageSize() {
-            super("size");
-        }
-
-        public BasicType getType() {
-            return new Int(Storage.this.size());
-        }
-
-        public BasicType interpret() {
-            return new Int(Storage.this.size());
-        }
-
-        public StorageSize clone() {
-            return new StorageSize();
-        }
-    }
-
-    public Storage(){
-        //interpreter
-        //TODO make this the -= overload
-        Signature remove = new Signature("remove_value");
-        putVariable(remove.getName(), remove);
-        {
-            Variable removed = new Variable("removed");
-            Function removal = new Function(Tuple.asTuple(removed), Tuple.asTuple(new InferredType()));
-            removal.addChild(new RemoveValue(removed));
-            //removal.unifyVariables(variables);
-            remove.addOverload(removal);
-        }
-
-        Variable sizeVariable = new StorageSize();
-        putVariable(sizeVariable.getName(), sizeVariable);
-    }
+//    private class RemoveValue extends ReturnCode{
+//        public RemoveValue(SyntaxNode removed) {
+//            addChild(removed);
+//        }
+//
+//        public BasicType getValue() {
+//            BasicType interpretedValue = getChild(0).interpret();
+//            for(int i = 0; i < Storage.this.size(); ++i) {
+//                if(Storage.this.getChild(i).equals(interpretedValue)) {
+//                    return Storage.this.removeChild(i).interpret();
+//                }
+//            }
+//            return new VoidType();
+//        }
+//
+//        public RemoveValue clone() {
+//            return new RemoveValue(getChild(0).clone());
+//        }
+//    }
+//    private class StorageSize extends Variable{
+//        public StorageSize() {
+//            super("size");
+//        }
+//
+//        public BasicType getType() {
+//            return new Int(Storage.this.size());
+//        }
+//
+//        public BasicType interpret() {
+//            return new Int(Storage.this.size());
+//        }
+//
+//        public StorageSize clone() {
+//            return new StorageSize();
+//        }
+//    }
+//
+//    public Storage(){
+//        //interpreter
+//        //TODO make this the -= overload
+//        Signature remove = new Signature("remove_value");
+//        putField(remove.getName(), remove);
+//        {
+//            Variable removed = new Variable("removed");
+//            Function removal = new Function(Tuple.asTuple(removed), Tuple.asTuple(new InferredType()));
+//            removal.addChild(new RemoveValue(removed));
+//            //removal.unifyVariables(variables);
+//            remove.addOverload(removal);
+//        }
+//
+//        Variable sizeVariable = new StorageSize();
+//        putField(sizeVariable.getName(), sizeVariable);
+//    }
 
     public String getName() {
         return "storage";
@@ -108,6 +102,13 @@ public abstract class Storage extends Container {
         return new SequenceIterator(this);
     }
 
+    public Storage clone() {
+        Storage ret = emptyClone();
+        for(SyntaxNode child : getChildren())
+            ret.addChild(child);
+        ret.getFields().putAll(getFieldClones());
+        return ret;
+    }
     public abstract Storage emptyClone();
 
     public String valueString() {

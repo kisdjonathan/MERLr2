@@ -4,7 +4,6 @@ import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
 import AST.baseTypes.advanced.DiscreteRange;
 import AST.baseTypes.numerical.Bool;
-import AST.baseTypes.Structure;
 import AST.baseTypes.Tuple;
 import AST.operations.variable.*;
 import AST.operations.*;

@@ -24,12 +24,6 @@ public class FixedArray extends Sequence{
     public boolean typeEquals(BasicType other) {
         return other instanceof FixedArray daother && getStoredType().typeEquals(daother.getStoredType());
     }
-    public FixedArray clone() {
-        FixedArray ret = new FixedArray();
-        for(SyntaxNode child : getChildren())
-            ret.addChild(child.clone());
-        return ret;
-    }
     public FixedArray emptyClone() {
         return new FixedArray();
     }

@@ -15,9 +15,6 @@ public class UnorderedMap extends Storage {
     public boolean typeEquals(BasicType other) {
         return false;
     }
-    public UnorderedMap clone() {
-        return null;    //TODO
-    }
 
     public Iterator<SyntaxNode> asIterator() {
         return null;    //TODO

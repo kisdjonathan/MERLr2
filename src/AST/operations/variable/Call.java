@@ -5,10 +5,11 @@ import AST.baseTypes.InferredType;
 import AST.baseTypes.Tuple;
 import AST.baseTypes.Function;
 import AST.components.Locality;
-import AST.components.Signature;
-import AST.components.Variable;
+import AST.variables.Signature;
+import AST.variables.Variable;
 import AST.operations.Operator;
 import AST.abstractNode.SyntaxNode;
+import AST.variables.VariableEntry;
 
 //Call stores information of a function call
 //TODO L for now, Call is expected to return the values of ret, but in the future, allow Call to write directly to ret
@@ -66,33 +67,42 @@ public class Call extends Operator {
         return ret;
     }
 
-    @Override
-    public Signature asVariable() {
-        Variable var = getChild(0).asVariable();
-        return new Signature(var.getName());
+    public Variable asVariable() {
+        return getChild(0).asVariable();
     }
 
     public void unifyVariables(Locality variables) {
         super.unifyVariables(variables);
-        if(getChild(0) instanceof Variable var) {
-            if (!(var instanceof Signature) ||
-                    !variables.hasVariable(var.getName()))
-                variables.putVariable(var.getName(), new Signature(var.getName()));
-            Variable func = variables.getVariable(var.getName());
-            setChild(0, func);
 
-            if(func instanceof  Signature signature) {
-                if (!signature.hasOverload(Tuple.asTuple(getChild(1)), Tuple.asTuple(getType())))
-                    signature.addOverload(new Function(Tuple.asTuple(getChild(1)), Tuple.asTuple(getType())));
-            }
+        SyntaxNode callee = getChild(0);
+        if(callee instanceof Variable var) {
+            VariableEntry signature = variables.getVariable(var.getName());
+            if (!signature.hasOverload(Tuple.asTuple(getChild(1)), Tuple.asTuple(getType())))
+                signature.addOverload(new Function(Tuple.asTuple(getChild(1)), Tuple.asTuple(getType())));
+//            else
+//                throw new Error("Conflicting overloads for " + callee + " passing " + new Function(Tuple.asTuple(getChild(1)), Tuple.asTuple(getType())));
         }
+        else
+            callee.setType(new Function(Tuple.asTuple(getChild(1)), Tuple.asTuple(getType())));
     }
 
     public BasicType interpret() {
-        Function f;
-        if(getChild(0).isVariable() && getChild(0).asVariable() instanceof Signature sig)
-            f = sig.getOverload((Tuple)getChild(1), Tuple.asTuple(getType()));
-        else
+        SyntaxNode callee = getChild(0);
+        Function f = null;
+        if(callee.isVariable()){
+            VariableEntry var = callee.asVariable().getEntry();
+            if(var.hasOverload()) {
+                if (var.hasOverload((Tuple) getChild(1), Tuple.asTuple(getType())))
+                    f = var.getOverload((Tuple) getChild(1), Tuple.asTuple(getType()));
+                else
+                    throw new Error("Attempting to call a function with signature: " +
+                            getChild(1) + Tuple.asTuple(getType()) +
+                            " but the function only has overloads defined for " +
+                            var.getOverloads());
+            }
+        }
+
+        if(f == null)
             f = (Function)getChild(0).interpret();
         return f.clone().interpretExecute(Tuple.asTuple(getChild(1).interpret()));
     }

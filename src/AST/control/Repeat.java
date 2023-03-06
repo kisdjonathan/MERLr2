@@ -7,7 +7,7 @@ import AST.baseTypes.flagTypes.ControlCode;
 import AST.baseTypes.numerical.Int;
 import AST.baseTypes.numerical.Numerical;
 import AST.components.Locality;
-import AST.components.Variable;
+import AST.variables.Variable;
 import AST.operations.arithmetic.PreIncrement;
 
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class Repeat extends Control {
 
     public void unifyVariables(Locality variables) {
         Locality.Layer localLayer = new Locality.Layer(variables);
-        localLayer.putVariable(counter.getName(), counter);
+        localLayer.putVariable(counter.getName(), counter.getEntry());
         super.unifyVariables(localLayer);
         getVariables().putAll(localLayer.getVariables());
     }

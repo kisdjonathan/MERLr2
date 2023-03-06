@@ -27,7 +27,7 @@ public class Float extends Numerical {
     }
 
     public Float clone() {
-        return new Float(value);
+        return (Float)(new Float(value).acceptFields(getFieldClones()));
     }
 
     public String valueString() {

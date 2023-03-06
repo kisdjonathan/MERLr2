@@ -57,6 +57,7 @@ public class Str extends Storage{
         }
         public CharSequence clone() {
             CharSequence ret = new CharSequence(strval);
+            ret.getFields().putAll(getFieldClones());
             return ret;
         }
 
@@ -72,7 +73,9 @@ public class Str extends Storage{
         return other instanceof Str;
     }
     public Str clone() {
-        return new Str(value);
+        Str ret = new Str(value);
+        ret.getFields().putAll(getFieldClones());
+        return ret;
     }
     public Str emptyClone() {
         return new Str();

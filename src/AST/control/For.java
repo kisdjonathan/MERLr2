@@ -5,10 +5,10 @@ import AST.baseTypes.BasicType;
 import AST.baseTypes.Tuple;
 import AST.baseTypes.advanced.Container;
 import AST.baseTypes.advanced.Sequence;
-import AST.baseTypes.advanced.Storage;
 import AST.baseTypes.flagTypes.ControlCode;
 import AST.components.*;
 import AST.operations.variable.In;
+import AST.variables.Variable;
 
 import java.util.ArrayList;
 import java.util.Iterator;

@@ -4,10 +4,10 @@ import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.*;
 import AST.baseTypes.flagTypes.ReturnCode;
 import AST.baseTypes.numerical.Int;
-import AST.components.Signature;
-import AST.components.Variable;
+import AST.variables.Signature;
+import AST.variables.Variable;
+import AST.variables.VariableEntry;
 
-import java.util.Iterator;
 import java.util.List;
 
 public class Sequence extends Storage{
@@ -28,8 +28,8 @@ public class Sequence extends Storage{
     }
     public Sequence(){
         //interpreter
-        Signature remove = new Signature("remove");
-        putVariable(remove.getName(), remove);
+        VariableEntry remove = new VariableEntry();
+        putField("remove", remove);
         {
             Variable removed = new Variable("removed");
             Function removal = new Function(Tuple.asTuple(removed), Tuple.asTuple(new InferredType()));
@@ -66,12 +66,6 @@ public class Sequence extends Storage{
         return ret;
     }
 
-    public Sequence clone() {
-        Sequence ret = emptyClone();
-        for(SyntaxNode child : ret.getChildren())
-            ret.addChild(child);
-        return ret;
-    }
     public Sequence emptyClone() {
         return new Sequence();
     }

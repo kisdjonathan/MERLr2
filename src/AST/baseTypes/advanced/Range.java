@@ -106,6 +106,7 @@ public abstract class Range extends Container {
         ret.addChild(getStart().clone());
         ret.addChild(getStop().clone());
         ret.addChild(getStep().clone());
+        ret.getFields().putAll(getFieldClones());
         return ret;
     }
 
@@ -114,16 +115,5 @@ public abstract class Range extends Container {
         for(SyntaxNode child: getChildren())
             ret.addChild(child.interpret());
         return ret;
-    }
-
-    public List<SyntaxNode> getFields() {
-        return null;    //TODO
-    }
-    public SyntaxNode getField(String name) {
-        return null;    //TODO
-    }
-
-    public List<Function> getMethods() {
-        return null;    //TODO
     }
 }

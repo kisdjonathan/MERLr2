@@ -6,7 +6,8 @@ import AST.baseTypes.flagTypes.ControlCode;
 import AST.baseTypes.numerical.Bool;
 import AST.baseTypes.VoidType;
 import AST.components.Locality;
-import AST.components.Variable;
+import AST.variables.Variable;
+import AST.variables.VariableEntry;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,8 +15,8 @@ import java.util.Map;
 public abstract class Control extends SyntaxNode implements Locality {
     protected SyntaxNode conditionControl = new Bool(true);
     protected class Node extends SyntaxNode implements Locality {
-        private final Map<String, Variable> variables = new HashMap<>();
-        public Map<String, Variable> getVariables() {
+        private final Map<String, VariableEntry> variables = new HashMap<>();
+        public Map<String, VariableEntry> getVariables() {
             return variables;
         }
 
@@ -72,8 +73,8 @@ public abstract class Control extends SyntaxNode implements Locality {
         }
     }
 
-    private final Map<String, Variable> variables = new HashMap<>();
-    public Map<String, Variable> getVariables() {
+    private final Map<String, VariableEntry> variables = new HashMap<>();
+    public Map<String, VariableEntry> getVariables() {
         return variables;
     }
 

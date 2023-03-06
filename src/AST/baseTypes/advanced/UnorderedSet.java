@@ -19,6 +19,7 @@ public class UnorderedSet extends Storage {
 
         public UnorderedSet clone() {
             FromValue ret = new FromValue(getChild(0).clone());
+            ret.getFields().putAll(getFieldClones());
             return ret;
         }
 
@@ -64,12 +65,6 @@ public class UnorderedSet extends Storage {
         return other instanceof UnorderedSet usother && getStoredType().typeEquals(usother.getStoredType());
     }
 
-    public UnorderedSet clone() {
-        UnorderedSet ret = new UnorderedSet();
-        for(SyntaxNode child : getChildren())
-            ret.addChild(child.clone());
-        return ret;
-    }
     public UnorderedSet emptyClone() {
         return new UnorderedSet();
     }

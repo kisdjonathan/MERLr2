@@ -4,7 +4,7 @@ import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.BasicType;
 import AST.baseTypes.InferredType;
 import AST.components.Locality;
-import AST.components.Variable;
+import AST.variables.Variable;
 import AST.operations.Operator;
 
 /**
@@ -35,39 +35,10 @@ public class Cast extends Operator {
     }
 
     public void unifyVariables(Locality variables) {
-        if(getChild(1) instanceof Variable var) {
-            if (variables.hasVariable(var.getName()))
-                setChild(1, variables.getVariable(var.getName()));
-            else {
-                //throw new Error("Variable used without assignment:" + var.getName());
-                var.setType(new InferredType());
-                variables.putVariable(var.getName(), var);
-            }
-        }
-        else
-            getChild(1).unifyVariables(variables);
+        getChild(1).unifyVariables(variables);
 
-
-        if(getChild(0) instanceof Variable var) {
-            if (variables.hasVariable(var.getName())) {
-                var = variables.getVariable(var.getName());
-                setChild(0, var);
-
-                //TODO user-defined casting
-                if(!var.getType().typeEquals(getType()))
-                    throw new Error("Can not convert " + var + " to " + getType());
-            }
-            else {
-                //throw new Error("Variable used without assignment:" + var.getName());
-                var.setType(getType());
-                variables.putVariable(var.getName(), var);
-            }
-        }
-        else {
-            //TODO user-defined casting
-            getChild(0).setType(getType());
-            getChild(0).unifyVariables(variables);
-        }
+        getChild(0).setType(getType());
+        getChild(0).unifyVariables(variables);
     }
 
     public BasicType interpret() {

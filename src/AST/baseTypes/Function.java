@@ -3,14 +3,15 @@ package AST.baseTypes;
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.flagTypes.ReturnCode;
 import AST.components.Locality;
-import AST.components.Variable;
+import AST.variables.Variable;
+import AST.variables.VariableEntry;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Function extends BasicType implements Locality {
     private Tuple args = null, rets = null;
-    private final Map<String, Variable> variables = new HashMap<>();
+    private final Map<String, VariableEntry> variables = new HashMap<>();
     private Locality externs = null;    //fix for methods that lose access to instance variables when cloned
 
     public Function() {}
@@ -40,7 +41,7 @@ public class Function extends BasicType implements Locality {
         rets.setParent(this);
     }
 
-    public Map<String, Variable> getVariables() {
+    public Map<String, VariableEntry> getVariables() {
         return variables;
     }
 
@@ -50,6 +51,7 @@ public class Function extends BasicType implements Locality {
             ret.addChild(child.clone());
         ret.variables.putAll(getVariableClones());
         ret.unifyVariables(externs);
+        ret.getFields().putAll(getFieldClones());
         return ret;
     }
 
@@ -59,13 +61,13 @@ public class Function extends BasicType implements Locality {
 
         for(SyntaxNode arg : args) {
             Variable var = arg.asVariable();
-            localLayer.putVariable(var.getName(), var);
+            localLayer.putVariable(var.getName(), var.getEntry());
         }
         for(SyntaxNode ret : rets) {
             if(ret instanceof BasicType)
                 break;
             Variable var = ret.asVariable();
-            localLayer.putVariable(var.getName(), var);
+            localLayer.putVariable(var.getName(), var.getEntry());
         }
         super.unifyVariables(localLayer);
         getVariables().putAll(localLayer.getVariables());

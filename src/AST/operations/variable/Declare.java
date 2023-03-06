@@ -4,10 +4,11 @@ import AST.baseTypes.BasicType;
 import AST.baseTypes.Function;
 import AST.baseTypes.InferredType;
 import AST.components.Locality;
-import AST.components.Signature;
-import AST.components.Variable;
+import AST.variables.Signature;
+import AST.variables.Variable;
 import AST.operations.Operator;
 import AST.abstractNode.SyntaxNode;
+import AST.variables.VariableEntry;
 
 public class Declare extends Operator {
     private Function functionDeclaration = null;
@@ -35,11 +36,7 @@ public class Declare extends Operator {
     public void unifyVariables(Locality variables) {
         for(int i = size() - 2; i >= 0; --i) {
             if (getChild(i) instanceof Call call) {
-                Signature sig = call.asVariable();
-                if(!variables.hasVariable(sig.getName()) || !(variables.getVariable(sig.getName()) instanceof Signature))
-                    variables.putVariable(sig.getName(), sig);
-                else
-                    sig = (Signature) variables.getVariable(sig.getName());
+                VariableEntry sig = call.asVariable().getEntry();
 
                 Function f = call.createFunctionHeader(getChild(size() - 1));
                 sig.addOverload(f);
@@ -49,16 +46,15 @@ public class Declare extends Operator {
                 functionDeclaration = f;
             }
             else {
-                Variable var = getChild(i).asVariable();
-                if(variables.getVariable(var.getName()).getType() instanceof InferredType)
-                    var = variables.getVariable(var.getName());
-                else if(variables.hasVariable(var.getName()))
-                    throw new Error("attempting to perform constant assignment " + getChild(size() - 1) + " on defined " + variables.getVariable(var.getName()));
+                Variable key = getChild(i).asVariable();
+                VariableEntry var = key.getEntry();
+                if(var.isConstant())
+                    throw new Error("attempting to perform assignment on constant " + key);
                 SyntaxNode val = getChild(size() - 1);
                 val.unifyVariables(variables);
+
                 var.setType(val.getType().clone());
                 var.setConstant(true);
-                variables.putVariable(var.getName(), var);
             }
         }
     }
@@ -77,7 +73,7 @@ public class Declare extends Operator {
             else if(!getChild(i).getType().equals(value))
                 throw new Error("attempting to assign constant " + getChild(i) + " to a new value " + value);
             else
-                getChild(i).setType(value);
+                ((Variable)getChild(i)).getEntry().setValue(value);
         }
         return value;
     }

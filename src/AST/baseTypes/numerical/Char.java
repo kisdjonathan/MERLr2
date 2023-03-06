@@ -22,7 +22,7 @@ public class Char extends Numerical {
     }
 
     public Char clone() {
-        return new Char(value);
+        return (Char)(new Char(value).acceptFields(getFieldClones()));
     }
 
     public boolean typeEquals(BasicType other) {

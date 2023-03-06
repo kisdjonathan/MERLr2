@@ -1,11 +1,10 @@
 package AST.operations.variable;
 
 import AST.baseTypes.BasicType;
-import AST.baseTypes.InferredType;
-import AST.baseTypes.Structure;
 import AST.operations.Operator;
 import AST.abstractNode.SyntaxNode;
 import AST.components.*;
+import AST.variables.Variable;
 
 //AST.Contextualization simply makes the fields of a variable available to its children
 public class Field extends Operator {
@@ -16,47 +15,17 @@ public class Field extends Operator {
     }
 
     public void unifyVariables(Locality variables) {
-        SyntaxNode potentialVar = getChild(0);
-        if(potentialVar instanceof Variable var) {
-            if(variables.hasVariable(var.getName())) {
-                var = variables.getVariable(var.getName());
-                setChild(0, var);
-            }
-            else
-                variables.putVariable(var.getName(), var);
+        SyntaxNode parent = getChild(0);
+        parent.unifyVariables(variables);
 
-            if(var.getType() instanceof InferredType)
-                var.setType(new Structure());
-            else if(!(var.getType() instanceof Structure))
-                throw new Error("Attempting to access field from non-structure " + var);
+        Locality fieldLayer = new Locality.StructInsertion(variables, parent);
 
-            Structure varType = (Structure)var.getType();
-            Locality fieldLayer = new Locality.StructInsertion(varType, variables, var);
-
-            SyntaxNode field = getChild(1);
-            if(field instanceof Variable val){
-                if(fieldLayer.hasVariable(val.getName())) {
-                    //getChild(1).setType(fieldLayer.getVariable(val.getName()).getType());
-                    val = fieldLayer.getVariable(val.getName());
-                    setChild(1, val);
-                }
-                else
-                    fieldLayer.putVariable(val.getName(), val);
-            }
-            else
-                field.unifyVariables(fieldLayer);
-        }
-        else {
-            //TODO assert field in the type of potentialVar
-            //ie could be function
-            //ie could be another field
-            throw new Error("Field of non-variable is not implemented");
-        }
+        SyntaxNode field = getChild(1);
+        field.unifyVariables(fieldLayer);
     }
 
     public Variable asVariable() {
-        Structure struct = (Structure)getChild(0).getType();
-        return struct.getVariable(getChild(1).asVariable().getName());
+        return getChild(1).asVariable();
     }
     public boolean isVariable() {
         return getChild(1).isVariable();

@@ -7,7 +7,7 @@ import AST.baseTypes.advanced.Sequence;
 import AST.baseTypes.advanced.Str;
 import AST.baseTypes.numerical.Char;
 import AST.baseTypes.numerical.Numerical;
-import AST.components.Variable;
+import AST.variables.Variable;
 import AST.operations.Operator;
 import AST.abstractNode.SyntaxNode;
 

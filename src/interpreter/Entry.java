@@ -3,23 +3,22 @@ package interpreter;
 import AST.abstractNode.SyntaxNode;
 import AST.baseTypes.*;
 import AST.baseTypes.advanced.Str;
-import AST.baseTypes.flagTypes.ControlCode;
 import AST.baseTypes.flagTypes.ReturnCode;
 import AST.baseTypes.numerical.*;
 import AST.baseTypes.numerical.Float;
 import AST.components.*;
-import AST.control.Return;
+import AST.variables.Signature;
+import AST.variables.Variable;
+import AST.variables.VariableEntry;
 import lexer.TokenReader;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 //entry point of the program
 //TODO complete
 public class Entry {
-    private static String path = "test files/test1.merl";
+    private static String path = "test files/test3.merl";
 
     public static void main(String[] args) {
         if(args.length > 0)
@@ -27,9 +26,9 @@ public class Entry {
         TokenReader reader = new TokenReader(new File(path));
         SyntaxNode body = reader.readGroup("");
         Locality.Wrapper globalVariables = new Locality.Wrapper();
-        globalVariables.putVariable("true", new Variable("true"){{setType(new Bool(true));}});
-        globalVariables.putVariable("false", new Variable("false"){{setType(new Bool(false));}});
-        globalVariables.putVariable("IO", getIOVar());
+        globalVariables.putVariable("true", new VariableEntry(new Bool()){{setValue(new Bool(true));setConstant(true);}});
+        globalVariables.putVariable("false", new VariableEntry(new Bool()){{setValue(new Bool(false));setConstant(true);}});
+        globalVariables.putVariable("IO", getIOVar().getEntry());
         body.unifyVariables(loadBaseTypes(globalVariables));
         BasicType value = body.interpret();
 //        System.out.println(value);
@@ -96,19 +95,19 @@ public class Entry {
         Variable vvar = new Variable("void", new VoidType());
         Variable svar = new Variable("str", new Str());
 
-        variables.putVariable(ivar.getName(), ivar);
-        variables.putVariable(fvar.getName(), fvar);
-        variables.putVariable(cvar.getName(), cvar);
-        variables.putVariable(bvar.getName(), bvar);
-        variables.putVariable(vvar.getName(), vvar);
-        variables.putVariable(svar.getName(), svar);
+        variables.putVariable(ivar.getName(), ivar.getEntry());
+        variables.putVariable(fvar.getName(), fvar.getEntry());
+        variables.putVariable(cvar.getName(), cvar.getEntry());
+        variables.putVariable(bvar.getName(), bvar.getEntry());
+        variables.putVariable(vvar.getName(), vvar.getEntry());
+        variables.putVariable(svar.getName(), svar.getEntry());
 
         return variables;
     }
 
     private static Variable getIOVar() {
         Variable ret = new Variable("IO");
-        Structure retBody = new Structure();
+        CustomType retBody = new CustomType();
 
         Function readl = new Function();
         readl.setArgs(new Tuple());
@@ -130,11 +129,11 @@ public class Entry {
         readc.setRets(new Char());
         readc.addChild(new ReadValue(ReadValue.CHAR));
 
-        Signature read = new Signature("read");
-        read.addOverload(readl);
-        read.addOverload(readi);
-        read.addOverload(readf);
-        read.addOverload(readc);
+        Variable read = new Variable("read");
+        read.getEntry().addOverload(readl);
+        read.getEntry().addOverload(readi);
+        read.getEntry().addOverload(readf);
+        read.getEntry().addOverload(readc);
 
 
         Function writei = new Function();
@@ -161,15 +160,15 @@ public class Entry {
         writes.setRets(new VoidType());
         writes.addChild(new WriteValue(WriteValue.STR, vars));
 
-        Signature write = new Signature("write");
-        write.addOverload(writei);
-        write.addOverload(writef);
-        write.addOverload(writec);
-        write.addOverload(writes);
+        Variable write = new Variable("write");
+        write.getEntry().addOverload(writei);
+        write.getEntry().addOverload(writef);
+        write.getEntry().addOverload(writec);
+        write.getEntry().addOverload(writes);
 
 
-        retBody.putVariable(read.getName(), read);
-        retBody.putVariable(write.getName(), write);
+        retBody.putField(read.getName(), read.getEntry());
+        retBody.putField(write.getName(), write.getEntry());
 
         ret.setType(retBody);
         return ret;
