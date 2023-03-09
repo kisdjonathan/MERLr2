@@ -48,6 +48,7 @@ public class OperatorReader {
             case "then"     ->new Without   ();
             case "in"       ->new In        ();
             case "#"        ->new Cardinal  ();
+            case "~"        ->new Round     ();
 
             case ";",","    ->new Tuple     ();
 
