@@ -13,6 +13,7 @@ import AST.variables.VariableEntry;
 import lexer.TokenReader;
 
 import java.io.File;
+import java.io.PrintStream;
 import java.util.Scanner;
 
 //entry point of the program
@@ -23,6 +24,10 @@ public class Entry {
     public static void main(String[] args) {
         if(args.length > 0)
             path = args[0];
+        interpret(path);
+    }
+
+    public static BasicType interpret(String path) {
         TokenReader reader = new TokenReader(new File(path));
         SyntaxNode body = reader.readGroup("");
         Locality.Wrapper globalVariables = new Locality.Wrapper();
@@ -30,14 +35,13 @@ public class Entry {
         globalVariables.putVariable("false", new VariableEntry(new Bool()){{setValue(new Bool(false));setConstant(true);}});
         globalVariables.putVariable("IO", getIOVar().getEntry());
         body.unifyVariables(loadBaseTypes(globalVariables));
-        BasicType value = body.interpret();
-//        System.out.println(value);
-//        System.out.println(globalVariables.getVariables());
+        return body.interpret();
     }
 
 
     //interpreter IO
-    private static Scanner scanner = new Scanner(System.in);
+    public static Scanner scanner = new Scanner(System.in);
+    public static PrintStream writer = System.out;
 
     private static class ReadValue extends ReturnCode {
         public static final int INT = 0, FLOAT = 1, STR = 2, LINE = 3, CHAR = 4;
@@ -72,7 +76,7 @@ public class Entry {
         }
 
         public BasicType getValue() {
-            System.out.print(switch(writetype){
+            writer.print(switch(writetype){
                 case INT -> ((Int)getChild(0).interpret()).getValue();
                 case FLOAT -> ((Float)getChild(0).interpret()).getValue();
                 case STR -> ((Str)getChild(0).interpret()).getValue();
