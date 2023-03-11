@@ -1,5 +1,13 @@
 # MERLr2
-## parser.SymbolReader
+
+## Documentation
+https://www.merl.systems
+
+## Execution
+Pass in the path of the MERL source code when executing the program from the command line
+
+## Implementation
+### parser.SymbolReader
 Reads in a file word by word, where every word holds exactly one piece of information (eg, a value, a suffix, a word, or an operator)
 *string and character literals are returned as the quotation mark followed by its value
 *numbers are returned as a whole without seperating out suffixes
