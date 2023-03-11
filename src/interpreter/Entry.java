@@ -18,7 +18,7 @@ import java.util.Scanner;
 //entry point of the program
 //TODO complete
 public class Entry {
-    private static String path = "test files/test3.merl";
+    private static String path = "test files/test2.merl";
 
     public static void main(String[] args) {
         if(args.length > 0)

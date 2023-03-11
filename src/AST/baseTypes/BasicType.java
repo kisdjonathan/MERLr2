@@ -84,6 +84,7 @@ public abstract class BasicType extends SyntaxNode {
      */
     public abstract boolean typeEquals(BasicType obj);
 
+
     public abstract BasicType clone();
 
     //TODO heap and stack allocation functions/fields

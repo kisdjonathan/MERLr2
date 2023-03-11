@@ -83,15 +83,24 @@ public class VariableEntry {
     }
 
 
+    /**
+     * used for reference variables
+     */
+    public void setReference(VariableEntry reference) {
+        //throw new Error("can not set reference " + reference + " at " + this);
+    }
+
+
 
     public VariableEntry clone() {
         VariableEntry ret = new VariableEntry(type.clone());
+        ret.setValue(getValue().clone());
         for(Function f : overloads)
             ret.addOverload(f);
         return ret;
     }
 
     public String toString() {
-        return "variable:" + getType();
+        return "variable:" + getValue();
     }
 }

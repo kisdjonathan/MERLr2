@@ -45,7 +45,6 @@ public class Modify extends Operator {
 
             BasicType resultType = potentialval.getType();
             var.setType(resultType.clone());
-
             return var;
         }
         else if (potentialvar instanceof Tuple multivar){
@@ -89,9 +88,9 @@ public class Modify extends Operator {
             BasicType overlayValue = b;
             BasicType baseValue = var.getEntry().getValue();
 
-            for(String field : baseValue.getFields().keySet())
-                if(!overlayValue.hasField(field))
-                    overlayValue.putField(field, baseValue.getField(field).clone());
+            for(VariableEntry field : overlayValue.getFields().values()) {
+                field.setReference(var.getEntry());
+            }
 
             var.getEntry().setValue(overlayValue);
             return overlayValue;

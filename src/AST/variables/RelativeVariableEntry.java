@@ -43,6 +43,10 @@ public class RelativeVariableEntry extends VariableEntry {
     }
 
 
+    public void setReference(VariableEntry reference) {
+        parent = reference;
+    }
+
     public RelativeVariableEntry clone(){
         RelativeVariableEntry ret = new RelativeVariableEntry(name, parent);
         return ret;
