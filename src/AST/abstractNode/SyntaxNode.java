@@ -3,10 +3,11 @@ package AST.abstractNode;
 import AST.baseTypes.BasicType;
 import AST.baseTypes.InferredType;
 import AST.components.Locality;
-import AST.variables.Variable;
+import AST.components.Variable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public abstract class SyntaxNode {
     private SyntaxNode parent;
@@ -58,7 +59,17 @@ public abstract class SyntaxNode {
      */
     public void unifyVariables(Locality variables){
         for(int i = 0; i < size(); ++i) {
-            getChild(i).unifyVariables(variables);
+            if(getChild(i) instanceof Variable var) {
+                if (variables.hasVariable(var.getName()))
+                    setChild(i, variables.getVariable(var.getName()));
+                else {
+                    //throw new Error("Variable used without assignment:" + var.getName());
+                    var.setType(new InferredType());
+                    variables.putVariable(var.getName(), var);
+                }
+            }
+            else
+                getChild(i).unifyVariables(variables);
         }
     }
 
@@ -78,9 +89,32 @@ public abstract class SyntaxNode {
         return getType().typeEquals(type);
     }
 
-    public abstract SyntaxNode clone();
+    public SyntaxNode clone() {
+        SyntaxNode ret = emptyClone();
+        for (SyntaxNode child : getChildren()) {
+            ret.addChild(child.clone());
+        }
+        ret.init(this);
+        return ret;
+    }
+    public void init(SyntaxNode original){}
+    public abstract SyntaxNode emptyClone();
+    public final SyntaxNode with(Consumer<SyntaxNode> action) {
+        action.accept(this);
+        return this;
+    }
 
     public abstract BasicType interpret();
 
 
+    private int line;
+    public void setLine(int line) {
+        this.line = line;
+    }
+    public String errorString() {
+        return "Error at line " + line + ": " + this;
+    }
+    public String errorString(String message) {
+        return "Error at line " + line + ": " + message;
+    }
 }
