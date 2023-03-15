@@ -61,6 +61,10 @@ public class OperatorUtil {
         infixes.put(";", new OperatorInfo(new Tuple(), level));
         levelNum += PrecedenceLevel.SPACING;
 
+        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = Field.symbol);
+        infixes.put(Field.symbol, new OperatorInfo(new Field(), level));
+        levelNum += PrecedenceLevel.SPACING;
+
         level = new PrecedenceLevel(levelNum, level.repr, null, level.next = If.symbol);
         infixes.put(If.symbol, new OperatorInfo(new If(), level));
         infixes.put(Repeat.symbol, new OperatorInfo(new Repeat(), level));
@@ -80,10 +84,6 @@ public class OperatorUtil {
 
         level = new PrecedenceLevel(levelNum, level.repr, null, level.next = In.symbol);
         infixes.put(In.symbol, new OperatorInfo(new In(), level));
-        levelNum += PrecedenceLevel.SPACING;
-
-        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = Field.symbol);
-        infixes.put(Field.symbol, new OperatorInfo(new Field(), level));
         levelNum += PrecedenceLevel.SPACING;
 
         level = new PrecedenceLevel(levelNum, level.repr, null, level.next = ",");
@@ -109,21 +109,28 @@ public class OperatorUtil {
         level = new PrecedenceLevel(levelNum, level.repr, null, level.next = Equal.symbol);
         infixes.put(Equal.symbol, new OperatorInfo(new ComparisonChain(), level));
         infixes.put(NoEqual.symbol, new OperatorInfo(new ComparisonChain(), level));
-        levelNum += PrecedenceLevel.SPACING;
-
-        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = Lesser.symbol);
         infixes.put(Lesser.symbol, new OperatorInfo(new ComparisonChain(), level));
         infixes.put(Greater.symbol, new OperatorInfo(new ComparisonChain(), level));
         infixes.put(NoLesser.symbol, new OperatorInfo(new ComparisonChain(), level));
         infixes.put(NoGreater.symbol, new OperatorInfo(new ComparisonChain(), level));
         levelNum += PrecedenceLevel.SPACING;
 
+        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = CompareTo.literal);
+        prefixes.put(CompareTo.symbol, new OperatorInfo(new CompareTo(), level));
+        levelNum += PrecedenceLevel.SPACING;
+
         level = new PrecedenceLevel(levelNum, level.repr, null, level.next = Not.literal);
         prefixes.put(Not.literal, new OperatorInfo(new Not(), level));
         levelNum += PrecedenceLevel.SPACING;
 
+        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = Shift.symbol);
+        infixes.put(Shift.symbol, new OperatorInfo(new Shift(), level));
+        infixes.put(Cycle.symbol, new OperatorInfo(new Cycle(), level));
+        levelNum += PrecedenceLevel.SPACING;
+
         level = new PrecedenceLevel(levelNum, level.repr, null, level.next = Modulo.literal);
         infixes.put(Modulo.literal, new OperatorInfo(new Modulo(), level));
+        infixes.put(Remainder.literal, new OperatorInfo(new Remainder(), level));
         levelNum += PrecedenceLevel.SPACING;
 
         level = new PrecedenceLevel(levelNum, level.repr, null, level.next = Add.symbol);
@@ -135,25 +142,23 @@ public class OperatorUtil {
         infixes.put(Parallel.symbol, new OperatorInfo(new Parallel(), level));
         levelNum += PrecedenceLevel.SPACING;
 
+        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = CrossMultiply.symbol);
+        infixes.put(CrossMultiply.symbol, new OperatorInfo(new CrossMultiply(), level));
+        levelNum += PrecedenceLevel.SPACING;
+
         level = new PrecedenceLevel(levelNum, level.repr, null, level.next = Multiply.symbol);
         infixes.put(Multiply.symbol, new OperatorInfo(new Multiply(), level));
         infixes.put(Divide.symbol, new OperatorInfo(new Divide(), level));
-        infixes.put(Remainder.symbol, new OperatorInfo(new Remainder(), level));
         infixes.put(Modulo.symbol, new OperatorInfo(new Modulo(), level));
-        levelNum += PrecedenceLevel.SPACING;
-
-        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = Exponent.symbol);
-        infixes.put(Exponent.symbol, new OperatorInfo(new Exponent(), level));
-        infixes.put(Root.symbol, new OperatorInfo(new Root(), level));
         levelNum += PrecedenceLevel.SPACING;
 
         level = new PrecedenceLevel(levelNum, level.repr, null, level.next = Factorial.symbol);
         postfixes.put(Factorial.symbol, new OperatorInfo(new Factorial(), level));
         levelNum += PrecedenceLevel.SPACING;
 
-        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = Shift.symbol);
-        infixes.put(Shift.symbol, new OperatorInfo(new Shift(), level));
-        infixes.put(Cycle.symbol, new OperatorInfo(new Cycle(), level));
+        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = Exponent.symbol);
+        infixes.put(Exponent.symbol, new OperatorInfo(new Exponent(), level));
+        infixes.put(Root.symbol, new OperatorInfo(new Root(), level));
         levelNum += PrecedenceLevel.SPACING;
 
         level = new PrecedenceLevel(levelNum, level.repr, null, level.next = Or.symbol);
