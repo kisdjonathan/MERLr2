@@ -1,4 +1,4 @@
 package AST.abstractNode;
 
-public class PrefixOperator extends SyntaxNode{
+public abstract class PrefixOperator extends Operator{
 }

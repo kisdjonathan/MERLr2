@@ -1,9 +1,8 @@
 package AST.abstractNode;
 
-import AST.baseTypes.BasicType;
-import AST.baseTypes.InferredType;
-import AST.components.Locality;
-import AST.components.Variable;
+import interpreter.Value;
+import type.Type;
+import AST.variable.Variable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,24 +52,20 @@ public abstract class SyntaxNode {
     }
 
     /**
-     * implemented in syntaxNodes that store children
-     * stops at children locals and calls their unifyVariables function
+     * gets all variables to reference the same entry
      * @param variables manages the locally stored variables and other accessible variables
      */
     public void unifyVariables(Locality variables){
-        for(int i = 0; i < size(); ++i) {
-            if(getChild(i) instanceof Variable var) {
-                if (variables.hasVariable(var.getName()))
-                    setChild(i, variables.getVariable(var.getName()));
-                else {
-                    //throw new Error("Variable used without assignment:" + var.getName());
-                    var.setType(new InferredType());
-                    variables.putVariable(var.getName(), var);
-                }
-            }
-            else
-                getChild(i).unifyVariables(variables);
-        }
+        for(int i = 0; i < size(); ++i)
+            getChild(i).unifyVariables(variables);
+    }
+
+    /**
+     * determines the types of all nodes
+     */
+    public void unifyTypes() {
+        for(int i = 0; i < size(); ++i)
+            getChild(i).unifyTypes();
     }
 
     public boolean isVariable() {
@@ -80,14 +75,21 @@ public abstract class SyntaxNode {
         throw new Error(this + " is not a variable");
     }
 
-    public abstract BasicType getType();
+    public abstract Type getType();
 
-    public void setType(BasicType type) {
+
+    public void setType(Type type) {
         throw new Error("can not set type for " + this);
     }
-    public boolean assertType(BasicType type) {
-        return getType().typeEquals(type);
+    public boolean assertType(Type type) {
+        if(getType().isInferred()) {
+            setType(type);
+            return true;
+        }
+        else
+            return getType().typeEquals(type);
     }
+
 
     public SyntaxNode clone() {
         SyntaxNode ret = emptyClone();
@@ -104,9 +106,12 @@ public abstract class SyntaxNode {
         return this;
     }
 
-    public abstract BasicType interpret();
+    public abstract Value interpret();
 
 
+    /**
+     * error handling
+     */
     private int line;
     public void setLine(int line) {
         this.line = line;

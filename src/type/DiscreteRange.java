@@ -1,4 +1,4 @@
-package AST.type;
+package type;
 
 import AST.abstractNode.SyntaxNode;
 

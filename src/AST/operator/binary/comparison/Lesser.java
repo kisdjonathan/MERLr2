@@ -1,4 +1,4 @@
-package AST.operator.chained;
+package AST.operator.binary.comparison;
 
 import AST.abstractNode.SyntaxNode;
 

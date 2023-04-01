@@ -1,4 +1,4 @@
 package AST.abstractNode;
 
-public class PostfixOperator extends SyntaxNode{
+public abstract class PostfixOperator extends Operator{
 }

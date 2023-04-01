@@ -11,13 +11,13 @@ import AST.operator.binary.flow.With;
 import AST.operator.binary.list.In;
 import AST.operator.binary.list.Index;
 import AST.operator.binary.variable.*;
-import AST.operator.chained.*;
 import AST.operator.unary.*;
 import AST.operator.binary.arithmetic.*;
 import AST.operator.binary.comparison.*;
 import AST.operator.binary.bitwise.*;
-import AST.type.DiscreteRange;
-import AST.type.Tuple;
+import type.DiscreteRange;
+import type.Tuple;
+import type.Type;
 
 import java.util.*;
 
@@ -337,17 +337,19 @@ public class OperatorUtil {
             addChild(a); addChild(b);
         }
 
-        public BasicType getType() {
-            return new Bool();
+        public Type getType() {
+            throw new Error(errorString("Compiler error: accessing type of incomplete operator \"ComparisonChain\""));
         }
-        public SyntaxNode clone() {
-            return null;
+        public SyntaxNode emptyClone() {
+            throw new Error(errorString("Compiler error: accessing clone of incomplete operator \"ComparisonChain\""));
         }
-        public BasicType interpret() {
-            return null;
-        }
+
+
         public String getName() {
             return "comparison";
+        }
+        protected List<Application> getEvaluationList() {
+            throw new Error(errorString("Compiler error: accessing evaluation of incomplete operator \"ComparisonChain\""));
         }
     }
 

@@ -1,4 +1,7 @@
 package AST.abstractNode;
 
-public class BinaryOperator extends SyntaxNode{
+import type.Tuple;
+import type.Type;
+
+public abstract class BinaryOperator extends Operator{
 }

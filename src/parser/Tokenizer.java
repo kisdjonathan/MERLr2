@@ -121,7 +121,7 @@ public class Tokenizer {
                 //longer symbols
                 case '~': 	len = nextMatchingStringLength(List.of("~=", "~")); break;
                 case '!':	len = nextMatchingStringLength(List.of("!=", "!")); break;
-                case '=':   len = nextMatchingStringLength(List.of("==", "=", "=?")); break;
+                case '=':   len = nextMatchingStringLength(List.of("==", "=")); break;
                 case ':':   len = nextMatchingStringLength(List.of(":=", "::", ":")); break;
                 case '>':	len = nextMatchingStringLength(List.of("><", ">>", ">=", ">")); break;
                 case '<':	len = nextMatchingStringLength(List.of("<=>", "<<", "<=", "<")); break;
@@ -170,6 +170,11 @@ public class Tokenizer {
                         else
                             lineBuffer.add(new Token("...", lineNumber));
                         continue;
+                    }
+                case '?':   //?=
+                    if(stringIn("?=", line, cind)) {
+                        len = 2;
+                        break;
                     }
                 default:	//id
                     while(cind + len < line.length() &&
