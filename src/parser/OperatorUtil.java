@@ -11,15 +11,20 @@ import AST.operator.binary.flow.With;
 import AST.operator.binary.list.In;
 import AST.operator.binary.list.Index;
 import AST.operator.binary.variable.*;
+import AST.operator.binary.function.Call;
 import AST.operator.unary.*;
 import AST.operator.binary.arithmetic.*;
 import AST.operator.binary.comparison.*;
 import AST.operator.binary.bitwise.*;
+import AST.operator.unary.arithmetic.Factorial;
+import AST.operator.unary.list.Cardinal;
+import AST.operator.unary.list.Spread;
 import type.DiscreteRange;
 import type.Tuple;
 import type.Type;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * note: the operations of MERL are allocated without conflicts between precedence levels so far
@@ -30,16 +35,14 @@ import java.util.*;
 public class OperatorUtil {
     private static class PrecedenceLevel {
         public static int SPACING = 128, MIN_VALUE = Integer.MIN_VALUE;
-        public String previous, next, repr;
         public double position;
-        public PrecedenceLevel(double pos, String prev, String nxt, String repr) {
+        public PrecedenceLevel(double pos, String prev, String nxt) {
             position = pos;
-            previous = prev;
-            next = nxt;
-            this.repr = repr;
+        }
+        public PrecedenceLevel(double pos) {
+            position = pos;
         }
     }
-
     private static class OperatorInfo {
         public SyntaxNode node;
         public PrecedenceLevel precedence;
@@ -49,172 +52,216 @@ public class OperatorUtil {
         }
     }
 
+    private static class SymbolEntry {
+        public static final String PREFIX="prefix", INFIX="infix", POSTFIX ="suffix";
+
+        public String type;
+        public String symbol;
+        public SyntaxNode operator;
+        public SymbolEntry(String type, String symbol, SyntaxNode operator) {
+            this.type = type;
+            this.symbol = symbol;
+            this.operator = operator;
+        }
+    }
+
 
     private static Map<String, OperatorInfo> infixes = new HashMap<>();
     private static Map<String, OperatorInfo> prefixes = new HashMap<>();
     private static Map<String, OperatorInfo> postfixes = new HashMap<>();
 
+    /*
+     * Operators in increasing order of precedence
+     * ;
+     * import   export
+     * ::
+     *(.) if    repeat  while      for      resolve
+     * with     then    using
+     * do   (prefix)
+     * :        =       <=>
+     * in
+     * ,
+     * pop      leak    >>  (suffix and infix)
+     * push     slip    <<       \  (suffix and infix)
+     * ...
+     *(.) or    nor     xor     xnor
+     *(.) and   nand
+     * ==       !=      ~=      <       >       <=      >=
+     * ?=
+     *(.) not   (prefix)
+     *(.) shift cycle
+     *(.) mod   rem
+     *(.) +     -
+     *(.) ||
+     *(.) ><
+     *(.) *     /       %
+     *(.) !     (suffix)
+     *(.) **    */
+    /*(.) |     ~|      ^       ~^
+     *(.) &     ~&
+     *(.) !     ~   (prefix)
+     * #    (suffix)
+     * ++   --  (suffix and prefix)
+     * @
+     * to       as
+     * ref      loc     pin
+     * _(_)     _[_]    _{_}
+     * */
     static {
-        int levelNum = PrecedenceLevel.MIN_VALUE;
+        final int[] levelNum = {PrecedenceLevel.MIN_VALUE};   //wrap levelNum
+        final PrecedenceLevel[] level = {new PrecedenceLevel(levelNum[0])};   //placeholder level; wrap level
 
-        PrecedenceLevel level = new PrecedenceLevel(levelNum, null, null, ";");
-        infixes.put(";", new OperatorInfo(new Tuple(), level));
-        levelNum += PrecedenceLevel.SPACING;
+        Consumer<List<SymbolEntry>> addLevel = (ops) -> {
+            level[0] = new PrecedenceLevel(levelNum[0]);
+            for(SymbolEntry entry : ops) {
+                (switch (entry.type) {
+                    case SymbolEntry.INFIX -> infixes;
+                    case SymbolEntry.PREFIX -> prefixes;
+                    case SymbolEntry.POSTFIX -> postfixes;
+                }).put(entry.symbol, new OperatorInfo(entry.operator, level[0]));
+            }
+            levelNum[0] += PrecedenceLevel.SPACING;
+        };
 
-        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = Field.symbol);
-        infixes.put(Field.symbol, new OperatorInfo(new Field(), level));
-        levelNum += PrecedenceLevel.SPACING;
-
-        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = If.symbol);
-        infixes.put(If.symbol, new OperatorInfo(new If(), level));
-        infixes.put(Repeat.symbol, new OperatorInfo(new Repeat(), level));
-        infixes.put(While.symbol, new OperatorInfo(new While(), level));
-        infixes.put(For.symbol, new OperatorInfo(new For(), level));
-        levelNum += PrecedenceLevel.SPACING;
-
-        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = With.symbol);
-        infixes.put(With.symbol, new OperatorInfo(new With(), level));
-        infixes.put(Then.symbol, new OperatorInfo(new Then(), level));
-        levelNum += PrecedenceLevel.SPACING;
-
-        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = Declare.symbol);
-        infixes.put(Declare.symbol, new OperatorInfo(new Declare(), level));
-        infixes.put(Modify.symbol, new OperatorInfo(new Modify(), level));
-        levelNum += PrecedenceLevel.SPACING;
-
-        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = In.symbol);
-        infixes.put(In.symbol, new OperatorInfo(new In(), level));
-        levelNum += PrecedenceLevel.SPACING;
-
-        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = ",");
-        infixes.put(",", new OperatorInfo(new Tuple(), level));
-        levelNum += PrecedenceLevel.SPACING;
-
-        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = "...");
-        infixes.put("...", new OperatorInfo(new DiscreteRange(), level));
-        levelNum += PrecedenceLevel.SPACING;
-
-        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = Or.literal);
-        infixes.put(Or.literal, new OperatorInfo(new Or(), level));
-        infixes.put(Nor.literal, new OperatorInfo(new Nor(), level));
-        infixes.put(Xor.literal, new OperatorInfo(new Xor(), level));
-        infixes.put(Xnor.literal, new OperatorInfo(new Xnor(), level));
-        levelNum += PrecedenceLevel.SPACING;
-
-        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = And.literal);
-        infixes.put(And.literal, new OperatorInfo(new And(), level));
-        infixes.put(Nand.literal, new OperatorInfo(new Nand(), level));
-        levelNum += PrecedenceLevel.SPACING;
-
-        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = Equal.symbol);
-        infixes.put(Equal.symbol, new OperatorInfo(new ComparisonChain(), level));
-        infixes.put(NoEqual.symbol, new OperatorInfo(new ComparisonChain(), level));
-        infixes.put(Lesser.symbol, new OperatorInfo(new ComparisonChain(), level));
-        infixes.put(Greater.symbol, new OperatorInfo(new ComparisonChain(), level));
-        infixes.put(NoLesser.symbol, new OperatorInfo(new ComparisonChain(), level));
-        infixes.put(NoGreater.symbol, new OperatorInfo(new ComparisonChain(), level));
-        levelNum += PrecedenceLevel.SPACING;
-
-        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = CompareTo.literal);
-        prefixes.put(CompareTo.symbol, new OperatorInfo(new CompareTo(), level));
-        levelNum += PrecedenceLevel.SPACING;
-
-        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = Not.literal);
-        prefixes.put(Not.literal, new OperatorInfo(new Not(), level));
-        levelNum += PrecedenceLevel.SPACING;
-
-        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = Shift.symbol);
-        infixes.put(Shift.symbol, new OperatorInfo(new Shift(), level));
-        infixes.put(Cycle.symbol, new OperatorInfo(new Cycle(), level));
-        levelNum += PrecedenceLevel.SPACING;
-
-        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = Modulo.literal);
-        infixes.put(Modulo.literal, new OperatorInfo(new Modulo(), level));
-        infixes.put(Remainder.literal, new OperatorInfo(new Remainder(), level));
-        levelNum += PrecedenceLevel.SPACING;
-
-        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = Add.symbol);
-        infixes.put(Add.symbol, new OperatorInfo(new Add(), level));
-        infixes.put(Subtract.symbol, new OperatorInfo(new Subtract(), level));
-        levelNum += PrecedenceLevel.SPACING;
-
-        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = Parallel.symbol);
-        infixes.put(Parallel.symbol, new OperatorInfo(new Parallel(), level));
-        levelNum += PrecedenceLevel.SPACING;
-
-        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = CrossMultiply.symbol);
-        infixes.put(CrossMultiply.symbol, new OperatorInfo(new CrossMultiply(), level));
-        levelNum += PrecedenceLevel.SPACING;
-
-        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = Multiply.symbol);
-        infixes.put(Multiply.symbol, new OperatorInfo(new Multiply(), level));
-        infixes.put(Divide.symbol, new OperatorInfo(new Divide(), level));
-        infixes.put(Modulo.symbol, new OperatorInfo(new Modulo(), level));
-        levelNum += PrecedenceLevel.SPACING;
-
-        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = Factorial.symbol);
-        postfixes.put(Factorial.symbol, new OperatorInfo(new Factorial(), level));
-        levelNum += PrecedenceLevel.SPACING;
-
-        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = Exponent.symbol);
-        infixes.put(Exponent.symbol, new OperatorInfo(new Exponent(), level));
-        infixes.put(Root.symbol, new OperatorInfo(new Root(), level));
-        levelNum += PrecedenceLevel.SPACING;
-
-        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = Or.symbol);
-        infixes.put(Or.symbol, new OperatorInfo(new Or(), level));
-        infixes.put(Nor.symbol, new OperatorInfo(new Nor(), level));
-        infixes.put(Xor.symbol, new OperatorInfo(new Xor(), level));
-        infixes.put(Xnor.symbol, new OperatorInfo(new Xnor(), level));
-        levelNum += PrecedenceLevel.SPACING;
-
-        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = And.symbol);
-        infixes.put(And.symbol, new OperatorInfo(new And(), level));
-        infixes.put(Nand.symbol, new OperatorInfo(new Nand(), level));
-        levelNum += PrecedenceLevel.SPACING;
-
-        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = Not.symbol);
-        prefixes.put(Not.symbol, new OperatorInfo(new Not(), level));
-        levelNum += PrecedenceLevel.SPACING;
-
-        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = Cardinal.symbol);
-        postfixes.put(Cardinal.symbol, new OperatorInfo(new Cardinal(), level));
-        levelNum += PrecedenceLevel.SPACING;
-
-        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = PreIncrement.symbol);
-        prefixes.put(PreIncrement.symbol, new OperatorInfo(new PreIncrement(), level));
-        prefixes.put(PreDecrement.symbol, new OperatorInfo(new PreDecrement(), level));
-        postfixes.put(PostIncrement.symbol, new OperatorInfo(new PostIncrement(), level));
-        postfixes.put(PostDecrement.symbol, new OperatorInfo(new PostDecrement(), level));
-        levelNum += PrecedenceLevel.SPACING;
-
-        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = Print.symbol);
-        prefixes.put(Print.symbol, new OperatorInfo(new Print(), level));
-        levelNum += PrecedenceLevel.SPACING;
-
-        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = Cast.symbol);
-        infixes.put(Cast.symbol, new OperatorInfo(new Cast(), level));
-        infixes.put(As.symbol, new OperatorInfo(new As(), level));
-        levelNum += PrecedenceLevel.SPACING;
-
-        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = Ref.symbol);
-        prefixes.put(Ref.symbol, new OperatorInfo(new Ref(), level));
-        prefixes.put(Loc.symbol, new OperatorInfo(new Loc(), level));
-        prefixes.put(Pin.symbol, new OperatorInfo(new Pin(), level));
-        levelNum += PrecedenceLevel.SPACING;
-
-        level = new PrecedenceLevel(levelNum, level.repr, null, level.next = Call.symbol);
-        infixes.put(Call.symbol, new OperatorInfo(new Call(), level));
-        infixes.put(Index.symbol, new OperatorInfo(new Index(), level));
-        infixes.put(Construct.symbol, new OperatorInfo(new Construct(), level));
-        levelNum += PrecedenceLevel.SPACING;
+        addLevel.accept(List.of(
+                new SymbolEntry(SymbolEntry.INFIX, ";", new Tuple())
+        ));
+        addLevel.accept(List.of(
+                new SymbolEntry(SymbolEntry.INFIX, "::", new Field())
+        ));
+        addLevel.accept(List.of(
+                new SymbolEntry(SymbolEntry.PREFIX, "if", new If()),
+                new SymbolEntry(SymbolEntry.PREFIX, "repeat", new Repeat()),
+                new SymbolEntry(SymbolEntry.PREFIX, "while", new While()),
+                new SymbolEntry(SymbolEntry.PREFIX, "for", new For())
+        ));
+        addLevel.accept(List.of(
+                new SymbolEntry(SymbolEntry.INFIX, "else", null),
+                new SymbolEntry(SymbolEntry.INFIX, "also", null)
+        ));
+        addLevel.accept(List.of(
+                new SymbolEntry(SymbolEntry.INFIX, "with", new With()),
+                new SymbolEntry(SymbolEntry.INFIX, "then", new Then())
+        ));
+        addLevel.accept(List.of(
+                new SymbolEntry(SymbolEntry.PREFIX, "do", new Call())
+        ));
+        addLevel.accept(List.of(
+                new SymbolEntry(SymbolEntry.INFIX, ":", new Declare()),
+                new SymbolEntry(SymbolEntry.INFIX, "=", new Modify()),
+                new SymbolEntry(SymbolEntry.INFIX, "<=>", new Associate())
+        ));
+        addLevel.accept(List.of(
+                new SymbolEntry(SymbolEntry.INFIX, "in", new In())
+        ));
+        addLevel.accept(List.of(
+                new SymbolEntry(SymbolEntry.INFIX, ",", new Tuple())
+        ));
+        addLevel.accept(List.of(
+                new SymbolEntry(SymbolEntry.INFIX, "...", new DiscreteRange()),
+                new SymbolEntry(SymbolEntry.PREFIX, "...", new Spread())
+        ));
+        addLevel.accept(List.of(
+                new SymbolEntry(SymbolEntry.INFIX, "or", new Or()),
+                new SymbolEntry(SymbolEntry.INFIX, "nor", new Nor()),
+                new SymbolEntry(SymbolEntry.INFIX, "xor", new Xor()),
+                new SymbolEntry(SymbolEntry.INFIX, "xnor", new Xnor())
+        ));
+        addLevel.accept(List.of(
+                new SymbolEntry(SymbolEntry.INFIX, "and", new And()),
+                new SymbolEntry(SymbolEntry.INFIX, "nand", new Nand())
+        ));
+        addLevel.accept(List.of(
+                new SymbolEntry(SymbolEntry.INFIX, "=", new ComparisonChain()),
+                new SymbolEntry(SymbolEntry.INFIX, "!=", new ComparisonChain()),
+                new SymbolEntry(SymbolEntry.INFIX, "~=", new ComparisonChain()),
+                new SymbolEntry(SymbolEntry.INFIX, "<", new ComparisonChain()),
+                new SymbolEntry(SymbolEntry.INFIX, ">", new ComparisonChain()),
+                new SymbolEntry(SymbolEntry.INFIX, "<=", new ComparisonChain()),
+                new SymbolEntry(SymbolEntry.INFIX, ">=", new ComparisonChain())
+        ));
+        addLevel.accept(List.of(
+                new SymbolEntry(SymbolEntry.INFIX, "?=", new CompareTo())
+        ));
+        addLevel.accept(List.of(
+                new SymbolEntry(SymbolEntry.PREFIX, "not", new Not())
+        ));
+        addLevel.accept(List.of(
+                new SymbolEntry(SymbolEntry.INFIX, "shift", new Shift()),
+                new SymbolEntry(SymbolEntry.INFIX, "cycle", new Cycle())
+        ));
+        addLevel.accept(List.of(
+                new SymbolEntry(SymbolEntry.INFIX, "mod", new Modulo()),
+                new SymbolEntry(SymbolEntry.INFIX, "rem", new Remainder())
+        ));
+        addLevel.accept(List.of(
+                new SymbolEntry(SymbolEntry.INFIX, "+", new Add()),
+                new SymbolEntry(SymbolEntry.INFIX, "-", new Subtract())
+        ));
+        addLevel.accept(List.of(
+                new SymbolEntry(SymbolEntry.INFIX, "||", new Parallel())
+        ));
+        addLevel.accept(List.of(
+                new SymbolEntry(SymbolEntry.INFIX, "><", new CrossMultiply())
+        ));
+        addLevel.accept(List.of(
+                new SymbolEntry(SymbolEntry.INFIX, "*", new Multiply()),
+                new SymbolEntry(SymbolEntry.INFIX, "/", new Divide()),
+                new SymbolEntry(SymbolEntry.INFIX, "%", new Remainder())
+        ));
+        addLevel.accept(List.of(
+                new SymbolEntry(SymbolEntry.POSTFIX, "!", new Factorial())
+        ));
+        addLevel.accept(List.of(
+                new SymbolEntry(SymbolEntry.INFIX, "**", new Exponent()),
+                new SymbolEntry(SymbolEntry.INFIX, "*/", new Root())
+        ));
+        addLevel.accept(List.of(
+                new SymbolEntry(SymbolEntry.INFIX, "|", new Or()),
+                new SymbolEntry(SymbolEntry.INFIX, "~|", new Nor()),
+                new SymbolEntry(SymbolEntry.INFIX, "^", new Xor()),
+                new SymbolEntry(SymbolEntry.INFIX, "~^", new Xnor())
+        ));
+        addLevel.accept(List.of(
+                new SymbolEntry(SymbolEntry.INFIX, "&", new And()),
+                new SymbolEntry(SymbolEntry.INFIX, "~&", new Nand())
+        ));
+        addLevel.accept(List.of(
+                new SymbolEntry(SymbolEntry.PREFIX, "!", new Not()),
+                new SymbolEntry(SymbolEntry.PREFIX, "~", new Not())
+        ));
+        addLevel.accept(List.of(
+                new SymbolEntry(SymbolEntry.POSTFIX, "#", new Cardinal())
+        ));
+        addLevel.accept(List.of(
+                new SymbolEntry(SymbolEntry.PREFIX, "++", new PreIncrement()),
+                new SymbolEntry(SymbolEntry.POSTFIX, "++", new PostIncrement()),
+                new SymbolEntry(SymbolEntry.PREFIX, "--", new PreDecrement()),
+                new SymbolEntry(SymbolEntry.POSTFIX, "--", new PostDecrement())
+        ));
+        addLevel.accept(List.of(
+                new SymbolEntry(SymbolEntry.PREFIX, "@", new Print())
+        ));
+        addLevel.accept(List.of(
+                new SymbolEntry(SymbolEntry.INFIX, "to", new Cast()),
+                new SymbolEntry(SymbolEntry.INFIX, "as", new As())
+        ));
+        addLevel.accept(List.of(
+                new SymbolEntry(SymbolEntry.PREFIX, "ref", new Ref()),
+                new SymbolEntry(SymbolEntry.PREFIX, "loc", new Loc()),
+                new SymbolEntry(SymbolEntry.PREFIX, "pin", new Pin())
+        ));
+        addLevel.accept(List.of(
+                new SymbolEntry(SymbolEntry.INFIX, "(", new Call()),
+                new SymbolEntry(SymbolEntry.INFIX, "[", new Index()),
+                new SymbolEntry(SymbolEntry.INFIX, "{", new Construct())
+        ));
     }
 
     /**
      * returns a new instance of the operation corresponding to name
      * includes both infix and suffix
      */
-
     public static SyntaxNode decodeInfix(Token name) {
         if(!infixes.containsKey(name.getValue()))
             throw new Error("Syntax error at line " + name.getLineNumber() + ": invalid infix operator " + name.getValue());
@@ -348,7 +395,7 @@ public class OperatorUtil {
         public String getName() {
             return "comparison";
         }
-        protected List<Application> getEvaluationList() {
+        protected List<Evaluation> getEvaluationList() {
             throw new Error(errorString("Compiler error: accessing evaluation of incomplete operator \"ComparisonChain\""));
         }
     }

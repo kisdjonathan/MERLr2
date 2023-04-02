@@ -1,5 +1,7 @@
 package AST.abstractNode;
 
+import AST.variable.Locality;
+import compiler.Assembly;
 import interpreter.Value;
 import type.Type;
 import AST.variable.Variable;
@@ -9,14 +11,6 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public abstract class SyntaxNode {
-    private SyntaxNode parent;
-    public SyntaxNode getParent() {
-        return parent;
-    }
-    public void setParent(SyntaxNode parent) {
-        this.parent = parent;
-    }
-
     private List<SyntaxNode> children = new ArrayList<>();
     public void setChildren(List<SyntaxNode> values) {
         children = values;
@@ -25,11 +19,9 @@ public abstract class SyntaxNode {
         return children;
     }
     public void addChild(SyntaxNode child) {
-        child.setParent(this);
         children.add(child);
     }
     public void addChild(int index, SyntaxNode child) {
-        child.setParent(this);
         children.add(index, child);
     }
     public void addChild(String descrip, SyntaxNode child) {
@@ -39,13 +31,10 @@ public abstract class SyntaxNode {
         return children.get(index);
     }
     public void setChild(int index, SyntaxNode child) {
-        child.setParent(this);
         children.set(index, child);
     }
     public SyntaxNode removeChild(int index) {
-        SyntaxNode ret = children.remove(index);
-        ret.setParent(null);
-        return ret;
+        return children.remove(index);
     }
     public int size() {
         return children.size();
@@ -106,7 +95,16 @@ public abstract class SyntaxNode {
         return this;
     }
 
+
+    /**
+     * interpreter
+     */
     public abstract Value interpret();
+
+    /**
+     * compiler
+     */
+    public abstract Assembly getAssembly();
 
 
     /**

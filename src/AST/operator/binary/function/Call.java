@@ -1,9 +1,7 @@
-package AST.operator.binary.variable;
+package AST.operator.binary.function;
 
 import AST.abstractNode.BinaryOperator;
-import AST.abstractNode.SyntaxNode;
 
 public class Call extends BinaryOperator {
-    public static final String symbol = "(";
     public static final String literal = "call";
 }

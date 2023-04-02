@@ -1,4 +1,4 @@
-package AST.operator.unary;
+package AST.operator.unary.arithmetic;
 
 import AST.abstractNode.SyntaxNode;
 
