@@ -1,6 +1,7 @@
 package type;
 
 import AST.abstractNode.SyntaxNode;
+import AST.operator.binary.variable.As;
 import compiler.Assembly;
 import interpreter.MultiValue;
 import interpreter.ReturnValue;
@@ -46,11 +47,9 @@ public class Tuple extends Type implements Iterable<SyntaxNode>{
         return ret;
     }
 
-    public Assembly getAssembly() {
-        Assembly ret = new Assembly();
+    public void compile(Assembly ret) {
         //TODO
         // for each child, generate its assembly and push onto commands, then shift top stack pointer up by the size of the value of the child
-        return ret;
     }
 
 

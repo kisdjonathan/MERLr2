@@ -7,6 +7,7 @@ import type.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+//Equivalent to tuple in values
 public class MultiValue implements Value {
     private final List<Value> values = new ArrayList<>();
 
@@ -15,8 +16,11 @@ public class MultiValue implements Value {
         this.values.addAll(values);
     }
 
-    public void addValue(Value value) {
+    public void addComponent(Value value) {
         values.add(value);
+    }
+    public Value getComponent(int at) {
+        return values.get(at);
     }
 
     public Tuple getValue() {
@@ -24,6 +28,9 @@ public class MultiValue implements Value {
         for(Value value : values)
             ret.addChild(value.getValue());
         return ret;
+    }
+    public Type getValue(int at) {
+        return values.get(at).getValue();
     }
 
     public void setValue(Type value) {
@@ -33,5 +40,9 @@ public class MultiValue implements Value {
         for(int i = 0; i < values.size(); ++i) {
             values.get(i).setValue((Type) value.getChild(i));
         }
+    }
+
+    public void addValue(Value value) {
+        values.add(value);
     }
 }

@@ -11,6 +11,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class Type extends SyntaxNode {
+    /**
+     * both are the same
+     */
     public static boolean typeEquals(Type first, Type second) {
         return (first.isInferred() || second.isInferred()) ||
                 (first.typeEquals(second) || second.typeEquals(first));
@@ -73,6 +76,13 @@ public abstract class Type extends SyntaxNode {
         fields.put(name, var);
     }
     /**
+     * sets the entry for name to var for all pairs of entry and var in vars
+     * used by compiler
+     **/
+    public void putFields(Map<String, VariableEntry> vars) {
+        fields.putAll(vars);
+    }
+    /**
      * returns true if there is a field by the key name
      * used by compiler
      */
@@ -95,6 +105,9 @@ public abstract class Type extends SyntaxNode {
 
     /**
      * true if this is obj
+     * ie. true if this is inferred and other is any
+     * ie. true if this is sequence and other is tuple
+     * ie. false if this is tuple and other is sequence
      */
     public abstract boolean typeEquals(Type obj);
 
@@ -110,4 +123,11 @@ public abstract class Type extends SyntaxNode {
     public Value interpret() {
         return new RawValue(this);
     }
+
+
+    public SyntaxNode getByteSize(){
+        throw new Error(errorString("undetermined size for " + this));
+    }
+
+    public void compile(Assembly body) {}
 }

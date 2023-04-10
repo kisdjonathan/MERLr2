@@ -103,8 +103,9 @@ public class Function extends Type implements Locality{
         }
     }
 
-    public Assembly getAssembly() {
-        return null;
+    public void compile(Assembly body) {
+        //TODO
+        // create assembly body under new label in body
     }
 
     public boolean typeEquals(Type other) {

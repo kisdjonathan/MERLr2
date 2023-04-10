@@ -1,6 +1,7 @@
 package AST.variable;
 
 import AST.abstractNode.SyntaxNode;
+import compiler.Assembly;
 import interpreter.RawValue;
 import interpreter.ReferenceValue;
 import interpreter.Value;
@@ -58,5 +59,16 @@ public class Variable extends SyntaxNode {
         if(isFirstOccurrence())
             body.setValue(new RawValue(body.getType()));
         return new ReferenceValue(body);
+    }
+
+    private Assembly position;  //commands to access the memory of the variable
+    public Assembly getPosition() {
+        return new Assembly();  //TODO
+    }
+
+    public void compile(Assembly body) {
+        if(firstOccurrence) {
+            //body.command("push size of type to stack")
+        }
     }
 }

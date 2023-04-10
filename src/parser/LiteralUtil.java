@@ -1,10 +1,9 @@
 package parser;
 
 import AST.abstractNode.SyntaxNode;
-import AST.baseTypes.numerical.Char;
-import AST.baseTypes.numerical.Float;
-import AST.baseTypes.numerical.Int;
-import AST.baseTypes.advanced.Str;
+import type.numerical.Char;
+import type.numerical.Float;
+import type.numerical.Int;
 
 import java.text.NumberFormat;
 import java.text.ParsePosition;
@@ -14,8 +13,8 @@ import java.util.HashSet;
 public class LiteralUtil {
     private static final int BITSPERBYTE = 8;
 
-    private static short characterSumChar(String value) {
-        return (short) value.charAt(value.length()-1);
+    private static char characterSumChar(String value) {
+        return value.charAt(value.length()-1);
     }
     private static short characterSumLongChar(String value) {
         short ret = (short)value.charAt(0);
@@ -90,7 +89,7 @@ public class LiteralUtil {
                 case "ud"   -> null;
                 case "ld"   -> null;
                 case "uld"  -> null;
-                case "c"    -> new Char (n.byteValue());
+                case "c"    -> new Char ((char)n.byteValue());
                 case "uc"   -> null;
                 case "lc"   -> null;
                 case "ulc"  -> null;

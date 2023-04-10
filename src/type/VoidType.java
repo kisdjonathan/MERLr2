@@ -7,11 +7,6 @@ public class VoidType extends Type {
         return "void";
     }
 
-    public Assembly getAssembly() {
-        return new Assembly();  //TODO
-    }
-
-
     public boolean typeEquals(Type other) {
         return true;
     }

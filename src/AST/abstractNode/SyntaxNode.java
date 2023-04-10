@@ -3,6 +3,7 @@ package AST.abstractNode;
 import AST.variable.Locality;
 import compiler.Assembly;
 import interpreter.Value;
+import type.InferredType;
 import type.Type;
 import AST.variable.Variable;
 
@@ -61,14 +62,15 @@ public abstract class SyntaxNode {
         return false;
     }
     public Variable asVariable() {
-        throw new Error(this + " is not a variable");
+        throw new Error(errorString(this + " is not a variable"));
     }
 
-    public abstract Type getType();
-
-
+    private Type type = new InferredType();
+    public Type getType() {
+        return type;
+    }
     public void setType(Type type) {
-        throw new Error("can not set type for " + this);
+        this.type = type;
     }
     public boolean assertType(Type type) {
         if(getType().isInferred()) {
@@ -104,7 +106,7 @@ public abstract class SyntaxNode {
     /**
      * compiler
      */
-    public abstract Assembly getAssembly();
+    public abstract void compile(Assembly body);
 
 
     /**
