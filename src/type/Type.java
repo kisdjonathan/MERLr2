@@ -6,6 +6,7 @@ import compiler.Assembly;
 import interpreter.RawValue;
 import interpreter.ReferenceValue;
 import interpreter.Value;
+import type.numerical.Int;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -127,6 +128,14 @@ public abstract class Type extends SyntaxNode {
 
     public SyntaxNode getByteSize(){
         throw new Error(errorString("undetermined size for " + this));
+    }
+    public Int getIntByteSize(){
+        try {
+            return (Int) getByteSize();
+        }
+        catch (Exception e) {
+            throw new Error(errorString("a fixed size is required but instead received " + this));
+        }
     }
 
     public void compile(Assembly body) {}

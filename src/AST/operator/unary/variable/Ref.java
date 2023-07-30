@@ -1,4 +1,4 @@
-package AST.operator.binary.variable;
+package AST.operator.unary.variable;
 
 import AST.abstractNode.SyntaxNode;
 

@@ -1,8 +1,8 @@
 package parser;
 
 import AST.abstractNode.SyntaxNode;
-import AST.baseTypes.*;
-import AST.baseTypes.advanced.*;
+import type.*;
+import type.advanced.*;
 import AST.operations.arithmetic.AbsoluteValue;
 
 public class GroupUtil {

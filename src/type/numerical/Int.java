@@ -31,6 +31,9 @@ public class Int extends Numerical {
     }
 
 
+    public static int getDefaultByteSize() {
+        return 4;
+    }
     public Int getByteSize() {
         return new Int(isLong() ? 8 : 4);
     }

@@ -17,7 +17,7 @@ public class Tuple extends Type implements Iterable<SyntaxNode>{
      * returns node if node is a tuple, otherwise creates a tuple containing node and returns that
      **/
     public static Tuple asTuple(SyntaxNode node) {
-        return node == null ? new Tuple() : node instanceof Tuple ? (Tuple)node : new Tuple() {{addChild(node);}};
+        return node == null ? new Tuple() : node instanceof Tuple ? (Tuple)node : new Tuple(node);
     }
 
     public Tuple(){}

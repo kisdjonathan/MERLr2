@@ -8,6 +8,7 @@ import compiler.commands.Push;
 import compiler.commands.arithmetic.AddInt;
 import compiler.commands.arithmetic.ArithmeticCommand;
 import compiler.components.Register;
+import type.Longable;
 import type.Tuple;
 import type.Type;
 
@@ -15,7 +16,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public abstract class Numerical extends Type {
+public abstract class Numerical extends Longable {
     public double asDouble(){
         if (this instanceof Float f) {
             return f.getValue();
@@ -39,17 +40,7 @@ public abstract class Numerical extends Type {
         }
     }
 
-    private boolean extended = false;
     private boolean unsigned = false;
-
-    public boolean isLong() {
-        return extended;
-    }
-    public Numerical setLong(boolean v) {
-        extended = v;
-        return this;
-    }
-
     public boolean isUnsigned() {
         return unsigned;
     }

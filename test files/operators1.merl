@@ -1,0 +1,141 @@
+<<assignment>>
+pi : 3.1415;
+    @"should be 3.1415";
+    @pi;
+a = 44;
+    @"should be 44:";
+    @a;
+a = 10;
+    @"should be 10:";
+    @a;
+b = 10.11;
+    @"should be 10.11:";
+    @b;
+
+<<addition>>
+c : a + 5;
+    @"should be 15:";
+    @c;
+d : a + pi;
+    @"should be 13.1415:";
+    @d;
+e : pi + b;
+    @"should be 13.2515:";
+    @e;
+
+<<subtraction>>
+f : a - 5;
+    @"should be 5:";
+    @f;
+g : a - b;
+    @"should be -0.11:";
+    @g;
+h : b - pi;
+    @"should be 6.9685:";
+    @h;
+
+<<multiply>>
+i : a * 5;
+    @"should be 50:";
+    @i;
+j : a * b;
+    @"should be 101.1:";
+    @j;
+k : b * pi;
+    @"should be 31.760565:";
+    @k;
+
+<<divide>>
+l : a / 5;
+    @"should be 2:";
+    @l;
+m : a / b;
+    @"should be 0.989119683481701:";
+    @m;
+n = b / pi;
+    @"should be 3.218207862486074:";
+    @n;
+n = a / 4;
+    @"should be 2.5:";
+    @n;
+o : b / a;
+    @"should be 1.011:";
+    @o;
+
+<<remainder>>
+p : a rem 2;
+    @"should be 0:";
+    @p;
+q : a rem 3;
+    @"should be 1";
+    @q;
+r : b rem a;
+    @"should be 0.11";
+    @r;
+s : -10 rem pi;
+    @"should be -0.5755";
+    @s;
+
+<<modulo>>
+t : a % 2;
+    @"should be 0:";
+    @t;
+u : a % 3;
+    @"should be 1:";
+    @u;
+v : b % a;
+    @"should be 0.11";
+    @v;
+w : -10 % pi;
+    @"should be 2.566";
+    @w;
+
+<<power>>
+x : a ** 2;
+    @"should be 100:";
+    @x;
+y : pi ** pi;
+    @"should be 36.4549147287:";
+    @y;
+z : pi ** 2;
+    @"should be 9.86902225:";
+    @z;
+A : 2 ** pi;
+    @"should be 8.82441108248:";
+    @A;
+
+<<root>>
+B : 1024 */ a;
+    @"should be 2:";
+    @B;
+C : pi */ pi;
+    @"should be 1.43962145171:";
+    @C;
+D : pi */ 2;
+    @"should be 1.772427713617681:";
+    @D;
+E : 2 */ pi;
+    @"should be 1.246877102676593:";
+    @E;
+
+<<parallel>>
+F : 10 || a;
+    @"should be 5:";
+    @F;
+G : pi || b;
+    @"should be 2.396752443119647:";
+    @G;
+H : 2 || pi;
+    @"should be 1.222016921131965:";
+    @H;
+
+<<round>>
+I : pi ~ 0;
+    @"should be 3.0:";
+    @I;
+J : b ~ -1;
+    @"should be 10.1";
+    @J;
+K : a ~ 2;
+    @"should be 0";
+    @K;
